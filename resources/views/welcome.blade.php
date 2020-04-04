@@ -4,10 +4,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>School Revenue</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        {{-- <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" /> --}}
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 
         <!-- Styles -->
         <style>
@@ -81,19 +84,19 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    School Revenue
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+
+                    A robust School Revenue management system <br>
+                <a href="{{ route('superadmin.register') }}" class="btn btn-primary ">Super Admin Reg</a>
                 </div>
             </div>
         </div>
+
+        <script src="{{ asset('assets/js/jquery.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+
     </body>
 </html>

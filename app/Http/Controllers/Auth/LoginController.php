@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -26,17 +27,17 @@ class LoginController extends Controller
      *
      * @var string
      */
-    // protected $redirectTo = '/home';
+    protected $redirectTo = '/home';
 
-    protected function redirectTo()
-    {
-        if (Auth::user()->user_role == 'superadmin') {
-            return 'dashboard';
-        }  
-        else {
-            return 'home';
-        }  
-    }
+    // protected function redirectTo()
+    // {
+    //     if (Auth::user()->user_role == '1') {
+    //         return redirect()->route('superadmins.index');
+    //     }  
+    //     else {
+    //         return 'home';
+    //     }  
+    // }
 
     /**
      * Create a new controller instance.
@@ -46,6 +47,26 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request){
+        //Check if both the email and password field are not empty with laravel validate function
+        $this->validate($request, [
+            'email'     =>  'required|email',
+            'password'  =>  'required'
+        ]);
+
+        //Push values from email and password input fields into an array 
+        $user_data = array(
+            'email'     =>  $request->get('email'),
+            'password'  =>  $request->get('password')
+        );
+
+        //Attempt to authenticate user provided credentials
+        if(Auth::attempt($user_data)){
+            return redirect()->route('home');
+
+        }
     }
 
     public function logout()

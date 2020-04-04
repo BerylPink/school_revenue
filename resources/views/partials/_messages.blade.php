@@ -1,9 +1,9 @@
-<script src="{{ asset('assets/dashboard/js/jquery-3.3.1.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/dashboard/js/jquery-3.3.1.min.js') }}"></script>
 
 <link href="{{ asset('assets/dashboard/css/jquery.toast.css') }}" rel="stylesheet" type="text/css">
 <script src="{{ asset('assets/dashboard/js/jquery.toast.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('assets/dashboard/css/sweetalert2.min.css') }}">
-<script src="{{ asset('assets/dashboard/js/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('assets/dashboard/js/sweetalert2.min.js') }}"></script> --}}
 
 
 {{-- Primary Alert --}}
@@ -32,14 +32,14 @@
 {{-- Success Alert --}}
 @if($message = Session::get('success'))
 
-{{-- <div class="alert alert-success alert-dismissible fade show" role="alert">
+<div class="alert alert-success alert-dismissible fade show" role="alert">
   <strong>Success!</strong> {{ Session::get('success') }}
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span>&times;</span>
   </button>
-</div> --}}
+</div>
 
-<script>
+{{-- <script>
   $.toast({
         heading: 'Success',
         text: '{{ $message }}',
@@ -49,7 +49,7 @@
         hideAfter: 10000,
         stack: 6
     });
-</script>
+</script> --}}
 
 @endif
 
@@ -125,7 +125,7 @@
 
 {{-- If the page has any error passed to it --}}
 @if(count($errors) > 0)
-{{-- <div class="alert alert-danger alert-dismissible fade show" role="alert">
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
     <strong class="font-weight-bold">Oops! something went wrong.</strong> 
     <ul>
       @foreach($errors->all() as $error)
@@ -135,8 +135,8 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span>&times;</span>
     </button>
-  </div> --}}
-  @foreach($errors->all() as $error)
+  </div>
+  {{-- @foreach($errors->all() as $error)
 
   <script>
     $.toast({
@@ -149,17 +149,17 @@
           stack: 6
       });
   </script>
-  @endforeach
+  @endforeach --}}
 
 @endif
 
 @if ($message = Session::get('error'))
-{{-- <div class="alert alert-danger alert-dismissible fade show" role="alert">
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
     <strong> {{ $message }}</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span>&times;</span>
     </button>
-  </div> --}}
+  </div>
 
   {{-- <div class="alert-section alert alert-danger alert-dismissible fade show">
     <div class="alert-container">
@@ -174,7 +174,7 @@
     </div>
   </div> --}}
 
-  <script>
+  {{-- <script>
     $.toast({
           heading: 'Error',
           text: '{{ $message }}',
@@ -184,7 +184,7 @@
           hideAfter: 10000,
           stack: 6
       });
-  </script>
+  </script> --}}
   
 @endif
 

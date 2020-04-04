@@ -14,7 +14,6 @@
 <script src="{{ asset('assets/vendor/unifyMenu/unifyMenu.js') }}"></script>
 <script src="{{ asset('assets/vendor/onoffcanvas/onoffcanvas.js') }}"></script>
 <script src="{{ asset('assets/js/moment.js') }}"></script>
-<script src="{{ asset('assets/js/cwem.js') }}"></script>
 
 <!-- Slimscroll JS -->
 <script src="{{ asset('assets/vendor/slimscroll/slimscroll.min.js') }}"></script>

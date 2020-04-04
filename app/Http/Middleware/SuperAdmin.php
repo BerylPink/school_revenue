@@ -21,7 +21,7 @@ class SuperAdmin
             return $next($request);
         }
         else {
-            return redirect('/home');
+            return redirect('/logout');
         }
         
     }
