@@ -16,7 +16,7 @@ class CreateAdminInfos extends Migration
         Schema::create('admin_infos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('users_id')->index();
-            $table->unsignedBigInteger('college_id')->index();
+            $table->unsignedBigInteger('colleges_id')->index();
             $table->unsignedBigInteger('states_id')->index();
             $table->string('firstname');
             $table->string('lastname');
@@ -24,7 +24,7 @@ class CreateAdminInfos extends Migration
             $table->string('phone_no', '11')->unique();
             $table->text('address');
             $table->text('profile_avatar');
-            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('created_by')->default(NULL);
             $table->unsignedBigInteger('updated_by')->default(NULL);
             $table->timestamps();
         });

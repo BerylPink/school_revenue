@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
 use App\User;
-use App\SuperAdmin;
+use App\Admin;
 
-class SuperAdminController extends Controller
+class adminController extends Controller
 {
     /**
      * This method will redirect users back to the login page if not properly authenticated
@@ -67,16 +67,21 @@ class SuperAdminController extends Controller
         $users = User::create([
             'email'            =>   $request->input('email'),
             'password'         =>   Hash::make($request->input('password')),
-            'user_role'        =>   '1',
-            'created_by'       =>   '1'
+            'user_role'        =>   '2',
+            'created_by'       =>   '1',
+            'updated_by'       =>   '1',
+            'colleges_id'       =>  '1'
         ]);
 
-        //INSERT INTO `super_admin_infos` tabble
-        $superAdminInfos = SuperAdmin::create([
+        //INSERT INTO `admin_infos` tabble
+        $adminInfos = Admin::create([
             'users_id'                  =>   $users->id,
+            'states_id'                  =>   $users->id,
+            'colleges_id'                  =>   $users->id,
             'firstname'                 =>   $request->input('firstname'),
             'lastname'                  =>   $request->input('lastname'),
             'phone_no'                  =>   $request->input('phone_no'),
+            'gender'                  =>   $request->input('gender'),
             'address'                   =>   $request->input('address'),
             'profile_avatar'            =>   $avatarName,            
         ]);
@@ -85,7 +90,7 @@ class SuperAdminController extends Controller
         DB::commit();
 
         //If successfully created go to login page
-        if($users AND $superAdminInfos){
+        if($users AND $adminInfos){
             return redirect('/login')->with('success', $request->input('firstname').' '.$request->input('lastname').'\'s profile has been created!');
         }
 
@@ -101,9 +106,12 @@ class SuperAdminController extends Controller
             'firstname'                 =>   'required',
             'lastname'                  =>   'required', 
             'phone_no'                  =>   'required|Numeric|unique:super_admin_infos,phone_no',
+            'gender'                  =>   'required',
             'email'                     =>   'required|email|unique:users,email', 
             'password'                  =>   'required',
             'password_confirmation'     =>   'required|same:password', 
+            'college'                  =>   'required',
+            'state'                  =>   'required',
             'avatar'                    =>   'image|mimes:jpeg,png,jpg,gif|max:2048',
             'address'                   =>   'required',
         ]);

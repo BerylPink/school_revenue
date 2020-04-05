@@ -28,7 +28,14 @@ class HomeController extends Controller
         
         if($userRole == '1'){
             return redirect()->route('superadmins.index');
-        }else{
+
+        }elseif ($userRole == '2') {
+            return redirect()->route('admins.index');
+        }
+        elseif ($userRole == '3') {
+            return redirect()->route('humanresource.index');
+        }
+        else{
             return redirect()->route('logout');
             
         }

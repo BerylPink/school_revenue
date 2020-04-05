@@ -39,3 +39,14 @@ Route::get('/superadmin/register', function () {
     return view('superadmin.registerSuperadmin');
 })->name('superadmin.register');
 Route::resource('/superadmins',            'SuperAdminController');
+
+Route::get('/admin/register', function () {
+    return view('admin.registerAdmin');
+})->name('admin.register');
+Route::resource('/admins',            'adminController');
+
+Route::get('/humanresource/register', function () {
+    return view('humanResource.registerHR');
+})->name('humanresource.register');
+Route::resource('/humanresource',            'humanResourceController');
+
