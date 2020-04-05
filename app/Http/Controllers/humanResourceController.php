@@ -26,7 +26,7 @@ class humanResourceController extends Controller
      */
     public function index()
     {
-        return view('superadmin.dashboard');
+        return view('humanResource.dashboard');
     }
 
     /**

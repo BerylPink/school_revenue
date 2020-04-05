@@ -26,7 +26,7 @@ class adminController extends Controller
      */
     public function index()
     {
-        return view('superadmin.dashboard');
+        return view('admin.dashboard');
     }
 
     /**
