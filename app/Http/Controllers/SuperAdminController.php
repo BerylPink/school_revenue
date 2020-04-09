@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\Controllers\Auth\LoginController;
+use Auth;
 use App\User;
 use App\SuperAdmin;
 
@@ -117,7 +118,27 @@ class SuperAdminController extends Controller
      */
     public function show($id)
     {
-        //
+        $userExists = User::findOrFail($id);
+
+        $userRole = User::select('user_role')->where('id', $id)->first();
+
+        if($userRole->user_role === 1){
+
+            $superAdmin = DB::table('users')
+            ->join('super_admin_infos', 'super_admin_infos.users_id', '=', 'users.id')
+            ->select('users.id', 'email', 'firstname', 'lastname', 'phone_no', 'address', 'profile_avatar', 'users.created_at')
+            ->where('users.id', $id)->first();
+    
+            $usersCreated = User::where('created_by', $id)->count();
+    
+            $data = compact('superAdmin', 'usersCreated');
+            // return response()->json($data);
+            
+            return view('superadmin.sa-show', $data);
+        }else{
+            return back()->with('error', 'This User is not a Super Admin');
+        }
+        
     }
 
     /**
@@ -154,5 +175,23 @@ class SuperAdminController extends Controller
         //
     }
 
-    
+    public function superAdminList(){
+
+        // dd('Here');
+
+        $superAdmins = DB::table('users')
+        ->join('super_admin_infos', 'super_admin_infos.users_id', '=', 'users.id')
+        ->select('users.id', 'email', 'firstname', 'lastname',  'users.created_at')
+        ->orderBy('users.created_at', 'DESC')->get();
+
+        $data = compact('superAdmins');
+
+        return view('superadmin.sa-list', $data)->with('i');
+    }
+
+    public function loggedUserID(){
+        $this->userID = new LoginController();
+
+        return $this->userID->userID();
+    }
 }

@@ -75,9 +75,9 @@
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
-                        @if (Route::has('register'))
+                        {{-- @if (Route::has('register'))
                             <a href="{{ route('register') }}">Register</a>
-                        @endif
+                        @endif --}}
                     @endauth
                 </div>
             @endif
@@ -90,7 +90,7 @@
                 <div class="links">
 
                     A robust School Revenue management system <br>
-                <a href="{{ route('superadmin.register') }}" class="btn btn-primary ">Super Admin Reg</a>
+                {{-- <a href="{{ route('superadmin.register') }}" class="btn btn-primary ">Super Admin Reg</a> --}}
                 </div>
             </div>
         </div>

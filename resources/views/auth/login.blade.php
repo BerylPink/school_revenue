@@ -9,7 +9,7 @@
                 <div class="card-body">
                 @include('partials._messages')
 
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login.verify_credentials') }}">
                         @csrf
 
                         <div class="form-group row">

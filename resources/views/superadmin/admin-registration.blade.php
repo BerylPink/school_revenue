@@ -1,15 +1,15 @@
-@extends('layouts.app')
+@extends('layouts.master')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Human Resource') }}</div>
+                <div class="card-header">{{ __('Register Admin') }}</div>
 
                 <div class="card-body">
                     @include('partials._messages')
 
-                    <form method="POST" action="{{ route('humanresource.store') }}">
+                    <form method="POST" action="{{ route('admins.store') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -99,6 +99,19 @@
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="college" class="col-md-4 col-form-label text-md-right">{{ __('College') }}</label>
+                            <div class="col-md-6">
+                                <input id="college" type="text" class="form-control @error('college') is-invalid @enderror" name="college" value="{{ old('college') }}" required autocomplete="college" autofocus>
+
+                                @error('college')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 

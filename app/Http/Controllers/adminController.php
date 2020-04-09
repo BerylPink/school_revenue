@@ -6,18 +6,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
+use App\Http\Controllers\Auth\LoginController;
 use App\User;
 use App\Admin;
+use App\College;
 
-class adminController extends Controller
+class AdminController extends Controller
 {
+    //Variable to hold user id in all methods
+    var $userID;
+
     /**
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
      */
-    // public function __construct() {
-    //     $this->middleware('auth:web');
-    //  }
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
      
     /**
      * Display a listing of the resource.
@@ -26,7 +31,14 @@ class adminController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard');
+        $admins = DB::table('users')
+        ->join('admin_infos', 'admin_infos.users_id', '=', 'users.id')
+        ->join('colleges', 'colleges.id', '=', 'admin_infos.college_id')
+        ->select('users.id', 'email', 'firstname', 'lastname', 'college_name', 'users.created_at')
+        ->orderBy('users.created_at', 'DESC')->get();
+
+        $data = compact('admins');
+        return view('admin.admin-list', $data)->with('i');
     }
 
     /**
@@ -36,7 +48,13 @@ class adminController extends Controller
      */
     public function create()
     {
-        //
+        $states = DB::table('states')->get();
+
+        $colleges = College::select('id', 'college_name', 'college_description')->orderBy('college_name', 'ASC')->get();
+
+        $data = compact('states', 'colleges');
+
+        return view('admin.admin-registration', $data);
     }
 
     /**
@@ -68,20 +86,18 @@ class adminController extends Controller
             'email'            =>   $request->input('email'),
             'password'         =>   Hash::make($request->input('password')),
             'user_role'        =>   '2',
-            'created_by'       =>   '1',
-            'updated_by'       =>   '1',
-            'colleges_id'       =>  '1'
+            'created_by'       =>   $this->loggedUserID(),
         ]);
 
         //INSERT INTO `admin_infos` tabble
         $adminInfos = Admin::create([
             'users_id'                  =>   $users->id,
-            'states_id'                  =>   $users->id,
-            'colleges_id'                  =>   $users->id,
+            'college_id'                =>   $request->input('college_id'),
+            'state_id'                  =>   $request->input('state_id'),
             'firstname'                 =>   $request->input('firstname'),
             'lastname'                  =>   $request->input('lastname'),
+            'gender'                    =>   $request->input('gender'),
             'phone_no'                  =>   $request->input('phone_no'),
-            'gender'                  =>   $request->input('gender'),
             'address'                   =>   $request->input('address'),
             'profile_avatar'            =>   $avatarName,            
         ]);
@@ -91,10 +107,10 @@ class adminController extends Controller
 
         //If successfully created go to login page
         if($users AND $adminInfos){
-            return redirect('/login')->with('success', $request->input('firstname').' '.$request->input('lastname').'\'s profile has been created!');
+            return redirect()->route('admins.index')->with('success', $request->input('firstname').' '.$request->input('lastname').'\'s profile has been created!');
         }
 
-        //If errors occur, return back to super admin registration page
+        //If errors occur, return back to  admin registration page
         return back()->withInput();
     }
 
@@ -106,13 +122,13 @@ class adminController extends Controller
             'firstname'                 =>   'required',
             'lastname'                  =>   'required', 
             'phone_no'                  =>   'required|Numeric|unique:super_admin_infos,phone_no',
-            'gender'                  =>   'required',
+            'gender'                    =>   'required',
             'email'                     =>   'required|email|unique:users,email', 
             'password'                  =>   'required',
-            'password_confirmation'     =>   'required|same:password', 
-            'college'                  =>   'required',
-            'state'                  =>   'required',
-            'avatar'                    =>   'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'confirm_password'          =>   'required|same:password', 
+            'college_id'                =>   'required',
+            'state_id'                  =>   'required',
+            'profile_avatar'            =>   'image|mimes:jpeg,png,jpg,gif|max:2048',
             'address'                   =>   'required',
         ]);
     }
@@ -125,7 +141,26 @@ class adminController extends Controller
      */
     public function show($id)
     {
-        //
+        $userExists = User::findOrFail($id);
+
+        $userRole = User::select('user_role')->where('id', $id)->first();
+
+        if($userRole->user_role === 2){
+
+            $admin = DB::table('users')
+            ->join('admin_infos', 'admin_infos.users_id', '=', 'users.id')
+            ->join('colleges', 'colleges.id', '=', 'admin_infos.college_id')
+            ->join('states', 'states.StateID', '=', 'admin_infos.state_id')
+            ->select('users.id', 'email', 'firstname', 'lastname', 'college_name', 'college_id', 'state_id', 'StateName', 'gender', 'phone_no', 'address', 'profile_avatar', 'users.created_at')
+            ->where('users.id', $id)->first();
+
+            $data = compact('admin');
+            // return response()->json($data);
+
+            return view('admin.admin-show', $data);
+        }else{
+            return back()->with('error', 'This User is not an Admin');
+        }
     }
 
     /**
@@ -136,7 +171,22 @@ class adminController extends Controller
      */
     public function edit($id)
     {
-        //
+        $userExists = User::findOrFail($id);
+
+        $admin = DB::table('users')
+        ->join('admin_infos', 'admin_infos.users_id', '=', 'users.id')
+        ->join('colleges', 'colleges.id', '=', 'admin_infos.college_id')
+        ->join('states', 'states.StateID', '=', 'admin_infos.state_id')
+        ->select('users.id', 'email', 'firstname', 'lastname', 'college_name', 'college_id', 'state_id', 'StateName', 'gender', 'phone_no', 'address', 'profile_avatar', 'users.created_at')
+        ->where('users.id', $id)->first();
+
+        $states = DB::table('states')->get();
+
+        $colleges = College::select('id', 'college_name', 'college_description')->orderBy('college_name', 'ASC')->get();
+
+        $data = compact('admin', 'states', 'colleges');
+
+        return view('admin.admin-edit', $data);
     }
 
     /**
@@ -148,7 +198,45 @@ class adminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+         //Validate if an image filewas selected 
+         if($request->hasFile('profile_avatar')){
+             $image = $request->file('profile_avatar');
+             $avatarName = rand() .'.'.$image->getClientOriginalExtension();
+             $image->move(public_path('uploads'), $avatarName);
+         } else{
+             //If image wasn't selected, set a default image for profile avatar
+             $avatarName = $request->input('old_profile_avatar');
+         }
+
+         $fullname = $request->input('firstname').' '.$request->input('lastname');
+
+        //UPDATE `users` table
+        $users = User::where('id', $id)->update([
+            'email'            =>   $request->input('email'),
+        ]);
+
+        //UPDATE `admin_infos` tabble
+        $adminInfos = Admin::where('users_id', $id)->update([
+            'college_id'                =>   $request->input('college_id'),
+            'state_id'                  =>   $request->input('state_id'),
+            'firstname'                 =>   $request->input('firstname'),
+            'lastname'                  =>   $request->input('lastname'),
+            'gender'                    =>   $request->input('gender'),
+            'phone_no'                  =>   $request->input('phone_no'),
+            'address'                   =>   $request->input('address'),
+            'profile_avatar'            =>   $avatarName,            
+        ]);
+
+       
+
+        if($users AND $adminInfos){
+
+            return redirect('/admins')->with('success', 'Updated '.$fullname.' profile.');
+        }
+            
+        return back()->withInput();
+        
     }
 
     /**
@@ -159,8 +247,22 @@ class adminController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $userExists = User::findOrFail($id);
+
+        $deleteFromAdmin = Admin::where('users_id', $id)->delete();
+
+        $deleteFromUser = User::where('id', $id)->delete();
+
+        if($deleteFromUser AND $deleteFromAdmin){
+            return back()->with('success', 'Profile deleted.');
+        }
+        
     }
 
+    public function loggedUserID(){
+        $this->userID = new LoginController();
+
+        return $this->userID->userID();
+    }
     
 }

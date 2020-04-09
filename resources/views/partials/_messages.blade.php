@@ -32,24 +32,19 @@
 {{-- Success Alert --}}
 @if($message = Session::get('success'))
 
-<div class="alert alert-success alert-dismissible fade show" role="alert">
+{{-- <div class="alert alert-success alert-dismissible fade show" role="alert">
   <strong>Success!</strong> {{ Session::get('success') }}
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span>&times;</span>
   </button>
-</div>
+</div> --}}
 
-{{-- <script>
-  $.toast({
-        heading: 'Success',
-        text: '{{ $message }}',
-        position: 'top-right',
-        loaderBg: '#1ca21f',
-        icon: 'success',
-        hideAfter: 10000,
-        stack: 6
-    });
-</script> --}}
+<div class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+  <i class="icon-tick"></i><strong>Success!</strong> {{ Session::get('success') }}
+</div>
 
 @endif
 
@@ -125,7 +120,7 @@
 
 {{-- If the page has any error passed to it --}}
 @if(count($errors) > 0)
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
+{{-- <div class="alert alert-danger alert-dismissible fade show" role="alert">
     <strong class="font-weight-bold">Oops! something went wrong.</strong> 
     <ul>
       @foreach($errors->all() as $error)
@@ -135,57 +130,37 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span>&times;</span>
     </button>
-  </div>
-  {{-- @foreach($errors->all() as $error)
+  </div> --}}
 
-  <script>
-    $.toast({
-          heading: 'Error',
-          text: '{{ $error }}',
-          position: 'top-right',
-          loaderBg: '#f13c39',
-          icon: 'error',
-          hideAfter: 10000,
-          stack: 6
-      });
-  </script>
-  @endforeach --}}
+  <div class="alert alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    <i class="icon-warning2"></i><strong>Oh snap!</strong> Something went wrong.
+    <ul>
+      @foreach($errors->all() as $error)
+        <li> {{ $error }} </li>
+      @endforeach
+    </ul>
+  </div>
+
 
 @endif
 
 @if ($message = Session::get('error'))
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
+{{-- <div class="alert alert-danger alert-dismissible fade show" role="alert">
     <strong> {{ $message }}</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span>&times;</span>
     </button>
-  </div>
-
-  {{-- <div class="alert-section alert alert-danger alert-dismissible fade show">
-    <div class="alert-container">
-      <div class="alert-icon">
-        <i class="fa fa-info-circle"></i>
-      </div>
-      <strong class="font-weight-bold">{{ $message }}</strong>
-      <button type="button" class="close-icon" data-dismiss="alert" aria-label="Close">
-        <span>&times;</span>
-      </button>
-      
-    </div>
   </div> --}}
-
-  {{-- <script>
-    $.toast({
-          heading: 'Error',
-          text: '{{ $message }}',
-          position: 'top-right',
-          loaderBg: '#e24845',
-          icon: 'error',
-          hideAfter: 10000,
-          stack: 6
-      });
-  </script> --}}
   
+  <div class="alert alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    <i class="icon-warning2"></i><strong>Oh snap!</strong> {{ $message }}.
+  </div>
 @endif
 
 {{-- @if($errors->has('email'))

@@ -5,19 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\Controllers\Auth\LoginController;
 use App\User;
 use App\HumanResource;
 
-class humanResourceController extends Controller
+class HumanResourceController extends Controller
 {
     /**
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
      */
-    // public function __construct() {
-    //     $this->middleware('auth:web');
-    //  }
+    public function __construct() {
+        $this->middleware('auth:web');
+     }
      
     /**
      * Display a listing of the resource.
@@ -26,7 +26,15 @@ class humanResourceController extends Controller
      */
     public function index()
     {
-        return view('humanResource.dashboard');
+        $hrs = DB::table('users')
+        ->join('human_resource_infos', 'human_resource_infos.users_id', '=', 'users.id')
+        ->join('states', 'states.StateID', '=', 'human_resource_infos.states_id')
+        ->select('users.id', 'email', 'firstname', 'lastname', 'StateName',  'users.created_at')
+        ->orderBy('users.created_at', 'DESC')->get();
+
+        $data = compact('hrs');
+
+        return view('humanresource.hr-list', $data)->with('i');
     }
 
     /**
@@ -36,7 +44,11 @@ class humanResourceController extends Controller
      */
     public function create()
     {
-        //
+        $states = DB::table('states')->get();
+
+        $data = compact('states');
+
+        return view('humanresource.hr-registration', $data);
     }
 
     /**
@@ -67,19 +79,18 @@ class humanResourceController extends Controller
         $users = User::create([
             'email'            =>   $request->input('email'),
             'password'         =>   Hash::make($request->input('password')),
-            'user_role'        =>   '2',
-            'created_by'       =>   '1',
-            'updated_by'       =>   '1'
+            'user_role'        =>   '3',
+            'created_by'       =>   $this->loggedUserID(),
         ]);
 
         //INSERT INTO `human_resource_infos` tabble
-        $humanresourseInfos = HumanResource::create([
+        $humanresourceInfos = HumanResource::create([
             'users_id'                  =>   $users->id,
-            'states_id'                  =>   $users->id,
+            'states_id'                 =>   $request->input('state_id'),
             'firstname'                 =>   $request->input('firstname'),
             'lastname'                  =>   $request->input('lastname'),
             'phone_no'                  =>   $request->input('phone_no'),
-            'gender'                  =>   $request->input('gender'),
+            'gender'                    =>   $request->input('gender'),
             'address'                   =>   $request->input('address'),
             'profile_avatar'            =>   $avatarName,            
         ]);
@@ -89,10 +100,10 @@ class humanResourceController extends Controller
 
         //If successfully created go to login page
         if($users AND $humanresourceInfos){
-            return redirect('/login')->with('success', $request->input('firstname').' '.$request->input('lastname').'\'s profile has been created!');
+            return redirect()->route('human-resource.index')->with('success', $request->input('firstname').' '.$request->input('lastname').'\'s profile has been created!');
         }
 
-        //If errors occur, return back to super admin registration page
+        //If errors occur, return back to human resources registration page
         return back()->withInput();
     }
 
@@ -103,12 +114,12 @@ class humanResourceController extends Controller
         return request()->validate([
             'firstname'                 =>   'required',
             'lastname'                  =>   'required', 
-            'phone_no'                  =>   'required|Numeric|unique:super_admin_infos,phone_no',
-            'gender'                  =>   'required',
+            'phone_no'                  =>   'required|Numeric|unique:human_resource_infos,phone_no',
+            'gender'                    =>   'required',
             'email'                     =>   'required|email|unique:users,email', 
             'password'                  =>   'required',
-            'password_confirmation'     =>   'required|same:password',
-            'state'                  =>   'required',
+            'confirm_password'          =>   'required|same:password', 
+            'state_id'                  =>   'required',
             'avatar'                    =>   'image|mimes:jpeg,png,jpg,gif|max:2048',
             'address'                   =>   'required',
         ]);
@@ -122,7 +133,25 @@ class humanResourceController extends Controller
      */
     public function show($id)
     {
-        //
+        $userExists = User::findOrFail($id);
+
+        $userRole = User::select('user_role')->where('id', $id)->first();
+
+        if($userRole->user_role === 3){
+
+            $hr = DB::table('users')
+            ->join('human_resource_infos', 'human_resource_infos.users_id', '=', 'users.id')
+            ->join('states', 'states.StateID', '=', 'human_resource_infos.states_id')
+            ->select('users.id', 'email', 'firstname', 'lastname', 'StateName', 'gender', 'phone_no', 'address', 'profile_avatar', 'users.created_at')
+            ->where('users.id', $id)->first();
+
+            $data = compact('hr');
+            // return response()->json($data);
+            
+            return view('humanresource.hr-show', $data);
+        }else{
+            return back()->with('error', 'This User is not a Human Resources personnel');
+        }
     }
 
     /**
@@ -133,7 +162,19 @@ class humanResourceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $userExists = User::findOrFail($id);
+
+        $hr = DB::table('users')
+        ->join('human_resource_infos', 'human_resource_infos.users_id', '=', 'users.id')
+        ->join('states', 'states.StateID', '=', 'human_resource_infos.states_id')
+        ->select('users.id', 'email', 'firstname', 'lastname', 'states_id', 'StateID', 'StateName', 'gender', 'phone_no', 'address', 'profile_avatar', 'users.created_at')
+        ->where('users.id', $id)->first();
+
+        $states = DB::table('states')->get();
+
+        $data = compact('hr', 'states');
+
+        return view('humanresource.hr-edit', $data);
     }
 
     /**
@@ -145,7 +186,42 @@ class humanResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //Validate if an image filewas selected 
+        if($request->hasFile('profile_avatar')){
+            $image = $request->file('profile_avatar');
+            $avatarName = rand() .'.'.$image->getClientOriginalExtension();
+            $image->move(public_path('uploads'), $avatarName);
+        } else{
+            //If image wasn't selected, set a default image for profile avatar
+            $avatarName = $request->input('old_profile_avatar');
+        }
+
+        $fullname = $request->input('firstname').' '.$request->input('lastname');
+
+       //UPDATE `users` table
+       $users = User::where('id', $id)->update([
+           'email'            =>   $request->input('email'),
+       ]);
+
+       //UPDATE `admin_infos` tabble
+       $hrInfos = HumanResource::where('users_id', $id)->update([
+           'states_id'                 =>   $request->input('state_id'),
+           'firstname'                 =>   $request->input('firstname'),
+           'lastname'                  =>   $request->input('lastname'),
+           'gender'                    =>   $request->input('gender'),
+           'phone_no'                  =>   $request->input('phone_no'),
+           'address'                   =>   $request->input('address'),
+           'profile_avatar'            =>   $avatarName,            
+       ]);
+
+      
+
+       if($users AND $hrInfos){
+
+           return redirect('/human-resource')->with('success', 'Updated '.$fullname.' profile.');
+       }
+           
+       return back()->withInput();
     }
 
     /**
@@ -156,8 +232,21 @@ class humanResourceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $userExists = User::findOrFail($id);
+
+        $deleteFromHr = HumanResource::where('users_id', $id)->delete();
+
+        $deleteFromUser = User::where('id', $id)->delete();
+
+        if($deleteFromUser AND $deleteFromHr){
+            return back()->with('success', 'Profile deleted.');
+        }
     }
 
+    public function loggedUserID(){
+        $this->userID = new LoginController();
+
+        return $this->userID->userID();
+    }
     
 }

@@ -26,16 +26,9 @@ class HomeController extends Controller
     {
         $userRole = Auth::user()->user_role;
         
-        if($userRole == '1'){
+        if($userRole == '1' || $userRole == '2' || $userRole == '3'){
             return redirect()->route('superadmins.index');
-
-        }elseif ($userRole == '2') {
-            return redirect()->route('admins.index');
-        }
-        elseif ($userRole == '3') {
-            return redirect()->route('humanresource.index');
-        }
-        else{
+        }else{
             return redirect()->route('logout');
             
         }

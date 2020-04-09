@@ -13,6 +13,8 @@ class Admin extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'users_id', 'colleges_id', 'states_id', 'firstname', 'lastname', 'phone_no', 'gender', 'address', 'profile_avatar'
+        'users_id', 'college_id', 'state_id', 'firstname', 'lastname', 'phone_no', 'gender', 'address', 'profile_avatar'
     ];
+
+   
 }

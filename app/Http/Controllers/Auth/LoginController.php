@@ -49,7 +49,7 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function login(Request $request){
+    public function verifyCredentials(Request $request){
         //Check if both the email and password field are not empty with laravel validate function
         $this->validate($request, [
             'email'     =>  'required|email',
@@ -65,10 +65,19 @@ class LoginController extends Controller
         //Attempt to authenticate user provided credentials
         if(Auth::attempt($user_data)){
             return redirect()->route('home');
-
+        }else{
+            return back()->with('error','Invalid credentials.');
         }
     }
 
+    public function userID(){
+        if (Auth::check()) {
+            return Auth::id();
+        } else{
+            return view('login');
+        }
+    }
+    
     public function logout()
     {
         Auth::logout();
