@@ -59,3 +59,8 @@ Route::resource('/colleges',          'CollegeController');
  * Routes for Department Features
 */
 Route::resource('/departments',       'DepartmentController');
+
+/**
+ * Routes for User Role Features
+*/
+Route::resource('/userRoles',       'UserRoleController');

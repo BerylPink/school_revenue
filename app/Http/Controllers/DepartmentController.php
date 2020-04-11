@@ -15,7 +15,11 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        $departments = Department::orderBy('department_name', 'ASC')->get();
+
+        $data = compact('departments');
+
+        return view('departments.department-list', $data)->with('i');
     }
 
     /**
@@ -41,7 +45,30 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validateRequest();
+
+        //INSERT INTO `users` table
+        $createDepartment = Department::create([
+            'college_name'               =>   $request->input('college_name'),
+            'department_name'            =>   $request->input('department_name'),
+            'department_description'     =>   $request->input('department_description'),
+        ]);
+
+        //If successfully created go to login page
+        if($createDepartment){
+            return redirect()->route('department.index')->with('success', $request->input('department_name').' has been created!');
+        }
+
+        //If errors occur, return back to college create page
+        return back()->withInput();
+    }
+
+    private function validateRequest(){
+        return request()->validate([
+            'college_name'                    =>   'required|unique:colleges,college_name',
+            'department_name'                 =>   'required|unique:departments,department_name',
+            'department_description'          =>   'required', 
+        ]);
     }
 
     /**
@@ -63,7 +90,13 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $departmentExists = Department::findOrFail($id);
+
+        $department = Department::select('id', 'colleges_id', 'department_name', 'department_description')->where('id', $id)->first();
+
+        $data = compact('department');
+
+        return view('departments.department-edit', $data);
     }
 
     /**
@@ -75,7 +108,19 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $updateDepartment = Department::where('id', $id)->update([
+            'college_name'                   =>   $request->input('college_name'),
+            'department_name'                =>   $request->input('department_name'),
+            'department_description'         =>   $request->input('department_description'),
+        ]);
+
+
+        if( $updateDepartment){
+
+            return redirect('/departments')->with('success', 'Updated '.$request->input('department_name').' details.');
+        }
+            
+        return back()->withInput();
     }
 
     /**
@@ -86,6 +131,12 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $departmentExists = Department::findOrFail($id);
+
+        $deleteDepartment = Department::where('id', $id)->delete();
+
+        if($deleteDepartment){
+            return back()->with('success', 'Profile deleted.');
+        }
     }
 }
