@@ -64,3 +64,13 @@ Route::resource('/departments',       'DepartmentController');
  * Routes for User Role Features
 */
 Route::resource('/userRoles',       'UserRoleController');
+
+/**
+ * Routes for Academic Staff Features
+*/
+Route::resource('/academicstaffs',       'AcademicController');
+
+/**
+ * Routes for Courses Features
+*/
+Route::resource('/courses',       'CourseController');

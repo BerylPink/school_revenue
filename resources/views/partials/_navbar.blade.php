@@ -123,10 +123,10 @@
 									</li>
 									@endif
 									<li>
-										<a href="">Lecturers</a>
+										<a href="">Academic Staff</a>
 									</li>
 									<li>
-										<a href="">Non-Teaching Staffs</a>
+										<a href="">Non-Academic Staffs</a>
 									</li>
 									<li>
 										<a href="">Student</a>

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Add Department')
+@section('title', 'Add Course')
 @section('content')
 @include('partials._messages')
 <!-- BEGIN .main-heading -->
@@ -11,13 +11,13 @@
             <i class="icon-library"></i>
           </div>
           <div class="page-title">
-            <h5>Add Department</h5>
-            <h6 class="sub-heading">Create a new Department</h6>
+            <h5>Add Course</h5>
+            <h6 class="sub-heading">Create new Course</h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
-            <a href="{{ route('departments.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Department list">
+            <a href="{{ route('courses.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Course list">
                 <i class="icon-books"></i>
               </a>
             </div>
@@ -32,15 +32,15 @@
 <div class="row gutters">
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
     <div class="card">
-      <div class="card-header">Create Department</div>
+      <div class="card-header">Create Course</div>
       <div class="card-body">
-        <form method="POST" action="{{ route('departments.store') }}">
+        <form method="POST" action="{{ route('courses.store') }}">
           @csrf
         <div class="form-group row gutters">
-          <label for="department_name" class="col-sm-3 col-form-label">Department Name</label>
+          <label for="course_name" class="col-sm-3 col-form-label">Course Name</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" id="department_name" placeholder="" class="form-control @error('department_name') is-invalid @enderror" name="department_name" value="{{ old('department_name') }}" required autocomplete="department_name" autofocus>
-            @error('department_name')
+            <input type="text" class="form-control" id="course_name" placeholder="" class="form-control @error('course_name') is-invalid @enderror" name="course_name" value="{{ old('course_name') }}" required autocomplete="course_name" autofocus>
+            @error('course_name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -58,13 +58,25 @@
               @endforeach
           </select>
           </div>
-      </div>
+        </div>
+
+        <div class="form-group row gutters">                        
+          <label for="departments_id" class="col-sm-3 col-form-label">Department</label>
+          <div class="col-sm-9">
+          <select id="departments_id" name="departments_id" class="form-control" required>
+              <option>Choose</option>
+              @foreach ($departments as $department)
+                  <option value="{{ $department->id }}" title="{{ $department->department_description }}">{{ $department->department_name }}</option>                                
+              @endforeach
+          </select>
+          </div>
+        </div>
 
         <div class="form-group row gutters">
-          <label for="college_description" class="col-sm-3 col-form-label">Description</label>
+          <label for="course_description" class="col-sm-3 col-form-label">Course Description</label>
           <div class="col-sm-9">
-            <textarea id="college_description" rows="3" class="form-control @error('college_description') is-invalid @enderror" name="college_description" required autocomplete="college_description" autofocus>{{ old('college_description') }}</textarea>
-            @error('college_description')
+            <textarea id="course_description" rows="3" class="form-control @error('course_description') is-invalid @enderror" name="course_description" required autocomplete="course_description" autofocus>{{ old('course_description') }}</textarea>
+            @error('course_description')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
