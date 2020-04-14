@@ -16,10 +16,10 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-// Route::get('/login',                 'ViewsOnlyController@showLoginForm')->name('login');
-Route::post('/verify-credentials',  'Auth\LoginController@verifyCredentials')->name('login.verify_credentials');
-Route::get('/home',                 'HomeController@index')->name('home');
-Route::get('/logout',               'Auth\LoginController@logout')->name('logout');
+// Route::get('/login',                   'ViewsOnlyController@showLoginForm')->name('login');
+Route::post('/verify-credentials',        'Auth\LoginController@verifyCredentials')->name('login.verify_credentials');
+Route::get('/home',                       'HomeController@index')->name('home');
+Route::get('/logout',                     'Auth\LoginController@logout')->name('logout');
 
 
 
@@ -32,35 +32,42 @@ Route::get('/logout',               'Auth\LoginController@logout')->name('logout
 Route::get('/superadmin/register', function () {
     return view('superadmin.registerSuperadmin');
 })->name('superadmin.register');
-Route::resource('/superadmins',       'SuperAdminController');
-Route::get('/superadmin/list',       'SuperAdminController@superAdminList')->name('superadmins.list');
+Route::resource('/superadmins',           'SuperAdminController');
+Route::get('/superadmin/list',            'SuperAdminController@superAdminList')->name('superadmins.list');
 
 /**
  * Routes for Admin Features
 */
-Route::resource('/admins',            'AdminController');
+Route::resource('/admins',                'AdminController');
 
+
+/**
+ * Routes for Human Resource Features
+*/
+Route::resource('/human-resource',        'HumanResourceController');
 Route::get('/humanresource/register', function () {
     return view('humanResource.registerHR');
 })->name('humanresource.register');
 
 /**
- * Routes for Human Resource Features
-*/
-Route::resource('/human-resource',    'HumanResourceController');
-
-/**
  * Routes for College Features
 */
-Route::resource('/colleges',          'CollegeController');
+Route::resource('/colleges',              'CollegeController');
 
 
 /**
  * Routes for Department Features
 */
-Route::resource('/departments',       'DepartmentController');
+Route::resource('/departments',          'DepartmentController');
+
 
 /**
  * Routes for User Role Features
 */
-Route::resource('/userRoles',       'UserRoleController');
+Route::resource('/userroles',            'UserRoleController');
+
+/**
+ * Routes for Student Features
+*/
+Route::resource('/students',             'StudentController');
+Route::get('/students/college/departments',  'StudentController@getDepartmentsFromCollege')->name('colleges.departments');

@@ -15,6 +15,14 @@
             <h6 class="sub-heading">Create a new Student Profile</h6>
           </div>
         </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+        <div class="right-actions">
+            <a href="{{ route('students.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Students list">
+            <i class="icon-users"></i>
+            </a>
+
+        </div>
+        </div>
       </div>
     </div>
   </header>
@@ -52,7 +60,6 @@
                     <div class="form-group col-md-4">
                         <label for="phone_no" class="col-form-label">Phone Number</label>
                         <input id="phone_no" maxlength="11" type="tel" class="form-control @error('phone_no') is-invalid @enderror" name="phone_no" value="{{ old('phone_no') }}" required autocomplete="phone_no" autofocus placeholder="Phone Number">
-
                         @error('phone_no')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -70,40 +77,46 @@
                             @enderror
                     </div>
                     <div class="form-group col-md-4">                        
-                        <label for="DOB" class="col-form-label">Date of Birth</label>
-                        <input id="date" type="date" name="date" value="{{ old('date') }}" required autocomplete="date" placeholder="Date of Birth">
-                        <!-- @error('gender')
+                        <label for="dob" class="col-form-label">Date of Birth</label>
+                        <input id="dob" type="dob" class="form-control @error('dob') is-invalid @enderror" name="dob" value="{{ old('dob') }}" required readonly placeholder="Date of Birth">
+                        @error('dob')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
-                        @enderror -->
+                        @enderror 
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-4">                        
-                        <label for="college_id" class="col-form-label">College</label>
-                        <select id="college_id" name="college_id" class="form-control" required>
+                        <label for="colleges_id" class="col-form-label">College</label>
+                        <select id="colleges_id" name="colleges_id" class="form-control @error('colleges_id') is-invalid @enderror" required>
                             <option>Choose</option>
                             @foreach ($colleges as $college)
                                 <option value="{{ $college->id }}" title="{{ $college->college_description }}">{{ $college->college_name }}</option>                                
                             @endforeach
                         </select>
+                        @error('colleges_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="department_id" class="col-form-label">Department</label>
-                        <select id="department_id" name="department_id" class="form-control" required>
-                            <option>Choose</option>
-                            @foreach ($departmentss as $department)
-                                <option value="{{ $department->id }}" title="{{ $department->department_description }}">{{ $department->department_name }}</option>                                
-                            @endforeach
+                        <label for="departments_id" class="col-form-label">Department</label>
+                        <select id="departments_id" name="departments_id" class="form-control @error('departments_id') is-invalid @enderror" required>
+                            <option value="">Choose</option>                                
                         </select>                        
-                        
+                        @error('departments_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">         
-                        <label for="profile_avatar" class="col-form-label">Admission Number</label>
-                        <input type="text" class="form-control" id="admission_no" placeholder="Admission Number" class="form-control @error('admission_no') is-invalid @enderror" name="admission_no" value="{{ old('admission_no') }}" required autocomplete="admission_no" autofocus>
-                        @error('admission_no')
+                        <label for="profile_avatar" class="col-form-label">Registration Number</label>
+                        <input type="text" class="form-control" id="registration_number" placeholder="Registration Number" class="form-control @error('registration_number') is-invalid @enderror" name="registration_number" value="{{ old('registration_number') }}" required autocomplete="registration_number" maxlength="11" autofocus>
+                        @error('registration_number')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -113,29 +126,39 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-4">                        
-                        <label for="country_id" class="col-form-label">Country</label>
-                        <select id="country_id" name="country_id" class="form-control" required>
+                        <label for="countries_id" class="col-form-label">Country</label>
+                        <select id="countries_id" name="countries_id" class="form-control @error('countries_id') is-invalid @enderror" required>
                             <option>Choose</option>
                             @foreach ($countries as $country)
                                 <option value="{{ $country->CountryID }}">{{ $country->CountryName }}</option>                                
                             @endforeach
                         </select>
+                        @error('countries_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">                        
-                        <label for="state_id" class="col-form-label">State</label>
-                        <select id="state_id" name="state_id" class="form-control" required>
+                        <label for="states_id" class="col-form-label">State</label>
+                        <select id="states_id" name="states_id" class="form-control @error('states_id') is-invalid @enderror" required>
                             <option>Choose</option>
                             @foreach ($states as $state)
                                 <option value="{{ $state->StateID }}">{{ $state->StateName }}</option>                                
                             @endforeach
                         </select>
+                        @error('states_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">         
                         <label for="gender" class="col-form-label">Gender</label>
-                        <select id="gender" name="gender" class="form-control" required>
+                        <select id="gender" name="gender" class="form-control @error('states_id') is-invalid @enderror" required>
                             <option>Choose</option>
-                            <option value="female">Female</option>
-                            <option value="male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Male">Male</option>
                         </select>
                         @error('gender')
                             <span class="invalid-feedback" role="alert">
@@ -146,27 +169,18 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="admission_date" class="col-form-label">Admission Date</label>
-                        <input id="admission_date" type="admission_date" name="admission_date" value="{{ old('admission_date') }}" required autocomplete="admission_date" placeholder="Admission Date">
-                        <!-- @error('gender')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror -->
-                    </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-12">
                         <label for="profile_avatar" class="col-form-label">Profile Avatar</label>
-                        <label class="custom-file">
+                        {{-- <label class="custom-file"> --}}
                             <input type="file" id="profile_avatar" name="profile_avatar" class="custom-file-input">
                             <span class="custom-file-control"></span>
-                        </label>
+                        {{-- </label> --}}
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="firstname" class="col-form-label">Password</label>
+                        <label for="password" class="col-form-label">Password</label>
                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
                         @error('password')
                             <span class="invalid-feedback" role="alert">
@@ -197,5 +211,37 @@
     <!-- Row end -->
     </div>
 
+<script>
+   $('#colleges_id').on('change',function () {
+        let college_id = $('#colleges_id').find('option:selected').val();
+        // console.log(state);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
+        $.ajax({
+            url: "{{ route('colleges.departments') }}",
+            method: "GET",
+            dataType: "JSON",
+            data: {college_id:college_id},
+            success: function(data){
+                if(data){
+                    $('#departments_id').html(data.collegeDepartment);
+                }
+            },
+        })
+    })
+
+    $('#countries_id').on('change',function () {
+        let country_id = $('#countries_id').find('option:selected').val();
+        if(country_id != 156){
+            $('#states_id').prop('selectedIndex', 1).val();
+        }else{
+            $('#states_id').prop('selectedIndex', 0).val();
+        }
+    })
+
+</script>
 @endsection

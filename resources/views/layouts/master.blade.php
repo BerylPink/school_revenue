@@ -14,9 +14,12 @@
   <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4-custom.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/gallery/gallery.css') }}" />
+  <link rel="stylesheet" href="{{ asset('assets/css/jquery.datetimepicker.min.css') }}">
+
   {{-- <link rel="stylesheet" href="{{ asset('assets/css/jquery.datetimepicker.min.css') }}"> --}}
   
   {{-- <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}" sizes="32x32"> --}}
+  <script src="{{ asset('assets/js/jquery.js') }}"></script>
   
   <title>@yield('title') - School Revenue</title>
 </head>

@@ -106,7 +106,7 @@
 								</a>
 							</li>
 					
-							<li class="{{ Route::currentRouteNamed('admins.index', 'admins.create', 'admins.show', 'admins.edit', 'human-resource.index', 'human-resource.create', 'human-resource.show', 'human-resource.edit','superadmins.list', 'superadmins.show') ? 'active selected' : '' }}">
+							<li class="{{ Route::currentRouteNamed('admins.index', 'admins.create', 'admins.show', 'admins.edit', 'human-resource.index', 'human-resource.create', 'human-resource.show', 'human-resource.edit','superadmins.list', 'superadmins.show', 'students.index', 'students.create', 'students.edit', 'students.show') ? 'active selected' : '' }}">
 								<a href="#" class="has-arrow" aria-expanded="false">
 									<span class="has-icon">
 										<i class="icon-users"></i>
@@ -114,26 +114,26 @@
 									<span class="nav-title">Users</span>
 								</a>
 								<ul aria-expanded="false" class="collapse">	
+									<li>
+										<a href="">Academic Staffs</a>
+									</li>
 									@if($user->user_role == 1)								
 									<li>
-									<a class="{{ Route::currentRouteNamed('admins.index') ? 'current-page' : '' }}" href="{{ route('admins.index') }}">Admin</a>
+									<a class="{{ Route::currentRouteNamed('admins.index', 'admins.create', 'admins.show', 'admins.edit') ? 'current-page' : '' }}" href="{{ route('admins.index') }}">Administrators</a>
 									</li>
 									<li>
-										<a class="{{ Route::currentRouteNamed('human-resource.index', 'human-resource.create', 'human-resource.show', 'human-resource.edit') ? 'current-page' : '' }}" href="{{ route('human-resource.index') }}">Human Resource</a>
+										<a class="{{ Route::currentRouteNamed('human-resource.index', 'human-resource.create', 'human-resource.show', 'human-resource.edit') ? 'current-page' : '' }}" href="{{ route('human-resource.index') }}">Human Resources</a>
 									</li>
-									@endif
+									@endif									
 									<li>
-										<a href="">Lecturers</a>
-									</li>
-									<li>
-										<a href="">Non-Teaching Staffs</a>
+										<a href="">Non-Academic Staffs</a>
 									</li>
 									<li>
-										<a href="">Student</a>
+										<a class="{{ Route::currentRouteNamed('students.index', 'students.create', 'students.edit', 'students.show') ? 'current-page' : '' }}" href="{{ route('students.index') }}">Students</a>
 									</li>
 									@if($user->user_role == 1)								
 									<li class="{{ Route::currentRouteNamed('superadmins.list') ? 'active selected' : '' }}">
-									<a class="{{ Route::currentRouteNamed('superadmins.list', 'superadmins.show') ? 'current-page' : '' }}" href="{{ route('superadmins.list') }}">Super Admin</a>
+										<a class="{{ Route::currentRouteNamed('superadmins.list', 'superadmins.show') ? 'current-page' : '' }}" href="{{ route('superadmins.list') }}">Super Admins</a>
 									</li>
 									@endif
 								</ul>

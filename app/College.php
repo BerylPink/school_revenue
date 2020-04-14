@@ -13,5 +13,8 @@ class College extends Model
         'college_name', 'college_description',
     ];
 
+    public function departments(){
+        return $this->hasMany(Department::class);
+    }
 }
 
