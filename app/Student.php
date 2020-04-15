@@ -13,7 +13,7 @@ class Student extends Model
     public $timestamps = false;
     
     protected $fillable = [
-        'users_id',	'countries_id', 'states_id', 'colleges_id', 'departments_id', 'registration_number', 'firstname', 'lastname', 'gender', 'dob', 'phone_no', 'address', 'profile_avatar',
+        'users_id',	'countries_id', 'states_id', 'colleges_id', 'departments_id', 'registration_number', 'firstname', 'lastname', 'gender', 'dob', 'phone_no', 'address', 'profile_avatar', 'updated_by',
     ];
 
     public function country(){

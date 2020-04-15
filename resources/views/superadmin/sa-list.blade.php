@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'SUper Admin List')
+@section('title', 'Super Admin List')
 @section('content')
 @include('partials._messages')
 <!-- BEGIN .main-heading -->

@@ -38,8 +38,8 @@ class StudentController extends Controller
         ->join('students', 'students.users_id', '=', 'users.id')
         ->join('colleges', 'colleges.id', '=', 'students.colleges_id')
         ->join('departments', 'departments.id', '=', 'students.departments_id')
-        ->select('users.id', 'firstname', 'lastname', 'registration_number', 'college_name', 'department_name', 'registration_date')
-        ->orderBy('registration_date', 'DESC')->get();
+        ->select('users.id', 'firstname', 'lastname', 'registration_number', 'college_name', 'department_name', 'users.created_at')
+        ->orderBy('users.created_at', 'DESC')->get();
 
         $data = compact('students');
 
@@ -183,7 +183,7 @@ class StudentController extends Controller
             ->join('departments', 'departments.id', '=', 'students.departments_id')
             ->join('countries', 'countries.CountryID', '=', 'students.countries_id')
             ->join('states', 'states.StateID', '=', 'students.states_id')
-            ->select('users.id', 'email', 'firstname', 'lastname', 'college_name', 'department_name', 'StateName', 'gender', 'phone_no', 'address', 'profile_avatar', 'registration_date')
+            ->select('users.id', 'email', 'registration_number', 'firstname', 'lastname', 'college_name', 'department_name', 'StateName', 'gender', 'phone_no', 'dob', 'CountryName', 'address', 'profile_avatar', 'users.created_at')
             ->where('users.id', $id)->first();
 
             $data = compact('student');
@@ -210,8 +210,8 @@ class StudentController extends Controller
         ->join('students', 'students.users_id', '=', 'users.id')
         ->join('colleges', 'colleges.id', '=', 'students.colleges_id')
         ->join('departments', 'departments.id', '=', 'students.departments_id')
-        ->join('states', 'states.StateID', '=', 'students.state_id')
-        ->select('users.id', 'email', 'firstname', 'lastname', 'college_name', 'colleges_id', 'state_id', 'StateName', 'departments_id', 'department_name', 'gender', 'phone_no', 'address', 'profile_avatar', 'users.created_at')
+        ->join('states', 'states.StateID', '=', 'students.states_id')
+        ->select('users.id', 'email', 'firstname', 'lastname', 'countries_id', 'college_name', 'students.colleges_id', 'states_id', 'StateName', 'departments_id', 'registration_number', 'department_name', 'gender', 'dob', 'phone_no', 'address', 'profile_avatar', 'users.created_at')
         ->where('users.id', $id)->first();
 
         $states = State::select('StateID', 'StateName')->get();
@@ -235,7 +235,67 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $studentId = Student::select('id')->where('users_id', $id)->first();
+        // return response()->json($studentId);
+
+        //Validate request
+        request()->validate([
+            'countries_id'              =>   'required',
+            'states_id'                 =>   'required',
+            'colleges_id'               =>   'required',
+            'departments_id'            =>   'required',
+            'registration_number'       =>   'required',
+            'firstname'                 =>   'required',
+            'lastname'                  =>   'required', 
+            'phone_no'                  =>   'required|Numeric|unique:students,phone_no,'.$studentId->id.',id',
+            'gender'                    =>   'required',
+            'email'                     =>   'required|email|unique:users,email,'.$id.',id',
+            'profile_avatar'            =>   'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'address'                   =>   'required',
+        ]);
+
+        //Validate if an image filewas selected 
+        if($request->hasFile('profile_avatar')){
+            $image = $request->file('profile_avatar');
+            $avatarName = rand() .'.'.$image->getClientOriginalExtension();
+            $image->move(public_path('uploads'), $avatarName);
+        } else{
+            //If image wasn't selected, set a default image for profile avatar
+            $avatarName = $request->input('old_profile_avatar');
+        }
+
+        $fullname = $request->input('firstname').' '.$request->input('lastname');
+
+        //UPDATE `users` table
+        $users = User::where('id', $id)->update([
+            'email'            =>   $request->input('email'),
+        ]);
+
+        //INSERT INTO `students` tabble
+        $studentInfos = Student::where('users_id', $id)->update([
+            'countries_id'              =>   $request->input('countries_id'),
+            'states_id'                 =>   $request->input('states_id'),
+            'colleges_id'               =>   $request->input('colleges_id'),
+            'departments_id'            =>   $request->input('departments_id'),
+            'registration_number'       =>   $request->input('registration_number'),
+            'firstname'                 =>   $request->input('firstname'),
+            'lastname'                  =>   $request->input('lastname'),
+            'gender'                    =>   $request->input('gender'),
+            'dob'                       =>   $request->input('dob'),
+            'phone_no'                  =>   $request->input('phone_no'),
+            'address'                   =>   $request->input('address'),
+            'profile_avatar'            =>   $avatarName,           
+            'registration_date'         =>   $request->input('registration_date'),
+            'updated_by'                =>   $this->loggedUserID(),
+
+        ]);
+
+        if($users AND $studentInfos){
+
+            return redirect('/students')->with('success', 'Updated '.$fullname.' profile.');
+        }
+            
+        return back()->withInput();
     }
 
     /**
@@ -246,7 +306,28 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $userExists = User::findOrFail($id);
+
+        $deleteImage = Student::select('profile_avatar')->where('users_id', $id)->first();
+
+        $deleteFromStudent = Student::where('users_id', $id)->delete();
+
+        $deleteFromUser = User::where('id', $id)->delete();
+
+        if($deleteFromUser AND $deleteFromStudent){
+
+            if(\File::exists(public_path('uploads/'.$deleteImage->profile_avatar))){
+
+                $deleted =  \File::delete(public_path('uploads/'.$deleteImage->profile_avatar));
+
+                if($deleted){
+                    return back()->with('success', 'Profile deleted.');
+                }
+            }else{
+                return back()->with('success', 'Profile deleted.');
+
+            }
+        }
     }
 
     /**

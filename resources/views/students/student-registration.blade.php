@@ -172,7 +172,7 @@
                     <div class="form-group col-md-12">
                         <label for="profile_avatar" class="col-form-label">Profile Avatar</label>
                         {{-- <label class="custom-file"> --}}
-                            <input type="file" id="profile_avatar" name="profile_avatar" class="custom-file-input">
+                            <input type="file" accept="image/x-png,image/gif,image/jpeg" id="profile_avatar" name="profile_avatar" class="custom-file-input">
                             <span class="custom-file-control"></span>
                         {{-- </label> --}}
                     </div>

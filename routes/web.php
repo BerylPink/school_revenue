@@ -71,3 +71,18 @@ Route::resource('/userroles',            'UserRoleController');
 */
 Route::resource('/students',             'StudentController');
 Route::get('/students/college/departments',  'StudentController@getDepartmentsFromCollege')->name('colleges.departments');
+
+/**
+ * Routes for Academic Staff Features
+*/
+Route::resource('/academicstaffs',       'AcademicController');
+
+/**
+ * Routes for Courses Features
+*/
+Route::resource('/courses',       'CourseController');
+
+/**
+ * Routes for Courses Features
+*/
+Route::resource('/fee-categories',       'FeeCategoryController');

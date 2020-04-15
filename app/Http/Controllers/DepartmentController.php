@@ -9,6 +9,14 @@ use App\College;
 class DepartmentController extends Controller
 {
     /**
+     * This method will redirect users back to the login page if not properly authenticated
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
+    
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -29,7 +37,8 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        $colleges = College::select('id', 'college_name', 'college_description')->orderBy('college_name', 'ASC')->get();
+        $colleges = College::select('id', 'college_name', 'college_description')
+        ->orderBy('college_name', 'ASC')->get();
 
         $data = compact('colleges');
 
@@ -49,14 +58,14 @@ class DepartmentController extends Controller
 
         //INSERT INTO `users` table
         $createDepartment = Department::create([
-            'college_name'               =>   $request->input('college_name'),
+            'colleges_id'                =>   $request->input('colleges_id'),
             'department_name'            =>   $request->input('department_name'),
             'department_description'     =>   $request->input('department_description'),
         ]);
 
         //If successfully created go to login page
         if($createDepartment){
-            return redirect()->route('department.index')->with('success', $request->input('department_name').' has been created!');
+            return redirect()->route('departments.index')->with('success', $request->input('department_name').' has been created!');
         }
 
         //If errors occur, return back to college create page
@@ -65,7 +74,7 @@ class DepartmentController extends Controller
 
     private function validateRequest(){
         return request()->validate([
-            'college_name'                    =>   'required|unique:colleges,college_name',
+            'colleges_id'                     =>   'required',
             'department_name'                 =>   'required|unique:departments,department_name',
             'department_description'          =>   'required', 
         ]);
@@ -94,7 +103,10 @@ class DepartmentController extends Controller
 
         $department = Department::select('id', 'colleges_id', 'department_name', 'department_description')->where('id', $id)->first();
 
-        $data = compact('department');
+        $colleges = College::select('id', 'college_name', 'college_description')
+        ->orderBy('college_name', 'ASC')->get();
+
+        $data = compact('department', 'colleges');
 
         return view('departments.department-edit', $data);
     }
@@ -109,7 +121,7 @@ class DepartmentController extends Controller
     public function update(Request $request, $id)
     {
         $updateDepartment = Department::where('id', $id)->update([
-            'college_name'                   =>   $request->input('college_name'),
+            'colleges_id'                    =>   $request->input('colleges_id'),
             'department_name'                =>   $request->input('department_name'),
             'department_description'         =>   $request->input('department_description'),
         ]);

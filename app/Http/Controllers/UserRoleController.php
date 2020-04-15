@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 class UserRoleController extends Controller
 {
     /**
+     * This method will redirect users back to the login page if not properly authenticated
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
+    
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

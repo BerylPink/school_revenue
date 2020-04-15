@@ -249,12 +249,24 @@ class AdminController extends Controller
     {
         $userExists = User::findOrFail($id);
 
+        $deleteImage = Admin::select('profile_avatar')->where('users_id', $id)->first();
+
         $deleteFromAdmin = Admin::where('users_id', $id)->delete();
 
         $deleteFromUser = User::where('id', $id)->delete();
 
         if($deleteFromUser AND $deleteFromAdmin){
-            return back()->with('success', 'Profile deleted.');
+            if(\File::exists(public_path('uploads/'.$deleteImage->profile_avatar))){
+
+                $deleted =  \File::delete(public_path('uploads/'.$deleteImage->profile_avatar));
+
+                if($deleted){
+                    return back()->with('success', 'Profile deleted.');
+                }
+            }else{
+                return back()->with('success', 'Profile deleted.');
+
+            }
         }
         
     }

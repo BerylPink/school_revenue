@@ -34,137 +34,81 @@
         <div class="card">
             <div class="card-header">Create Profile</div>
             <div class="card-body">
-                <form method="POST" action="{{ route('students.store') }}" enctype="multipart/form-data">
-                    @csrf
+                <form method="POST" action="{{ route('students.update', $student->id) }}" enctype="multipart/form-data">
+                    @csrf @method('PUT')
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="firstname" class="col-form-label">First Name</label>
-                        <input type="text" class="form-control" id="firstname" placeholder="First Name" class="form-control @error('firstname') is-invalid @enderror" name="firstname" value="{{ old('firstname') }}" required autocomplete="firstname" autofocus>
-                        @error('firstname')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input type="text" class="form-control" id="firstname" placeholder="First Name" class="form-control" name="firstname" value="{{ old('firstname') ?? $student->firstname }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="lastname" class="col-form-label">Last Name</label>
-                        <input type="text" class="form-control" id="lastname" placeholder="Last Name" class="form-control @error('lastname') is-invalid @enderror" name="lastname" value="{{ old('lastname') }}" required autocomplete="lastname" autofocus>
-                        @error('lastname')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input type="text" class="form-control" id="lastname" placeholder="Last Name" class="form-control" name="lastname" value="{{ old('lastname') ?? $student->lastname }}">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="phone_no" class="col-form-label">Phone Number</label>
-                        <input id="phone_no" maxlength="11" type="tel" class="form-control @error('phone_no') is-invalid @enderror" name="phone_no" value="{{ old('phone_no') }}" required autocomplete="phone_no" autofocus placeholder="Phone Number">
-                        @error('phone_no')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input id="phone_no" maxlength="11" type="tel" class="form-control" name="phone_no" value="{{ old('phone_no') ?? $student->phone_no }}" placeholder="Phone Number">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="email" class="col-form-label">Email</label>
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Email">
-
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') ?? $student->email }}" placeholder="Email">
                     </div>
                     <div class="form-group col-md-4">                        
                         <label for="dob" class="col-form-label">Date of Birth</label>
-                        <input id="dob" type="dob" class="form-control @error('dob') is-invalid @enderror" name="dob" value="{{ old('dob') }}" required readonly placeholder="Date of Birth">
-                        @error('dob')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror 
+                        <input id="dob" type="dob" class="form-control" name="dob" value="{{ old('dob') ?? $student->dob }}"  placeholder="Date of Birth">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-4">                        
                         <label for="colleges_id" class="col-form-label">College</label>
-                        <select id="colleges_id" name="colleges_id" class="form-control @error('colleges_id') is-invalid @enderror" required>
+                        <select id="colleges_id" name="colleges_id" class="form-control">
                             <option>Choose</option>
                             @foreach ($colleges as $college)
-                                <option value="{{ $college->id }}" title="{{ $college->college_description }}">{{ $college->college_name }}</option>                                
+                                <option value="{{ $college->id }}" title="{{ $college->college_description }}" @if($college->id == $student->colleges_id ) selected @endif>{{ $college->college_name }}</option>                                
                             @endforeach
                         </select>
-                        @error('colleges_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label for="departments_id" class="col-form-label">Department</label>
-                        <select id="departments_id" name="departments_id" class="form-control @error('departments_id') is-invalid @enderror" required>
-                            <option value="">Choose</option>                                
-                        </select>                        
-                        @error('departments_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <select id="departments_id" name="departments_id" class="form-control">
+                        <option value="{{ $student->departments_id }}">{{ $student->department_name }}</option>                                
+                        </select>
                     </div>
                     <div class="form-group col-md-4">         
                         <label for="profile_avatar" class="col-form-label">Registration Number</label>
-                        <input type="text" class="form-control" id="registration_number" placeholder="Registration Number" class="form-control @error('registration_number') is-invalid @enderror" name="registration_number" value="{{ old('registration_number') }}" required autocomplete="registration_number" maxlength="11" autofocus>
-                        @error('registration_number')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input type="text" class="form-control" id="registration_number" placeholder="Registration Number" class="form-control" name="registration_number" value="{{ old('registration_number') ?? $student->registration_number }}" readonly maxlength="11">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-4">                        
                         <label for="countries_id" class="col-form-label">Country</label>
-                        <select id="countries_id" name="countries_id" class="form-control @error('countries_id') is-invalid @enderror" required>
+                        <select id="countries_id" name="countries_id" class="form-control">
                             <option>Choose</option>
                             @foreach ($countries as $country)
-                                <option value="{{ $country->CountryID }}">{{ $country->CountryName }}</option>                                
+                                <option value="{{ $country->CountryID }}" @if($country->CountryID == $student->countries_id ) selected @endif>{{ $country->CountryName }}</option>                                
                             @endforeach
                         </select>
-                        @error('countries_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
                     </div>
                     <div class="form-group col-md-4">                        
                         <label for="states_id" class="col-form-label">State</label>
-                        <select id="states_id" name="states_id" class="form-control @error('states_id') is-invalid @enderror" required>
+                        <select id="states_id" name="states_id" class="form-control">
                             <option>Choose</option>
                             @foreach ($states as $state)
-                                <option value="{{ $state->StateID }}">{{ $state->StateName }}</option>                                
+                                <option value="{{ $state->StateID }}" @if($state->StateID == $student->states_id ) selected @endif>{{ $state->StateName }}</option>                                
                             @endforeach
                         </select>
-                        @error('states_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
                     </div>
                     <div class="form-group col-md-4">         
                         <label for="gender" class="col-form-label">Gender</label>
-                        <select id="gender" name="gender" class="form-control @error('states_id') is-invalid @enderror" required>
+                        <select id="gender" name="gender" class="form-control">
                             <option>Choose</option>
-                            <option value="Female">Female</option>
-                            <option value="Male">Male</option>
+                            <option value="Female" @if($student->gender == 'Female') selected @endif>Female</option>
+                            <option value="Male" @if($student->gender == 'Male') selected @endif>Male</option>
                         </select>
-                        @error('gender')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
                     </div>
                 </div>
 
@@ -174,36 +118,18 @@
                         {{-- <label class="custom-file"> --}}
                             <input type="file" id="profile_avatar" name="profile_avatar" class="custom-file-input">
                             <span class="custom-file-control"></span>
+                            <input type="hidden" id="old_profile_avatar" name="old_profile_avatar" class="custom-file-input" value="{{ $student->profile_avatar }}">
                         {{-- </label> --}}
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="password" class="col-form-label">Password</label>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
-                        @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="confirm_password" class="col-form-label">Confirm Password</label>
-                        <input id="confirm_assword" type="password" class="form-control" name="confirm_password" required>
-                    </div>
-                </div>
+              
                 <div class="form-group">
                     <label for="address" class="col-form-label">Address</label>
-                    <textarea id="address" rows="3" class="form-control @error('address') is-invalid @enderror" name="address"  required autocomplete="address" autofocus>{{ old('address') }}</textarea>
-                    @error('address')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                    <textarea id="address" rows="3" class="form-control" name="address">{{ old('address') ?? $student->address }}</textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>
         </div>

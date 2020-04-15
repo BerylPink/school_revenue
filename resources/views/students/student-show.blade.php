@@ -59,18 +59,24 @@
                       </a>
                       <div class="pl-10 d-none d-md-block">
                       <h5 class="mb-0"><a class="hover-primary text-white" href="#">{{ $student->firstname.' '.$student->lastname }}</a></h5>
-                        <span>Human Resources</span>
+                        <span>{{ $student->registration_number }}</span>
                       </div>
                     </div>
     
                     <ul class="flexbox flex-justified text-center py-20">
                       <li class="px-10">
+                        <span class="opacity-60">Country</span><br>
+                        <span class="font-size-20">{{ $student->CountryName }}</span>
+                      </li>
+
+                      <li class="px-10">
                         <span class="opacity-60">State</span><br>
                         <span class="font-size-20">{{ $student->StateName }}</span>
                       </li>
+                      
                       <li class="pl-10">
-                        <span class="opacity-60">Date Created</span><br>
-                        <span class="font-size-20"><?php $date = \Carbon\Carbon::parse($student->registration_date , 'UTC'); echo $date->isoFormat('MMMM Do YYYY'); ?></span>
+                        <span class="opacity-60">Reg. Date</span><br>
+                        <span class="font-size-20"><?php $date = \Carbon\Carbon::parse($student->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY'); ?></span>
                       </li>
                     </ul>
                   </div>
@@ -93,10 +99,9 @@
 
                       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                           <div class="profile-user-info">
-                            <p>Email :<span class="text-gray pl-10">{{ $student->email }}</span> </p>
-                            <p>Phone :<span class="text-gray pl-10">{{ $student->phone_no }}</span></p>
-                            <p>Gender :<span class="text-gray pl-10">{{ $student->gender }}</span></p>
-                            <p>Address :<span class="text-gray pl-10">{{ $student->address }}</span></p>
+                            <p>Age :<span class="text-gray pl-10">{{ \Carbon\Carbon::parse($student->dob)->age}}</span> </p>
+                            <p>College :<span class="text-gray pl-10">{{ $student->college_name }}</span></p>
+                            <p>Department :<span class="text-gray pl-10">{{ $student->department_name }}</span></p>
                           </div>
                       </div>
                   </div>

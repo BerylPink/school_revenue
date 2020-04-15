@@ -105,6 +105,23 @@
 									<span class="nav-title">Dashboard</span>
 								</a>
 							</li>
+
+							<li class="{{ Route::currentRouteNamed('fee-categories.index', 'fee-categories.create', 'fee-categories.edit') ? 'active selected' : '' }}">
+								<a href="#" class="has-arrow" aria-expanded="false">
+									<span class="has-icon">
+										<i class="icon-tree"></i>
+									</span>
+									<span class="nav-title">Fee Category</span>
+								</a>
+								<ul aria-expanded="false" class="collapse" style="height: 0px;">
+									<li>
+										<a class="{{ Route::currentRouteNamed('fee-categories.create') ? 'current-page' : '' }}" href="{{ route('fee-categories.create') }}">Add</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('fee-categories.index') ? 'current-page' : '' }}" href="{{ route('fee-categories.index') }}">List</a>
+									</li>
+								</ul>
+							</li>
 					
 							<li class="{{ Route::currentRouteNamed('admins.index', 'admins.create', 'admins.show', 'admins.edit', 'human-resource.index', 'human-resource.create', 'human-resource.show', 'human-resource.edit','superadmins.list', 'superadmins.show', 'students.index', 'students.create', 'students.edit', 'students.show') ? 'active selected' : '' }}">
 								<a href="#" class="has-arrow" aria-expanded="false">
@@ -119,7 +136,7 @@
 									</li>
 									@if($user->user_role == 1)								
 									<li>
-									<a class="{{ Route::currentRouteNamed('admins.index', 'admins.create', 'admins.show', 'admins.edit') ? 'current-page' : '' }}" href="{{ route('admins.index') }}">Administrators</a>
+										<a class="{{ Route::currentRouteNamed('admins.index', 'admins.create', 'admins.show', 'admins.edit') ? 'current-page' : '' }}" href="{{ route('admins.index') }}">Administrators</a>
 									</li>
 									<li>
 										<a class="{{ Route::currentRouteNamed('human-resource.index', 'human-resource.create', 'human-resource.show', 'human-resource.edit') ? 'current-page' : '' }}" href="{{ route('human-resource.index') }}">Human Resources</a>
@@ -138,7 +155,8 @@
 									@endif
 								</ul>
 							</li>
-							<li class="{{ Route::currentRouteNamed('colleges.index', 'colleges.create') ? 'active selected' : '' }}">
+
+							<li class="{{ Route::currentRouteNamed('colleges.index', 'colleges.create', 'colleges.edit') ? 'active selected' : '' }}">
 								<a href="#" class="has-arrow" aria-expanded="false">
 									<span class="has-icon">
 										<i class="icon-office"></i>
@@ -150,11 +168,12 @@
 										<a class="{{ Route::currentRouteNamed('colleges.create') ? 'current-page' : '' }}" href="{{ route('colleges.create') }}">Add</a>
 									</li>
 									<li>
-									<a class="{{ Route::currentRouteNamed('colleges.index') ? 'current-page' : '' }}" href="{{ route('colleges.index') }}">List</a>
+										<a class="{{ Route::currentRouteNamed('colleges.index') ? 'current-page' : '' }}" href="{{ route('colleges.index') }}">List</a>
 									</li>
 								</ul>
 							</li>
-							<li class="{{ Route::currentRouteNamed('departments.index', 'departments.create') ? 'active selected' : '' }}">
+
+							<li class="{{ Route::currentRouteNamed('departments.index', 'departments.create', 'departments.edit') ? 'active selected' : '' }}">
 								<a href="#" class="has-arrow" aria-expanded="false">
 									<span class="has-icon">
 										<i class="icon-books"></i>
@@ -163,14 +182,15 @@
 								</a>
 								<ul aria-expanded="false" class="collapse" style="height: 0px;">
 									<li>
-									<a class="{{ Route::currentRouteNamed('departments.create') ? 'current-page' : '' }}" href="{{ route('departments.create') }}">Add</a>
+										<a class="{{ Route::currentRouteNamed('departments.create') ? 'current-page' : '' }}" href="{{ route('departments.create') }}">Add</a>
 									</li>
 									<li>
-										<a href="">List</a>
+										<a class="{{ Route::currentRouteNamed('departments.index') ? 'current-page' : '' }}" href="{{ route('departments.index') }}">List</a>
 									</li>
 								</ul>
 							</li>
-							<li class="">
+
+							<li>
 								<a href="#" class="has-arrow" aria-expanded="false">
 									<span class="has-icon">
 										<i class="icon-credit-card"></i>
@@ -179,16 +199,14 @@
 								</a>
 								<ul aria-expanded="false" class="collapse" style="height: 0px;">
 									<li>
-										<a href="">List</a>
+										<a class="" href="">Add</a>
 									</li>
 									<li>
-										<a href="">Option 1</a>
-									</li>
-									<li>
-										<a href="">Option 2</a>
+										<a class="" href="">List</a>
 									</li>
 								</ul>
 							</li>
+							
 						</ul>
 						<!-- END: side-nav-content -->
 					</nav>

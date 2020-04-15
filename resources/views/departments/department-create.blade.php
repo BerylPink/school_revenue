@@ -34,13 +34,13 @@
     <div class="card">
       <div class="card-header">Create Department</div>
       <div class="card-body">
-        <form method="POST" action="{{ route('colleges.store') }}">
+        <form method="POST" action="{{ route('departments.store') }}">
           @csrf
         <div class="form-group row gutters">
-          <label for="college_name" class="col-sm-3 col-form-label">Name</label>
+          <label for="department_name" class="col-sm-3 col-form-label">Department Name</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" id="college_name" placeholder="" class="form-control @error('college_name') is-invalid @enderror" name="college_name" value="{{ old('college_name') }}" required autocomplete="college_name" autofocus>
-            @error('college_name')
+            <input type="text" class="form-control" id="department_name" placeholder="" class="form-control @error('department_name') is-invalid @enderror" name="department_name" value="{{ old('department_name') }}" required autocomplete="department_name" autofocus>
+            @error('department_name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -51,20 +51,25 @@
         <div class="form-group row gutters">                        
           <label for="colleges_id" class="col-sm-3 col-form-label">College</label>
           <div class="col-sm-9">
-          <select id="colleges_id" name="colleges_id" class="form-control" required>
+          <select id="colleges_id" name="colleges_id" class="form-control @error('password') is-invalid @enderror" required>
               <option>Choose</option>
               @foreach ($colleges as $college)
                   <option value="{{ $college->id }}" title="{{ $college->college_description }}">{{ $college->college_name }}</option>                                
               @endforeach
           </select>
+          @error('colleges_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
           </div>
       </div>
 
         <div class="form-group row gutters">
-          <label for="college_description" class="col-sm-3 col-form-label">Description</label>
+          <label for="department_description" class="col-sm-3 col-form-label">Description</label>
           <div class="col-sm-9">
-            <textarea id="college_description" rows="3" class="form-control @error('college_description') is-invalid @enderror" name="college_description" required autocomplete="college_description" autofocus>{{ old('college_description') }}</textarea>
-            @error('college_description')
+            <textarea id="department_description" rows="3" class="form-control @error('department_description') is-invalid @enderror" name="department_description" required autocomplete="department_description" autofocus>{{ old('department_description') }}</textarea>
+            @error('department_description')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>

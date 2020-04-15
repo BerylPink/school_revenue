@@ -54,7 +54,7 @@
                   <td>{{ $student->registration_number }}</td>
                   <td>{{ $student->college_name }}</td>
                   <td>{{ $student->department_name }}</td>
-                  <td><?php $date = \Carbon\Carbon::parse($student->registration_date , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
+                  <td><?php $date = \Carbon\Carbon::parse($student->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
                   <td>
                     <div class="dropdown text-center">
                       <a class="btn btn-primary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

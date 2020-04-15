@@ -92,7 +92,7 @@
                         <div class="form-group row">
                             <label for="profile_avatar" class="col-md-4 col-form-label text-md-right">{{ __('Avatar') }}</label>
                             <div class="col-md-6">
-                                <input type="file" id="profile_avatar" name="profile_avatar" class="form-control-file">
+                                <input type="file" accept="image/x-png,image/gif,image/jpeg" id="profile_avatar" name="profile_avatar" class="form-control-file">
                             </div>
                         </div>
                         <div class="form-group row">

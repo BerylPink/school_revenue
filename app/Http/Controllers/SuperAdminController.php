@@ -9,6 +9,9 @@ use App\Http\Controllers\Auth\LoginController;
 use Auth;
 use App\User;
 use App\SuperAdmin;
+use App\Student;
+use App\Academic;
+use App\NonAcademic;
 
 class SuperAdminController extends Controller
 {
@@ -27,7 +30,15 @@ class SuperAdminController extends Controller
      */
     public function index()
     {
-        return view('superadmin.dashboard');
+        $totalStudents = Student::count();
+
+        $totalAcademicStaffs = Academic::count();
+
+        $totalNonAcademicStaffs = NonAcademic::count();
+
+        $data = compact('totalStudents', 'totalAcademicStaffs', 'totalNonAcademicStaffs');
+
+        return view('superadmin.dashboard', $data);
     }
 
     /**

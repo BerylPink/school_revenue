@@ -30,21 +30,21 @@
 
   <div class="main-content">
     <div class="row gutters">
-      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
+      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
         <div class="card">
           <div class="card-body">
             <div class="stats-widget">
               <div class="stats-widget-header">
-                <i class="icon-facebook"></i>
+                <i class="icon-books"></i>
               </div>
               <div class="stats-widget-body">
                 <!-- Row start -->
                 <ul class="row no-gutters">
                   <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
-                    <h6 class="title">Facebook</h6>
+                    <h6 class="title">Students</h6>
                   </li>
                   <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
-                    <h4 class="total">5,600</h4>
+                  <h4 class="total">{{ $totalStudents }}</h4>
                   </li>
                 </ul>
               </div>
@@ -52,21 +52,21 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
+      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
         <div class="card">
           <div class="card-body">
             <div class="stats-widget">
               <div class="stats-widget-header">
-                <i class="icon-twitter"></i>
+                <i class="icon-clipboard"></i>
               </div>
               <div class="stats-widget-body">
                 <!-- Row start -->
                 <ul class="row no-gutters">
                   <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
-                    <h6 class="title">Twitter</h6>
+                    <h6 class="title">Academic Staffs</h6>
                   </li>
                   <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
-                    <h4 class="total">3,500</h4>
+                    <h4 class="total">{{ $totalAcademicStaffs }}</h4>
                   </li>
                 </ul>
               </div>
@@ -74,22 +74,22 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
+      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
         <div class="card">
           <div class="card-body">
             <div class="stats-widget">
-              <a href="#" class="stats-label" data-toggle="tooltip" data-placement="top" title="" data-original-title="New Followers">47</a>
+              
               <div class="stats-widget-header">
-                <i class="icon-googleplus"></i>
+                <i class="icon-newspaper"></i>
               </div>
               <div class="stats-widget-body">
                 <!-- Row start -->
                 <ul class="row no-gutters">
                   <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
-                    <h6 class="title">Google</h6>
+                    <h6 class="title">Non-Academic Staffs</h6>
                   </li>
                   <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
-                    <h4 class="total">2,800</h4>
+                    <h4 class="total">{{ $totalNonAcademicStaffs }}</h4>
                   </li>
                 </ul>
               </div>
@@ -97,29 +97,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
-        <div class="card">
-          <div class="card-body">
-            <div class="stats-widget">
-              <a href="#" class="stats-label" data-toggle="tooltip" data-placement="top" title="" data-original-title="New Posts">12</a>
-              <div class="stats-widget-header">
-                <i class="icon-rss"></i>
-              </div>
-              <div class="stats-widget-body">
-                <!-- Row start -->
-                <ul class="row no-gutters">
-                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
-                    <h6 class="title">Blog</h6>
-                  </li>
-                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
-                    <h4 class="total">7,000</h4>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      
     </div>
   </div>
 @endsection
