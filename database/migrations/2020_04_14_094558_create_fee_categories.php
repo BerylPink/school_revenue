@@ -15,10 +15,10 @@ class CreateFeeCategories extends Migration
     {
         Schema::create('fee_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('fee_name');
             $table->string('fee_type');
+            $table->string('fee_name');
             $table->string('ammount');
-            $table->string('tax');
+            // $table->string('tax');
             $table->unsignedBigInteger('created_by')->default(NULL);
             $table->unsignedBigInteger('updated_by')->default(NULL);
             $table->timestamps();

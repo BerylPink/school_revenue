@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
-use App\Academics;
+use App\Academic;
 use App\College;
 use App\Department;
 use App\Courses;
@@ -28,11 +28,12 @@ class AcademicController extends Controller
      */ 
     public function index()
     {
-        $academics = Academics::orderBy('department_name', 'ASC')->get();
+        $academicStaffs = Academic::select('id', 'firstname', 'lastname', 'email', 'employee_number')->get();
 
         $data = compact('academics');
 
         return view('academics.academics-list', $data)->with('i');
+        
     }
 
     /**
@@ -43,20 +44,16 @@ class AcademicController extends Controller
     public function create()
     {
 
-        $country = DB::table('country')->get();
+        $states = State::select('StateID', 'StateName')->get();
 
-        $states = DB::table('states')->get();
+        $courses = Course::select('id', 'colleges_id', 'departments_id', 'course_name', 'course_description')
+        ->orderBy('course_name', 'ASC')->get();
 
-        $colleges = College::select('id', 'college_name', 'college_description')->orderBy('college_name', 'ASC')->get();
+        $countries = Country::select('CountryID', 'CountryName')->get();
 
-        $departments = Department::select('id', 'department_name', 'department_description')->orderBy('department_name', 'ASC')->get();
+        $data = compact('states', 'courses', 'countries');
 
-        $courses = Course::select('id', 'course_name', 'course_description')->orderBy('course_name', 'ASC')->get();
-
-
-        $data = compact('country', 'states', 'colleges', 'departments', 'courses',);
-
-        return view('academic.academic-registration', $data);
+        return view('academics.academics-registration', $data);
     }
 
     /**
@@ -74,15 +71,14 @@ class AcademicController extends Controller
 
         //INSERT INTO `academic_staffs` tabble
         $academic = Academic::create([
-            'college_id'                =>   $request->input('college_id'),
-            'departments_id'            =>   $request->input('department_id'),
-            'courses_id'                =>   $request->input('course_id'),
+
             'country_id'                =>   $request->input('country_id'),
             'state_id'                  =>   $request->input('state_id'),
+            'employee_no'               =>   $request->input('employee_number'),
+            'courses_id'                =>   $request->input('course_id'),
             'firstname'                 =>   $request->input('firstname'),
             'lastname'                  =>   $request->input('lastname'),
             'email'                     =>   $request->input('email'),
-            'employee_no'               =>   $request->input('employee_no'),
             'gender'                    =>   $request->input('gender'),
             'marital_status'            =>   $request->input('marital_status'),
             'DOB     '                  =>   $request->input('DOB'),
@@ -108,20 +104,18 @@ class AcademicController extends Controller
      */
     private function validateRequest(){
         return request()->validate([
-            'firstname'                 =>   'required',
-            'lastname'                  =>   'required', 
-            'phone_no'                  =>   'required|Numeric|unique:super_admin_infos,phone_no',
-            'gender'                    =>   'required',
-            'email'                     =>   'required|email|unique:users,email', 
-            'employee_no'               =>   'required',
-            'marital_status'            =>   'required',
-            'DOB     '                  =>   'required',
-            'date_joined'               =>   'required',
-            'college_id'                =>   'required',
-            'departments_id'            =>   'required',
-            'courses_id'                =>   'required',
             'country_id'                =>   'required',
             'state_id'                  =>   'required',
+            'employee_no'               =>   'required',
+            'courses_id'                =>   'required',
+            'firstname'                 =>   'required',
+            'lastname'                  =>   'required', 
+            'email'                     =>   'required|email|unique:users,email', 
+            'gender'                    =>   'required',
+            'marital_status'            =>   'required',
+            'DOB     '                  =>   'required',
+            'date_joined'               =>   'required', 
+            'phone_no'                  =>   'required|Numeric|unique:super_admin_infos,phone_no',
             'address'                   =>   'required',
         ]);
     }
@@ -135,7 +129,12 @@ class AcademicController extends Controller
 
     public function show($id)
     {
-        //
+        $academicStaffs = Academic::select('id', 'firstname', 'lastname', 'email', 'employee_number')->get();
+
+        $data = compact('academic_staffs');
+
+        return view('academics.academics-list', $data)->with('i');
+        
     }
 
     /**

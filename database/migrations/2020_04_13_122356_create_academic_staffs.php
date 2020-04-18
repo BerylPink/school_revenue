@@ -15,10 +15,9 @@ class CreateAcademicStaffs extends Migration
     {
         Schema::create('academic_staffs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('states_id')->index();
             $table->unsignedBigInteger('country_id')->index();
-            $table->unsignedBigInteger('colleges_id')->index();
-            $table->unsignedBigInteger('departments_id')->index();
+            $table->unsignedBigInteger('states_id')->index();
+            $table->string('employee_number');
             $table->unsignedBigInteger('courses_id')->index();
             $table->string('firstname');
             $table->string('lastname');
@@ -27,7 +26,6 @@ class CreateAcademicStaffs extends Migration
             $table->enum('marital_status',['Single', 'Married', 'divorced']);
             $table->date('DOB');
             $table->date('date_joined');
-            $table->string('employee_number');
             $table->string('phone_no', '11')->unique();
             $table->text('address');
             $table->unsignedBigInteger('created_by')->default(NULL);

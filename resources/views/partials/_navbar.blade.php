@@ -122,6 +122,23 @@
 									</li>
 								</ul>
 							</li>
+
+							<li class="{{ Route::currentRouteNamed('categories.index', 'categories.create', 'categories.edit') ? 'active selected' : '' }}">
+								<a href="#" class="has-arrow" aria-expanded="false">
+									<span class="has-icon">
+										<i class="icon-tree"></i>
+									</span>
+									<span class="nav-title">Category</span>
+								</a>
+								<ul aria-expanded="false" class="collapse" style="height: 0px;">
+									<li>
+										<a class="{{ Route::currentRouteNamed('categories.create') ? 'current-page' : '' }}" href="{{ route('categories.create') }}">Add</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('categories.index') ? 'current-page' : '' }}" href="{{ route('categories.index') }}">List</a>
+									</li>
+								</ul>
+							</li>
 					
 							<li class="{{ Route::currentRouteNamed('admins.index', 'admins.create', 'admins.show', 'admins.edit', 'human-resource.index', 'human-resource.create', 'human-resource.show', 'human-resource.edit','superadmins.list', 'superadmins.show', 'students.index', 'students.create', 'students.edit', 'students.show') ? 'active selected' : '' }}">
 								<a href="#" class="has-arrow" aria-expanded="false">
@@ -132,7 +149,7 @@
 								</a>
 								<ul aria-expanded="false" class="collapse">	
 									<li>
-										<a href="">Academic Staffs</a>
+										<a class="{{ Route::currentRouteNamed('academics.index', 'academics.create', 'academics.show', 'academics.edit') ? 'current-page' : '' }}" href="{{ route('academics.index') }}">Academic Staffs</a>
 									</li>
 									@if($user->user_role == 1)								
 									<li>
@@ -143,7 +160,7 @@
 									</li>
 									@endif									
 									<li>
-										<a href="">Non-Academic Staffs</a>
+										<a class="{{ Route::currentRouteNamed('nonacademics.index', 'nonacademics.create', 'nonacademics.show', 'nonacademics.edit') ? 'current-page' : '' }}" href="{{ route('nonacademics.index') }}">Non-Academic Staffs</a>
 									</li>
 									<li>
 										<a class="{{ Route::currentRouteNamed('students.index', 'students.create', 'students.edit', 'students.show') ? 'current-page' : '' }}" href="{{ route('students.index') }}">Students</a>
@@ -190,6 +207,57 @@
 								</ul>
 							</li>
 
+							<li class="{{ Route::currentRouteNamed('courses.index', 'courses.create', 'courses.edit') ? 'active selected' : '' }}">
+								<a href="#" class="has-arrow" aria-expanded="false">
+									<span class="has-icon">
+										<i class="icon-books"></i>
+									</span>
+									<span class="nav-title">Courses</span>
+								</a>
+								<ul aria-expanded="false" class="collapse" style="height: 0px;">
+									<li>
+										<a class="{{ Route::currentRouteNamed('courses.create') ? 'current-page' : '' }}" href="{{ route('courses.create') }}">Add</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('courses.index') ? 'current-page' : '' }}" href="{{ route('courses.index') }}">List</a>
+									</li>
+								</ul>
+							</li>
+
+							<li class="{{ Route::currentRouteNamed('banks.index', 'banks.create', 'banks.edit') ? 'active selected' : '' }}">
+								<a href="#" class="has-arrow" aria-expanded="false">
+									<span class="has-icon">
+										<i class="icon-tree"></i>
+									</span>
+									<span class="nav-title">Bank Details</span>
+								</a>
+								<ul aria-expanded="false" class="collapse" style="height: 0px;">
+									<li>
+										<a class="{{ Route::currentRouteNamed('banks.create') ? 'current-page' : '' }}" href="{{ route('banks.create') }}">Add</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('banks.index') ? 'current-page' : '' }}" href="{{ route('banks.index') }}">List</a>
+									</li>
+								</ul>
+							</li>
+
+							<li>
+								<a href="#" class="has-arrow" aria-expanded="false">
+									<span class="has-icon">
+										<i class="icon-credit-card"></i>
+									</span>
+									<span class="nav-title">Payment Gateway</span>
+								</a>
+								<ul aria-expanded="false" class="collapse" style="height: 0px;">
+									<li>
+										<a class="{{ Route::currentRouteNamed('gateways.create') ? 'current-page' : '' }}" href="{{ route('gateways.create') }}">Add</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('gateways.index') ? 'current-page' : '' }}" href="{{ route('gateways.index') }}">List</a>
+									</li>
+								</ul>
+							</li>
+
 							<li>
 								<a href="#" class="has-arrow" aria-expanded="false">
 									<span class="has-icon">
@@ -206,6 +274,8 @@
 									</li>
 								</ul>
 							</li>
+
+							
 							
 						</ul>
 						<!-- END: side-nav-content -->

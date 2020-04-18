@@ -38,7 +38,8 @@ class StudentController extends Controller
         ->join('students', 'students.users_id', '=', 'users.id')
         ->join('colleges', 'colleges.id', '=', 'students.colleges_id')
         ->join('departments', 'departments.id', '=', 'students.departments_id')
-        ->select('users.id', 'firstname', 'lastname', 'registration_number', 'college_name', 'department_name', 'users.created_at')
+        ->select('users.id', 'firstname', 'lastname', 'registration_number', 'college_name',
+         'department_name', 'users.created_at')
         ->orderBy('users.created_at', 'DESC')->get();
 
         $data = compact('students');

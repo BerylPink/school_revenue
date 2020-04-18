@@ -10,6 +10,14 @@ class Course extends Model
     public $table = "courses";
 
     protected $fillable = [
-        'colleges_id', 'departments_id', 'course_name', 'course_description',
+        'colleges_id', 'colleges_id', 'course_name', 'course_description',
     ];
+
+    public function college(){
+        return $this->BelongsTo(College::class);
+    }
+
+    public function department(){
+        return $this->BelongsTo(Department::class);
+    }
 }

@@ -75,7 +75,12 @@ Route::get('/students/college/departments',  'StudentController@getDepartmentsFr
 /**
  * Routes for Academic Staff Features
 */
-Route::resource('/academicstaffs',       'AcademicController');
+Route::resource('/academics',       'AcademicController');
+
+/**
+ * Routes for Non-Academic Staff Features
+*/
+Route::resource('/nonacademics',       'AcademicController');
 
 /**
  * Routes for Courses Features
@@ -83,6 +88,21 @@ Route::resource('/academicstaffs',       'AcademicController');
 Route::resource('/courses',       'CourseController');
 
 /**
- * Routes for Courses Features
+ * Routes for fee-Category Features
 */
 Route::resource('/fee-categories',       'FeeCategoryController');
+
+/**
+ * Routes for Category Features
+*/
+Route::resource('/categories',       'CategoryController');
+
+/**
+ * Routes for Bank Details Features
+*/
+Route::resource('/banks',       'BankController');
+
+/**
+ * Routes for Bank Details Features
+*/
+Route::resource('/gateways',       'GatewayController');

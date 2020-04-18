@@ -47,6 +47,41 @@
             @enderror
           </div>
         </div>
+
+        <div class="form-group row gutters">                        
+          <label for="colleges_id" class="col-sm-3 col-form-label">College</label>
+          <div class="col-sm-9">
+          <select id="colleges_id" name="colleges_id" class="form-control @error('password') is-invalid @enderror" required>
+              <option>Choose</option>
+              @foreach ($colleges as $college)
+                  <option value="{{ $college->id }}" title="{{ $college->college_description }}" @if($college->id  == $department->colleges_id) selected @endif>{{ $college->college_name }}</option>                                
+              @endforeach
+          </select>
+          @error('colleges_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+          </div>
+      </div>
+
+      <div class="form-group row gutters">                        
+          <label for="departments_id" class="col-sm-3 col-form-label">Department</label>
+          <div class="col-sm-9">
+          <select id="departments_id" name="departments_id" class="form-control @error('password') is-invalid @enderror" required>
+              <option>Choose</option>
+              @foreach ($departments as $department)
+                  <option value="{{ $department->id }}" title="{{ $department->department_description }}" @if($department->id  == $course->departments_id) selected @endif>{{ $department->department_name }}</option>                                
+              @endforeach
+          </select>
+          @error('departments_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+          </div>
+      </div>
+
         <div class="form-group row gutters">
           <label for="course_description" class="col-sm-3 col-form-label">Description</label>
           <div class="col-sm-9">

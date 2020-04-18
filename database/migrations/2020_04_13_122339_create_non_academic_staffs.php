@@ -15,18 +15,18 @@ class CreateNonAcademicStaffs extends Migration
     {
         Schema::create('non_academic_staffs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('states_id')->index();
             $table->unsignedBigInteger('country_id')->index();
+            $table->unsignedBigInteger('states_id')->index();
             $table->unsignedBigInteger('category_id')->index();
-            $table->string('email')->unique();
+            $table->string('employee_number');
             $table->string('firstname');
             $table->string('lastname');
+            $table->string('email')->unique();
+            $table->string('phone_no', '11')->unique();
             $table->enum('gender',['Male', 'Female']);
             $table->enum('marital_status',['Single', 'Married', 'divorced']);
             $table->date('DOB');
-            $table->date('joined_date');
-            $table->string('employee_number');
-            $table->string('phone_no', '11')->unique();
+            $table->date('date_joined');
             $table->text('address');
             $table->unsignedBigInteger('created_by')->default(NULL);
             $table->unsignedBigInteger('updated_by')->default(NULL);

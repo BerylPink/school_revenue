@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Category;
+use DB;
+use App\Bank;
 
-class CategoryController extends Controller
+class BankController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,14 +18,13 @@ class CategoryController extends Controller
         $this->middleware('auth:web');
     }
 
-
     public function index()
     {
-        $categories = Category::orderBy('category_name', 'ASC')->get();
+        $banks = Bank::orderBy('account_name', 'ASC')->get();
 
-        $data = compact('categories');
+        $data = compact('banks');
 
-        return view('categories.cat-list', $data)->with('i');
+        return view('banks.bank-list', $data)->with('i');
     }
 
     /**
@@ -34,7 +34,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('categories.cat-create');
+        $banks = Bank::select('id', 'bank_name', 'account_name', 'account_number')
+        ->orderBy('account_name', 'ASC')->get();
+
+        $data = compact('banks');
+
+        return view('banks.bank-create', $data);
     }
 
     /**
@@ -45,31 +50,29 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //Validate request
         $this->validateRequest();
 
         //INSERT INTO `users` table
-        $createCategory = Category::create([
-            'category_name'            =>   $request->input('category_name'),
-            'category_description'     =>   $request->input('category_description'),
+        $createBank = Bank::create([
+            'bank_name'                  =>   $request->input('bank_name'),
+            'account_name'               =>   $request->input('account_name'),
+            'account_number'             =>   $request->input('account_number'),
         ]);
 
         //If successfully created go to login page
-        if($createCategory){
-            return redirect()->route('categories.index')->with('success', $request->input('category_name').' has been created!');
+        if($createDepartment){
+            return redirect()->route('banks.index')->with('success', $request->input('account_name').' has been created!');
         }
 
         //If errors occur, return back to college create page
         return back()->withInput();
     }
 
-     /**
-     * Validate user input fields
-     */
     private function validateRequest(){
         return request()->validate([
-            'category_name'                 =>   'required|unique:categories,category_name',
-            'category_description'          =>   'required', 
+            'bank_name'                    =>   'required',
+            'account_name'                 =>   'required|unique:banks,account_name',
+            'account_number'               =>   'required', 
         ]);
     }
 
@@ -92,13 +95,13 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $categoryExists = Category::findOrFail($id);
+        $bankExists = Bank::findOrFail($id);
 
-        $category = Category::select('id', 'category_name', 'category_description')->where('id', $id)->first();
+        $bank = Bank::select('id', 'bank_name', 'account_name', 'account_number')->where('id', $id)->first();
 
-        $data = compact('category');
+        $data = compact('bank');
 
-        return view('categories.cat-edit', $data);
+        return view('banks.bank-edit', $data);
     }
 
     /**
@@ -110,15 +113,17 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updateCategory = Category::where('id', $id)->update([
-            'category_name'                =>   $request->input('category_name'),
-            'category_description'         =>   $request->input('category_description'),
+        //UPDATE `colleges` tabble
+        $updateBank = Bank::where('id', $id)->update([
+            'bank_name'             =>   $request->input('bank_name'),
+            'account_name'          =>   $request->input('account_name'),
+            'account_number'        =>   $request->input('account_number'),
         ]);
 
 
-        if( $updateCategory){
+        if( $updateCollege){
 
-            return redirect('/categories')->with('success', 'Updated '.$request->input('category_name').' details.');
+            return redirect('/banks')->with('success', 'Updated '.$request->input('account_name').' details.');
         }
             
         return back()->withInput();
@@ -132,11 +137,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $categoryExists = Category::findOrFail($id);
+        $bankExists = Bank::findOrFail($id);
 
-        $deleteCategory = Category::where('id', $id)->delete();
+        $deleteBank = Bank::where('id', $id)->delete();
 
-        if($deleteCategory){
+        if($deleteBank){
             return back()->with('success', 'Profile deleted.');
         }
     }

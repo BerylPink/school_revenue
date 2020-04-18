@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Category List')
+@section('title', 'Payment Gateway List')
 @section('content')
 @include('partials._messages')
 <!-- BEGIN .main-heading -->
@@ -11,13 +11,13 @@
             <i class="icon-library"></i>
           </div>
           <div class="page-title">
-            <h5>Categories List</h5>
-            <h6 class="sub-heading">All Categories as of <strong><?php echo date('M, d Y'); ?></h6>
+            <h5>Payment Gateway List</h5>
+            <h6 class="sub-heading">All Payment Gateways as of <strong><?php echo date('M, d Y'); ?></h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
-            <a href="{{ route('categories.create') }}" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="left" title="Add Category">
+            <a href="{{ route('gateways.create') }}" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="left" title="Add Payment Gateway">
                 <i class="icon-plus"></i>
               </a>
             </div>
@@ -37,32 +37,30 @@
           <thead class="thead-inverse">
             <tr>
               <th>S/N</th>
-              <th>Name</th>
-              <th>Description</th>
+              <th>Gateway Name</th>
               <th>Date Created</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            @foreach($categories as $category)
+            @foreach($gateways as $gateway)
             <tr>
               <td>{{ ++$i }}</td>
-              <td>{{ $category->category_name }}</td>
-              <td>{{ $category->category_description }}</td>
-              <td><?php $date = \Carbon\Carbon::parse($category->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
+              <td>{{ $gateway->gateway_name }}</td>
+              <td><?php $date = \Carbon\Carbon::parse($gateway->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
               <td>
                 <div class="dropdown text-center">
                   <a class="btn btn-primary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Select Action
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                      <a class="dropdown-item" href="{{ route('categories.edit', ['categories' => $category->id]) }}" title="Edit {{ $category->category_name }}">
+                      <a class="dropdown-item" href="{{ route('gateways.edit', ['gateways' => $gateway->id]) }}" title="Edit {{ $gateway->gateway_name }}">
                         <span class="icon-edit text-warning"></span> 
                         Edit
                       </a>
-                      <form method="POST" action="{{ route('categories.destroy', ['categories' => $category->id]) }}">
+                      <form method="POST" action="{{ route('gateways.destroy', ['gateways' => $gateway->id]) }}">
                         @csrf @method('DELETE')
-                        <button type="submit" class="dropdown-item" href=""   title="Delete {{ $category->category_name }}">
+                        <button type="submit" class="dropdown-item" href=""   title="Delete {{ $gateway->gateway_name }}">
                         <span class="icon-bin text-danger"></span> 
                         Delete
                         </button>

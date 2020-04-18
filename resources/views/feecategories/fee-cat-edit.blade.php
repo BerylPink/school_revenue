@@ -63,7 +63,7 @@
 
         <div class="form-group row gutters">
           <div class="col-sm-10">
-            <a href="{{ route('departments.index') }}" class="btn btn-danger">Back</a>
+            <a href="{{ route('fee-categories.index') }}" class="btn btn-danger">Back</a>
             <button type="submit" class="btn btn-primary">Update</button>
           </div>
         </div>

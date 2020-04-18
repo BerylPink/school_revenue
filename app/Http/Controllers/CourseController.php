@@ -14,6 +14,12 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
+
+
     public function index()
     {
         $courses = Course::orderBy('course_name', 'ASC')->get();
@@ -30,7 +36,8 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $courses = Course::select('id', 'colleges_id', 'departments_id','course_name', 'course_description')->orderBy('course_name', 'ASC')->get();
+        $courses = Course::select('id', 'colleges_id', 'departments_id','course_name', 
+        'course_description')->orderBy('course_name', 'ASC')->get();
 
         $data = compact('courses');
 
@@ -49,15 +56,15 @@ class CourseController extends Controller
 
         //INSERT INTO `users` table
         $createDepartment = Department::create([
-            'college_name'               =>   $request->input('college_name'),
-            'department_name'            =>   $request->input('department_name'),
+            'college_id'                 =>   $request->input('college_id'),
+            'department_id'              =>   $request->input('department_id'),
             'course_name'                =>   $request->input('course_name'),
             'course_description'         =>   $request->input('course_description'),
         ]);
 
         //If successfully created go to login page
         if($createCourse){
-            return redirect()->route('course.index')->with('success', $request->input('course_name').' has been created!');
+            return redirect()->route('courses.index')->with('success', $request->input('course_name').' has been created!');
         }
 
         //If errors occur, return back to college create page
@@ -73,8 +80,8 @@ class CourseController extends Controller
 
     private function validateRequest(){
         return request()->validate([
-            'college_name'                    =>   'required|unique:colleges,college_name',
-            'department_name'                 =>   'required|unique:departments,department_name',
+            'college_id'                      =>   'required',
+            'department_id'                   =>   'required',
             'course_name'                     =>   'required|unique:courses,course_name',
             'course_description'              =>   'required', 
         ]);
@@ -97,7 +104,13 @@ class CourseController extends Controller
 
         $course = Course::select('id', 'colleges_id', 'departments_id', 'course_name', 'course_description')->where('id', $id)->first();
 
-        $data = compact('course');
+        $colleges = College::select('id', 'college_name', 'college_description')
+        ->orderBy('college_name', 'ASC')->get();
+
+        $departments = Department::select('id', 'colleges_id', 'department_name', 'department_description')
+        ->orderBy('department_name', 'ASC')->get();
+
+        $data = compact('course', 'department', 'colleges');
 
         return view('courses.course-edit', $data);
     }
@@ -112,8 +125,8 @@ class CourseController extends Controller
     public function update(Request $request, $id)
     {
         $updateCourse = Course::where('id', $id)->update([
-            'college_name'                   =>   $request->input('college_name'),
-            'department_name'                =>   $request->input('department_name'),
+            'college_id'                     =>   $request->input('college_id'),
+            'department_id'                  =>   $request->input('department_id'),
             'course_name'                    =>   $request->input('course_name'),
             'course_description'             =>   $request->input('course_description'),
         ]);
