@@ -29,7 +29,7 @@ class HomeController extends Controller
         if($userRole == '1' || $userRole == '2' || $userRole == '3'){
             return redirect()->route('superadmins.index');
         }else{
-            return redirect()->route('logout');
+            return redirect()->route('students.dashboard');
             
         }
     }

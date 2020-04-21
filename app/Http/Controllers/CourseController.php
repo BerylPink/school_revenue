@@ -39,7 +39,10 @@ class CourseController extends Controller
         $courses = Course::select('id', 'colleges_id', 'departments_id','course_name', 
         'course_description')->orderBy('course_name', 'ASC')->get();
 
-        $data = compact('courses');
+        $colleges = College::select('id', 'college_name', 'college_description')
+        ->orderBy('college_name', 'ASC')->get();
+
+        $data = compact('courses', 'colleges');
 
         return view('courses.course-create', $data);
     }
@@ -55,9 +58,9 @@ class CourseController extends Controller
         $this->validateRequest();
 
         //INSERT INTO `users` table
-        $createDepartment = Department::create([
-            'college_id'                 =>   $request->input('college_id'),
-            'department_id'              =>   $request->input('department_id'),
+        $createCourse = Course::create([
+            'colleges_id'                =>   $request->input('colleges_id'),
+            'departments_id'             =>   $request->input('departments_id'),
             'course_name'                =>   $request->input('course_name'),
             'course_description'         =>   $request->input('course_description'),
         ]);
@@ -80,8 +83,8 @@ class CourseController extends Controller
 
     private function validateRequest(){
         return request()->validate([
-            'college_id'                      =>   'required',
-            'department_id'                   =>   'required',
+            'colleges_id'                      =>   'required',
+            'departments_id'                   =>   'required',
             'course_name'                     =>   'required|unique:courses,course_name',
             'course_description'              =>   'required', 
         ]);
@@ -110,7 +113,7 @@ class CourseController extends Controller
         $departments = Department::select('id', 'colleges_id', 'department_name', 'department_description')
         ->orderBy('department_name', 'ASC')->get();
 
-        $data = compact('course', 'department', 'colleges');
+        $data = compact('course', 'departments', 'colleges');
 
         return view('courses.course-edit', $data);
     }
@@ -125,8 +128,8 @@ class CourseController extends Controller
     public function update(Request $request, $id)
     {
         $updateCourse = Course::where('id', $id)->update([
-            'college_id'                     =>   $request->input('college_id'),
-            'department_id'                  =>   $request->input('department_id'),
+            'colleges_id'                     =>   $request->input('colleges_id'),
+            'departments_id'                  =>   $request->input('departments_id'),
             'course_name'                    =>   $request->input('course_name'),
             'course_description'             =>   $request->input('course_description'),
         ]);
@@ -153,7 +156,7 @@ class CourseController extends Controller
         $deleteCourse = Course::where('id', $id)->delete();
 
         if($deleteCourse){
-            return back()->with('success', 'Profile deleted.');
+            return back()->with('success', 'Course has been deleted.');
         }
     }
 }

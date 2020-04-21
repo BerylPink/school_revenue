@@ -156,7 +156,7 @@ class FeeCategoryController extends Controller
         $deleteFeeCategory = FeeCategory::where('id', $id)->delete();
 
         if($deleteFeeCategory){
-            return back()->with('success', 'Fee category deleted.');
+            return back()->with('success', 'Fee category has been deleted.');
         }
     }
 }

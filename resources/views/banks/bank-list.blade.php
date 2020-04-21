@@ -62,9 +62,9 @@
                         <span class="icon-edit text-warning"></span> 
                         Edit
                       </a>
-                      <form method="POST" action="{{ route('banks.destroy', ['bankss' => $banks->id]) }}">
+                      <form method="POST" action="{{ route('banks.destroy', ['banks' => $bank->id]) }}">
                         @csrf @method('DELETE')
-                        <button type="submit" class="dropdown-item" href=""   title="Delete {{ $banks->account_name }}">
+                        <button type="submit" class="dropdown-item" href=""   title="Delete {{ $bank->account_name }}">
                         <span class="icon-bin text-danger"></span> 
                         Delete
                         </button>

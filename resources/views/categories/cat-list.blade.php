@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Category List')
+@section('title', 'Non-Academic Staff Category List')
 @section('content')
 @include('partials._messages')
 <!-- BEGIN .main-heading -->
@@ -11,13 +11,13 @@
             <i class="icon-library"></i>
           </div>
           <div class="page-title">
-            <h5>Category List</h5>
-            <h6 class="sub-heading">All Categories as of <strong><?php echo date('M, d Y'); ?></h6>
+            <h5>Non-Academic Staff Category List</h5>
+            <h6 class="sub-heading">All Non-Academic Staff Categories as of <strong><?php echo date('M, d Y'); ?></h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
-            <a href="{{ route('categories.create') }}" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="left" title="Add Category">
+            <a href="{{ route('categories.create') }}" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="left" title="Add Non-Academic Staff Category">
                 <i class="icon-plus"></i>
               </a>
             </div>

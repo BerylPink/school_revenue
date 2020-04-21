@@ -200,6 +200,38 @@ class SuperAdminController extends Controller
         return view('superadmin.sa-list', $data)->with('i');
     }
 
+    public function changePassword(){
+
+        return view('superadmin.change-password');
+    }
+
+    public function updatePassword(Request $request){
+
+        // return $request;
+
+        request()->validate([
+            'password'                  =>   'required',
+            'confirm_password'          =>   'required|same:password', 
+        ]);
+
+        $updatePassword = User::where('id', $this->loggedUserID())->update([
+            'password'            =>   Hash::make($request->input('password')),
+        ]);
+
+        if($updatePassword){
+            if(Auth::user()->user_role === 4){
+
+                return redirect()->route('students.dashboard')->with('success', 'Password has been updated.');
+            }else{
+
+                return redirect()->route('superadmins.index')->with('success', 'Password has been updated.');
+            }
+        }
+            
+        return back()->withInput();
+
+    }
+
     public function loggedUserID(){
         $this->userID = new LoginController();
 

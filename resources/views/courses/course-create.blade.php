@@ -51,7 +51,7 @@
         <div class="form-group row gutters">                        
           <label for="colleges_id" class="col-sm-3 col-form-label">College</label>
           <div class="col-sm-9">
-          <select id="colleges_id" name="colleges_id" class="form-control @error('password') is-invalid @enderror" required>
+          <select id="colleges_id" name="colleges_id" class="form-control @error('colleges_id') is-invalid @enderror" required>
               <option>Choose</option>
               @foreach ($colleges as $college)
                   <option value="{{ $college->id }}" title="{{ $college->college_description }}">{{ $college->college_name }}</option>                                
@@ -68,11 +68,8 @@
       <div class="form-group row gutters">                        
           <label for="departments_id" class="col-sm-3 col-form-label">Department</label>
           <div class="col-sm-9">
-          <select id="departments_id" name="departments_id" class="form-control @error('password') is-invalid @enderror" required>
+          <select id="departments_id" name="departments_id" class="form-control @error('departments_id') is-invalid @enderror" required>
               <option>Choose</option>
-              @foreach ($departments as $department)
-                  <option value="{{ $department->id }}" title="{{ $department->department_description }}">{{ $department->department_name }}</option>                                
-              @endforeach
           </select>
           @error('departments_id')
                 <span class="invalid-feedback" role="alert">
@@ -105,4 +102,28 @@
 </div>
 <!-- Row end -->
   </div>
+
+  <script>
+    $('#colleges_id').on('change',function () {
+        let college_id = $('#colleges_id').find('option:selected').val();
+        // console.log(state);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('colleges.departments') }}",
+            method: "GET",
+            dataType: "JSON",
+            data: {college_id:college_id},
+            success: function(data){
+                if(data){
+                    $('#departments_id').html(data.collegeDepartment);
+                }
+            },
+        })
+    })
+  </script>
 @endsection

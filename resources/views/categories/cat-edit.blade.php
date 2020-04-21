@@ -11,13 +11,13 @@
             <i class="icon-library"></i>
           </div>
           <div class="page-title">
-            <h5>Edit Category</h5>
+            <h5>Edit Non-Academic Staff Category</h5>
           <h6 class="sub-heading">Editing {{ $category->category_name }}</h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
-            <a href="{{ route('categories.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Category list">
+            <a href="{{ route('categories.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Non-Academic Staff Category list">
                 <i class="icon-tree"></i>
               </a>
             </div>
@@ -32,7 +32,7 @@
 <div class="row gutters">
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
     <div class="card">
-      <div class="card-header">Edit Category</div>
+      <div class="card-header">Edit Non-Academic Staff Category</div>
       <div class="card-body">
         <form method="POST" action="{{ route('categories.update', $category->id) }}">
           @csrf @method('PUT')

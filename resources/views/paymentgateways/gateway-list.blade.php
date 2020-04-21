@@ -17,7 +17,7 @@
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
-            <a href="{{ route('gateways.create') }}" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="left" title="Add Payment Gateway">
+            <a href="{{ route('payment-gateways.create') }}" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="left" title="Add Payment Gateway">
                 <i class="icon-plus"></i>
               </a>
             </div>
@@ -46,7 +46,7 @@
             @foreach($gateways as $gateway)
             <tr>
               <td>{{ ++$i }}</td>
-              <td>{{ $gateway->gateway_name }}</td>
+              <td>{{ $gateway->payment_gateway_name }}</td>
               <td><?php $date = \Carbon\Carbon::parse($gateway->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
               <td>
                 <div class="dropdown text-center">
@@ -54,13 +54,13 @@
                     Select Action
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                      <a class="dropdown-item" href="{{ route('gateways.edit', ['gateways' => $gateway->id]) }}" title="Edit {{ $gateway->gateway_name }}">
+                      <a class="dropdown-item" href="{{ route('payment-gateways.edit', ['payment-gateways' => $gateway->id]) }}" title="Edit {{ $gateway->payment_gateway_name }}">
                         <span class="icon-edit text-warning"></span> 
                         Edit
                       </a>
-                      <form method="POST" action="{{ route('gateways.destroy', ['gateways' => $gateway->id]) }}">
+                      <form method="POST" action="{{ route('payment-gateways.destroy', ['payment-gateways' => $gateway->id]) }}">
                         @csrf @method('DELETE')
-                        <button type="submit" class="dropdown-item" href=""   title="Delete {{ $gateway->gateway_name }}">
+                        <button type="submit" class="dropdown-item" href=""   title="Delete {{ $gateway->payment_gateway_name }}">
                         <span class="icon-bin text-danger"></span> 
                         Delete
                         </button>

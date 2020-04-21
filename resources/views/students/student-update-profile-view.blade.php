@@ -12,14 +12,14 @@
           </div>
           <div class="page-title">
             <h5>Student Profile</h5>
-            <h6 class="sub-heading">Edit a Student Profile</h6>
+            <h6 class="sub-heading">Edit my Profile</h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
         <div class="right-actions">
-            <a href="{{ route('students.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Students list">
+            {{-- <a href="{{ route('students.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Students list">
             <i class="icon-users"></i>
-            </a>
+            </a> --}}
 
         </div>
         </div>
@@ -32,7 +32,7 @@
     <!-- Row start -->
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
         <div class="card">
-            <div class="card-header">Edit Student Profile</div>
+            <div class="card-header">Edit My Profile</div>
             <div class="card-body">
                 <form method="POST" action="{{ route('students.update', $student->id) }}" enctype="multipart/form-data">
                     @csrf @method('PUT')
@@ -58,28 +58,6 @@
                     <div class="form-group col-md-4">                        
                         <label for="dob" class="col-form-label">Date of Birth</label>
                         <input id="dob" type="dob" class="form-control" name="dob" value="{{ old('dob') ?? $student->dob }}"  placeholder="Date of Birth">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-4">                        
-                        <label for="colleges_id" class="col-form-label">College</label>
-                        <select id="colleges_id" name="colleges_id" class="form-control">
-                            <option>Choose</option>
-                            @foreach ($colleges as $college)
-                                <option value="{{ $college->id }}" title="{{ $college->college_description }}" @if($college->id == $student->colleges_id ) selected @endif>{{ $college->college_name }}</option>                                
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="departments_id" class="col-form-label">Department</label>
-                        <select id="departments_id" name="departments_id" class="form-control">
-                        <option value="{{ $student->departments_id }}">{{ $student->department_name }}</option>                                
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4">         
-                        <label for="profile_avatar" class="col-form-label">Registration Number</label>
-                        <input type="text" class="form-control" id="registration_number" placeholder="Registration Number" class="form-control" name="registration_number" value="{{ old('registration_number') ?? $student->registration_number }}" readonly maxlength="11">
                     </div>
                 </div>
 
@@ -113,8 +91,13 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="profile_avatar" class="col-form-label">Profile Avatar</label>
+                    <div class="form-group col-md-6">         
+                        <label for="profile_avatar" class="col-form-label">Registration Number</label>
+                        <input type="text" class="form-control" id="registration_number" placeholder="Registration Number" class="form-control" name="registration_number" value="{{ old('registration_number') ?? $student->registration_number }}" readonly maxlength="11">
+                    </div>
+
+                    <div class="form-group col-md-6" style="margin-top: 2.23rem!important;">
+                        {{-- <label for="profile_avatar" class="col-form-label">Profile Avatar</label> --}}
                         {{-- <label class="custom-file"> --}}
                             <input type="file" id="profile_avatar" name="profile_avatar" class="custom-file-input">
                             <span class="custom-file-control"></span>
@@ -123,6 +106,9 @@
                     </div>
                 </div>
 
+                <input type="hidden"  name="colleges_id" value="{{ $student->colleges_id }}">
+
+                <input type="hidden"  name="departments_id" value="{{ $student->departments_id }}">
               
                 <div class="form-group">
                     <label for="address" class="col-form-label">Address</label>

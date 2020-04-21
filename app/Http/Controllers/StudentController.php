@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Auth\LoginController;
-
+use Auth;
 use DB;
 use App\Student;
 use App\College;
@@ -13,6 +13,11 @@ use App\Department;
 use App\Country;
 use App\State;
 use App\User;
+use App\PaymentGateway;
+use App\FeeCategory;
+use App\FeeType;
+use App\StudentPaymentHistory;
+
 
 class StudentController extends Controller
 {
@@ -243,8 +248,6 @@ class StudentController extends Controller
         request()->validate([
             'countries_id'              =>   'required',
             'states_id'                 =>   'required',
-            'colleges_id'               =>   'required',
-            'departments_id'            =>   'required',
             'registration_number'       =>   'required',
             'firstname'                 =>   'required',
             'lastname'                  =>   'required', 
@@ -292,8 +295,13 @@ class StudentController extends Controller
         ]);
 
         if($users AND $studentInfos){
+            if(Auth::user()->user_role === 4){
 
-            return redirect('/students')->with('success', 'Updated '.$fullname.' profile.');
+                return redirect()->route('students.dashboard')->with('success', 'Profile has been updated.');
+            }else{
+
+                return redirect('/students')->with('success', 'Updated '.$fullname.' profile.');
+            }
         }
             
         return back()->withInput();
@@ -348,6 +356,9 @@ class StudentController extends Controller
             // return response()->json($departments);
 
             $collegeDepartment = '';
+            
+            $collegeDepartment = '<option>Choose</option>';
+
             foreach ($departments as $department ){
                 $collegeDepartment .= "
                     <option value='$department->id' title='$department->department_description'>$department->department_name</option>
@@ -361,6 +372,131 @@ class StudentController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function studentDashboard(){
+
+        $student = Student::where('users_id', $this->loggedUserID())->first();
+
+        $data = compact('student');
+
+        return view('students.student-dashboard', $data);
+    }
+
+    public function studentProfile(){
+
+        $userExists = User::findOrFail($this->loggedUserID());
+
+        $student = DB::table('users')
+        ->join('students', 'students.users_id', '=', 'users.id')
+        ->join('colleges', 'colleges.id', '=', 'students.colleges_id')
+        ->join('departments', 'departments.id', '=', 'students.departments_id')
+        ->join('countries', 'countries.CountryID', '=', 'students.countries_id')
+        ->join('states', 'states.StateID', '=', 'students.states_id')
+        ->select('users.id', 'email', 'registration_number', 'firstname', 'lastname', 'college_name', 'department_name', 'StateName', 'gender', 'phone_no', 'dob', 'CountryName', 'address', 'profile_avatar', 'users.created_at')
+        ->where('users.id', $this->loggedUserID())->first();
+
+        $data = compact('student');
+        // return response()->json($data);
+
+        return view('students.student-profile', $data);
+
+    }
+
+    public function studentUpdateProfileView(){
+        $student = DB::table('users')
+        ->join('students', 'students.users_id', '=', 'users.id')
+        ->join('colleges', 'colleges.id', '=', 'students.colleges_id')
+        ->join('departments', 'departments.id', '=', 'students.departments_id')
+        ->join('states', 'states.StateID', '=', 'students.states_id')
+        ->select('users.id', 'email', 'firstname', 'lastname', 'countries_id', 'college_name', 'students.colleges_id', 'states_id', 'StateName', 'departments_id', 'registration_number', 'department_name', 'gender', 'dob', 'phone_no', 'address', 'profile_avatar', 'users.created_at')
+        ->where('users.id', $this->loggedUserID())->first();
+
+        $states = State::select('StateID', 'StateName')->get();
+
+        $colleges = College::select('id', 'college_name', 'college_description')
+        ->orderBy('college_name', 'ASC')->get();
+
+        $countries = Country::select('CountryID', 'CountryName')->get();
+
+        $data = compact('student', 'states', 'colleges', 'countries');
+
+        return view('students.student-update-profile-view', $data);
+
+    }
+
+    public function studentPayment(){
+
+        $paymentGateways = PaymentGateway::select('id', 'payment_gateway_name')
+        ->orderBy('payment_gateway_name', 'ASC')->get();
+
+        $feeTypes = FeeType::select('id', 'fee_type_name')
+        ->orderBy('fee_type_name', 'ASC')->get();
+
+        $data = compact('paymentGateways', 'feeTypes');
+
+        return view('students.student-make-payment', $data);
+        
+    }
+
+    public function getFeeCategory(Request $request){
+        if($request->ajax()){
+
+            $feeType = $request->get('fee_type');
+
+            $feeCategories = FeeCategory::select('id', 'fee_name')
+            ->where('fee_type', $feeType)->get();
+
+            $feeCategoryRenderer = '';
+            $feeCategoryRenderer .= "
+                    <option>Choose</option>
+                    ";
+            foreach ($feeCategories as $feeCategory ){
+                $feeCategoryRenderer .= "
+                    <option value='$feeCategory->id'>$feeCategory->fee_name</option>
+                    ";
+            }
+
+            $data = array(
+                'feeCategoryRenderer' => $feeCategoryRenderer
+            );
+
+        }
+
+        return response()->json($data);
+    }
+
+    public function getFeeCategoryAmount(Request $request){
+        if($request->ajax()){
+
+            $feeCategory = $request->get('fee_category');
+
+            $amount = FeeCategory::select('id', 'fee_name', 'amount')
+            ->where('id', $feeCategory)->first();
+            // dd($feeCategory);
+
+            $data = array(
+                'fee_name'   => $amount->fee_name,
+                'amount' => $amount->amount
+            );
+        }
+
+        return response()->json($data);
+    }
+
+    public function studentPaymentHistory(){
+
+        $paymentHistories = DB::table('student_payment_histories')
+        ->join('fee_types', 'fee_types.id', '=', 'student_payment_histories.fee_type')
+        ->join('fee_categories', 'fee_categories.id', '=', 'student_payment_histories.fee_category')
+        ->join('payment_gateways', 'payment_gateways.id', '=', 'student_payment_histories.payment_gateway')
+        ->select('fee_type_name', 'fee_name', 'payment_gateway_name', 'amount_paid', 'student_payment_histories.created_at')
+        ->where('student_payment_histories.user_id', $this->loggedUserID())
+        ->orderBy('student_payment_histories.created_at', 'ASC')->get();
+
+        $data = compact('paymentHistories');
+
+        return view('students.student-payment-history', $data)->with('i');
     }
 
     public function loggedUserID(){

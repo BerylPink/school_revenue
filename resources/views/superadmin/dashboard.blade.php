@@ -35,7 +35,7 @@
           <div class="card-body">
             <div class="stats-widget">
               <div class="stats-widget-header">
-                <i class="icon-books"></i>
+                <i class="icon-users"></i>
               </div>
               <div class="stats-widget-body">
                 <!-- Row start -->

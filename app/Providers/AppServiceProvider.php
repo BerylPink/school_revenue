@@ -53,6 +53,13 @@ class AppServiceProvider extends ServiceProvider
                         ->join('human_resource_infos', 'human_resource_infos.users_id', '=', 'users.id')
                         ->select('email', 'user_role', 'firstname', 'lastname', 'profile_avatar')->where('users.id', $userID)->first();
                     }
+
+                    //Get basic information of HR User
+                    if($userRole == 4){
+                        $users = DB::table('users')
+                        ->join('students', 'students.users_id', '=', 'users.id')
+                        ->select('email', 'user_role', 'firstname', 'lastname', 'profile_avatar')->where('users.id', $userID)->first();
+                    }
         
                     $view->with('user', $users);
             }

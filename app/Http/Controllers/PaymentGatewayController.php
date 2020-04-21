@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Gateway;
+use App\PaymentGateway;
 
-class GatewayController extends Controller
+class PaymentGatewayController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +18,11 @@ class GatewayController extends Controller
 
     public function index()
     {
-        $gateways = Gateway::orderBy('gateway_name', 'ASC')->get();
+        $gateways = PaymentGateway::orderBy('payment_gateway_name', 'ASC')->get();
 
         $data = compact('gateways');
 
-        return view('gateways.gateway-list', $data)->with('i');
+        return view('paymentgateways.gateway-list', $data)->with('i');
     }
 
     /**
@@ -32,7 +32,7 @@ class GatewayController extends Controller
      */
     public function create()
     {
-        return view('gateways.gateway-create');
+        return view('paymentgateways.gateway-create');
     }
 
     /**
@@ -47,13 +47,13 @@ class GatewayController extends Controller
          $this->validateRequest();
 
          //INSERT INTO `users` table
-         $createGateway = Gateway::create([
-             'gateway_name'            =>   $request->input('gateway_name'),
+         $createPaymentGateway = PaymentGateway::create([
+             'payment_gateway_name'            =>   $request->input('payment_gateway_name'),
          ]);
  
          //If successfully created go to login page
-         if($createGateway){
-             return redirect()->route('gateways.index')->with('success', $request->input('gateway_name').' has been created!');
+         if($createPaymentGateway){
+             return redirect()->route('payment-gateways.index')->with('success', $request->input('payment_gateway_name').' has been created!');
          }
  
          //If errors occur, return back to college create page
@@ -62,7 +62,7 @@ class GatewayController extends Controller
 
     private function validateRequest(){
         return request()->validate([
-            'gateway_name'                 =>   'required|unique:gateways,gateway_name', 
+            'payment_gateway_name'        =>   'required|unique:payment_gateways,payment_gateway_name', 
         ]);
     }
 
@@ -85,13 +85,13 @@ class GatewayController extends Controller
      */
     public function edit($id)
     {
-        $gatewayExists = Gateway::findOrFail($id);
+        $paymentGatewayExists = PaymentGateway::findOrFail($id);
 
-        $gateway = Gateway::select('id', 'gateway_name')->where('id', $id)->first();
+        $gateway = PaymentGateway::select('id', 'payment_gateway_name')->where('id', $id)->first();
 
         $data = compact('gateway');
 
-        return view('gateways.gateway-edit', $data);
+        return view('paymentgateways.gateway-edit', $data);
     }
 
     /**
@@ -104,14 +104,14 @@ class GatewayController extends Controller
     public function update(Request $request, $id)
     {
         //UPDATE `gateway` tabble
-        $updateGateway = Gateway::where('id', $id)->update([
-            'gateway_name'                =>   $request->input('gateway_name'),
+        $updatePaymentGateway = PaymentGateway::where('id', $id)->update([
+            'payment_gateway_name'                =>   $request->input('payment_gateway_name'),
         ]);
 
 
-        if( $updateGateway){
+        if( $updatePaymentGateway){
 
-            return redirect('/gateways')->with('success', 'Updated '.$request->input('gateway_name').' details.');
+            return redirect('/payment-gateways')->with('success', 'Updated '.$request->input('payment_gateway_name').' details.');
         }
             
         return back()->withInput();
@@ -125,12 +125,12 @@ class GatewayController extends Controller
      */
     public function destroy($id)
     {
-        $gatewayExists = Gateways::findOrFail($id);
+        $paymentGatewayExists = PaymentGateway::findOrFail($id);
 
-        $deleteGateway = Gateways::where('id', $id)->delete();
+        $deletePaymentGateway = PaymentGateway::where('id', $id)->delete();
 
-        if($deleteGateways){
-            return back()->with('success', 'Profile deleted.');
+        if($deletePaymentGateway){
+            return back()->with('success', 'Payment gateway deleted.');
         }
     }
 }

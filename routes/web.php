@@ -34,6 +34,9 @@ Route::get('/superadmin/register', function () {
 })->name('superadmin.register');
 Route::resource('/superadmins',           'SuperAdminController');
 Route::get('/superadmin/list',            'SuperAdminController@superAdminList')->name('superadmins.list');
+Route::get('/settings/password/change',   'SuperAdminController@changePassword')->name('settings.change_password');
+Route::put('/settings/password/update',   'SuperAdminController@updatePassword')->name('settings.update_password');
+
 
 /**
  * Routes for Admin Features
@@ -71,21 +74,28 @@ Route::resource('/userroles',            'UserRoleController');
 */
 Route::resource('/students',             'StudentController');
 Route::get('/students/college/departments',  'StudentController@getDepartmentsFromCollege')->name('colleges.departments');
+Route::get('/student',                   'StudentController@studentDashboard')->name('students.dashboard');
+Route::get('/student/profile',           'StudentController@studentProfile')->name('students.profile');
+Route::get('/student/profile/update',    'StudentController@studentUpdateProfileView')->name('students.update_profile_view');
+Route::get('/student/payment/',          'StudentController@studentPayment')->name('students.payment');
+Route::get('/students/payment/fee-category', 'StudentController@getFeeCategory')->name('students.fee_category');
+Route::get('/students/payment/fee-category-amount', 'StudentController@getFeeCategoryAmount')->name('students.fee_category_amount');
+Route::get('/students/payment/histrory', 'StudentController@studentPaymentHistory')->name('students.payment_history');
 
 /**
  * Routes for Academic Staff Features
 */
-Route::resource('/academics',       'AcademicController');
+Route::resource('/academics',            'AcademicController');
 
 /**
  * Routes for Non-Academic Staff Features
 */
-Route::resource('/nonacademics',       'AcademicController');
+Route::resource('/nonacademics',         'NonAcademicController');
 
 /**
  * Routes for Courses Features
 */
-Route::resource('/courses',       'CourseController');
+Route::resource('/courses',              'CourseController');
 
 /**
  * Routes for fee-Category Features
@@ -95,14 +105,20 @@ Route::resource('/fee-categories',       'FeeCategoryController');
 /**
  * Routes for Category Features
 */
-Route::resource('/categories',       'CategoryController');
+Route::resource('/categories',           'CategoryController');
 
 /**
  * Routes for Bank Details Features
 */
-Route::resource('/banks',       'BankController');
+Route::resource('/banks',                'BankController');
 
 /**
- * Routes for Bank Details Features
+ * Routes for Payment Gateway Features
 */
-Route::resource('/gateways',       'GatewayController');
+Route::resource('/payment-gateways',     'PaymentGatewayController');
+
+/**
+ * Routes for Payments Features
+*/
+Route::resource('/payments',             'PaymentController');
+Route::post('/payments/student/make-payment',     'PaymentController@studentMakePayment')->name('payments.student_payment');

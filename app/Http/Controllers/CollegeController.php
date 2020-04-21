@@ -24,6 +24,8 @@ class CollegeController extends Controller
     {
         $colleges = College::orderBy('college_name', 'ASC')->get();
 
+        
+
         $data = compact('colleges');
 
         return view('colleges.college-list', $data)->with('i');
@@ -140,7 +142,7 @@ class CollegeController extends Controller
         $deleteCollege = College::where('id', $id)->delete();
 
         if($deleteCollege){
-            return back()->with('success', 'Profile deleted.');
+            return back()->with('success', 'College has been deleted.');
         }
     }
 }

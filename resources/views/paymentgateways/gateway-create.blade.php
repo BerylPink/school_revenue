@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Editing '.$gateway->gateway_name)
+@section('title', 'Add Payment Gateway')
 @section('content')
 @include('partials._messages')
 <!-- BEGIN .main-heading -->
@@ -11,13 +11,13 @@
             <i class="icon-library"></i>
           </div>
           <div class="page-title">
-            <h5>Edit Payment Gateway</h5>
-          <h6 class="sub-heading">Editing {{ $gateway->gateway_name }}</h6>
+            <h5>Add Payment Gateway</h5>
+            <h6 class="sub-heading">Create a new Payment Gateway</h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
-            <a href="{{ route('gateways.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Payment Gateway list">
+            <a href="{{ route('payment-gateways.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Payment Gateway list">
                 <i class="icon-tree"></i>
               </a>
             </div>
@@ -32,21 +32,26 @@
 <div class="row gutters">
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
     <div class="card">
-      <div class="card-header">Edit Payment Gateway</div>
+      <div class="card-header">Create Payment Gateway</div>
       <div class="card-body">
-        <form method="POST" action="{{ route('gateways.update', $gateway->id) }}">
-          @csrf @method('PUT')
+        <form method="POST" action="{{ route('payment-gateways.store') }}">
+          @csrf
         <div class="form-group row gutters">
-          <label for="gateway_name" class="col-sm-3 col-form-label">Gateway Name</label>
+          <label for="payment_gateway_name" class="col-sm-3 col-form-label">Gateway Name</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" id="gateway_name" placeholder="Gateway Name" class="form-control" name="gateway_name" value="{{ old('gateway_name') ?? $gateway->gateway_name }}">
+            <input type="text" class="form-control" id="payment_gateway_name" placeholder="" class="form-control @error('payment_gateway_name') is-invalid @enderror" name="payment_gateway_name" value="{{ old('payment_gateway_name') }}" required autocomplete="payment_gateway_name" autofocus>
+            @error('payment_gateway_name')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
           </div>
         </div>
 
+        
         <div class="form-group row gutters">
           <div class="col-sm-10">
-            <a href="{{ route('gateways.index') }}" class="btn btn-danger">Back</a>
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">Create</button>
           </div>
         </div>
         </form>

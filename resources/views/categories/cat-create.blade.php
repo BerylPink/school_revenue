@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Add Category')
+@section('title', 'Add Non-Academic Staff Category')
 @section('content')
 @include('partials._messages')
 <!-- BEGIN .main-heading -->
@@ -11,13 +11,13 @@
             <i class="icon-library"></i>
           </div>
           <div class="page-title">
-            <h5>Add Category</h5>
-            <h6 class="sub-heading">Create a new Category</h6>
+            <h5>Add Non-Academic Staff Category</h5>
+            <h6 class="sub-heading">Create a new Non-Academic Staff Category</h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
-            <a href="{{ route('categories.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Category list">
+            <a href="{{ route('categories.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Non-Academic Staff Category list">
                 <i class="icon-tree"></i>
               </a>
             </div>
@@ -32,7 +32,7 @@
 <div class="row gutters">
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
     <div class="card">
-      <div class="card-header">Create Category</div>
+      <div class="card-header">Create Non-Academic Staff Category</div>
       <div class="card-body">
         <form method="POST" action="{{ route('categories.store') }}">
           @csrf

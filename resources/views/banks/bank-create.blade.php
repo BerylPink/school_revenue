@@ -18,7 +18,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
             <a href="{{ route('banks.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Bank Details list">
-                <i class="icon-tree"></i>
+                <i class="icon-library"></i>
               </a>
             </div>
           </div>

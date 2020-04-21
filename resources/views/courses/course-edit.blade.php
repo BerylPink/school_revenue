@@ -54,7 +54,7 @@
           <select id="colleges_id" name="colleges_id" class="form-control @error('password') is-invalid @enderror" required>
               <option>Choose</option>
               @foreach ($colleges as $college)
-                  <option value="{{ $college->id }}" title="{{ $college->college_description }}" @if($college->id  == $department->colleges_id) selected @endif>{{ $college->college_name }}</option>                                
+                  <option value="{{ $college->id }}" title="{{ $college->college_description }}" @if($college->id  == $course->colleges_id) selected @endif>{{ $college->college_name }}</option>                                
               @endforeach
           </select>
           @error('colleges_id')
@@ -106,4 +106,27 @@
 </div>
 <!-- Row end -->
   </div>
+  <script>
+    $('#colleges_id').on('change',function () {
+        let college_id = $('#colleges_id').find('option:selected').val();
+        // console.log(state);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('colleges.departments') }}",
+            method: "GET",
+            dataType: "JSON",
+            data: {college_id:college_id},
+            success: function(data){
+                if(data){
+                    $('#departments_id').html(data.collegeDepartment);
+                }
+            },
+        })
+    })
+  </script>
 @endsection

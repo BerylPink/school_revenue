@@ -59,12 +59,12 @@ class BankController extends Controller
             'account_number'             =>   $request->input('account_number'),
         ]);
 
-        //If successfully created go to login page
-        if($createDepartment){
+        //If successfully created go to banl list page
+        if($createBank){
             return redirect()->route('banks.index')->with('success', $request->input('account_name').' has been created!');
         }
 
-        //If errors occur, return back to college create page
+        //If errors occur, return back to bank create page
         return back()->withInput();
     }
 
@@ -121,7 +121,7 @@ class BankController extends Controller
         ]);
 
 
-        if( $updateCollege){
+        if($updateBank){
 
             return redirect('/banks')->with('success', 'Updated '.$request->input('account_name').' details.');
         }
@@ -142,7 +142,7 @@ class BankController extends Controller
         $deleteBank = Bank::where('id', $id)->delete();
 
         if($deleteBank){
-            return back()->with('success', 'Profile deleted.');
+            return back()->with('success', 'Bank has been deleted.');
         }
     }
 }

@@ -137,7 +137,7 @@ class CategoryController extends Controller
         $deleteCategory = Category::where('id', $id)->delete();
 
         if($deleteCategory){
-            return back()->with('success', 'Profile deleted.');
+            return back()->with('success', 'Non-Academic Staff category has been deleted.');
         }
     }
 }
