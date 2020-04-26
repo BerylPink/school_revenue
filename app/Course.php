@@ -10,7 +10,7 @@ class Course extends Model
     public $table = "courses";
 
     protected $fillable = [
-        'colleges_id', 'departments_id', 'course_name', 'course_description',
+        'colleges_id', 'departments_id', 'course_name', 'course_code', 'course_unit', 'course_description',
     ];
 
     public function college(){

@@ -103,6 +103,16 @@ Route::resource('/courses',              'CourseController');
 Route::resource('/fee-categories',       'FeeCategoryController');
 
 /**
+ * Routes for expense-Category Features
+*/
+Route::resource('/expense-categories',       'ExpenseCategoryController');
+
+/**
+ * Routes for Expense Features
+*/
+Route::resource('/expenses',       'ExpenseController');
+
+/**
  * Routes for Category Features
 */
 Route::resource('/categories',           'CategoryController');

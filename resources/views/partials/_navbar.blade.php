@@ -137,8 +137,6 @@
 								</ul>
 							</li>
 
-							
-
 							<li class="{{ Route::currentRouteNamed('fee-categories.index', 'fee-categories.create', 'fee-categories.edit', 'categories.index', 'categories.create', 'categories.edit') ? 'active selected' : '' }}">
 								<a href="#" class="has-arrow" aria-expanded="false">
 									<span class="has-icon">
@@ -152,6 +150,27 @@
 									</li>
 									<li>
 										<a class="{{ Route::currentRouteNamed('categories.index') ? 'current-page' : '' }}" href="{{ route('categories.index') }}">Non-Academic Staff</a>
+									</li>
+									
+								</ul>
+							</li>
+
+							<li class="{{ Route::currentRouteNamed('expense-categories.index', 'expense-categories.create', 'expense-categories.edit', 'expenses.index', 'expenses.create', 'expenses.edit') ? 'active selected' : '' }}">
+								<a href="#" class="has-arrow" aria-expanded="false">
+									<span class="has-icon">
+										<i class="icon-tree"></i>
+									</span>
+									<span class="nav-title">Expense</span>
+								</a>
+								<ul aria-expanded="false" class="collapse" style="height: 0px;">
+									<li>
+										<a class="{{ Route::currentRouteNamed('expense-categories.index') ? 'current-page' : '' }}" href="{{ route('expense-categories.index') }}">Expense Category</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('expenses.create') ? 'current-page' : '' }}" href="{{ route('expenses.create') }}">Add</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('expenses.index') ? 'current-page' : '' }}" href="{{ route('expenses.index') }}">List</a>
 									</li>
 									
 								</ul>

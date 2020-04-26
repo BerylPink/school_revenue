@@ -48,6 +48,30 @@
           </div>
         </div>
 
+        <div class="form-group row gutters">
+          <label for="course_code" class="col-sm-3 col-form-label">Code</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" id="course_code" placeholder="Code" class="form-control @error('course_code') is-invalid @enderror" name="course_code" value="{{ old('course_code') ?? $course->course_code }}" required autocomplete="course_code" autofocus>
+            @error('course_code')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+          </div>
+        </div>
+
+        <div class="form-group row gutters">
+          <label for="course_unit" class="col-sm-3 col-form-label">Unit</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" id="course_unit" placeholder="Unit" class="form-control @error('course_unit') is-invalid @enderror" name="course_unit" value="{{ old('course_unit') ?? $course->course_unit }}" required autocomplete="course_unit" autofocus>
+            @error('course_unit')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+          </div>
+        </div>
+
         <div class="form-group row gutters">                        
           <label for="colleges_id" class="col-sm-3 col-form-label">College</label>
           <div class="col-sm-9">

@@ -37,7 +37,7 @@ class CourseController extends Controller
     public function create()
     {
         $courses = Course::select('id', 'colleges_id', 'departments_id','course_name', 
-        'course_description')->orderBy('course_name', 'ASC')->get();
+        'course_code', 'course_unit', 'course_description')->orderBy('course_name', 'ASC')->get();
 
         $colleges = College::select('id', 'college_name', 'college_description')
         ->orderBy('college_name', 'ASC')->get();
@@ -62,6 +62,8 @@ class CourseController extends Controller
             'colleges_id'                =>   $request->input('colleges_id'),
             'departments_id'             =>   $request->input('departments_id'),
             'course_name'                =>   $request->input('course_name'),
+            'course_code'                =>   $request->input('course_code'),
+            'course_unit'                =>   $request->input('course_unit'),
             'course_description'         =>   $request->input('course_description'),
         ]);
 
@@ -85,8 +87,10 @@ class CourseController extends Controller
         return request()->validate([
             'colleges_id'                      =>   'required',
             'departments_id'                   =>   'required',
-            'course_name'                     =>   'required|unique:courses,course_name',
-            'course_description'              =>   'required', 
+            'course_name'                      =>   'required|unique:courses,course_name',
+            'course_code'                      =>   'required|unique:courses,course_code',
+            'course_unit'                      =>   'required',
+            'course_description'               =>   'required', 
         ]);
     }
 
@@ -105,7 +109,8 @@ class CourseController extends Controller
     {
         $courseExists = Course::findOrFail($id);
 
-        $course = Course::select('id', 'colleges_id', 'departments_id', 'course_name', 'course_description')->where('id', $id)->first();
+        $course = Course::select('id', 'colleges_id', 'departments_id', 'course_name', 
+        'course_code', 'course_unit', 'course_description')->where('id', $id)->first();
 
         $colleges = College::select('id', 'college_name', 'college_description')
         ->orderBy('college_name', 'ASC')->get();
@@ -130,8 +135,10 @@ class CourseController extends Controller
         $updateCourse = Course::where('id', $id)->update([
             'colleges_id'                     =>   $request->input('colleges_id'),
             'departments_id'                  =>   $request->input('departments_id'),
-            'course_name'                    =>   $request->input('course_name'),
-            'course_description'             =>   $request->input('course_description'),
+            'course_name'                     =>   $request->input('course_name'),
+            'course_code'                     =>   $request->input('course_code'),
+            'course_unit'                     =>   $request->input('course_unit'),
+            'course_description'              =>   $request->input('course_description'),
         ]);
 
 

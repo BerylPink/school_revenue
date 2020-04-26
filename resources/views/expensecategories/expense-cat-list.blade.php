@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Course List')
+@section('title', 'Expense Category List')
 @section('content')
 @include('partials._messages')
 <!-- BEGIN .main-heading -->
@@ -11,13 +11,13 @@
             <i class="icon-library"></i>
           </div>
           <div class="page-title">
-            <h5>Courses List</h5>
-            <h6 class="sub-heading">All Courses as of <strong><?php echo date('M, d Y'); ?></h6>
+            <h5>Expense Category List</h5>
+            <h6 class="sub-heading">All Expense Categories as of <strong><?php echo date('M, d Y'); ?></h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
-            <a href="{{ route('courses.create') }}" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="left" title="Add Course">
+            <a href="{{ route('expense-categories.create') }}" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="left" title="Add Expense Category">
                 <i class="icon-plus"></i>
               </a>
             </div>
@@ -38,33 +38,31 @@
             <tr>
               <th>S/N</th>
               <th>Name</th>
-              <th>Code</th>
               <th>Description</th>
               <th>Date Created</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            @foreach($courses as $course)
+            @foreach($expenseCategories as $expenseCategory)
             <tr>
               <td>{{ ++$i }}</td>
-              <td>{{ $course->course_name }}</td>
-              <td>{{ $course->course_code }}</td>
-              <td>{{ $course->course_description }}</td>
-              <td><?php $date = \Carbon\Carbon::parse($course->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
+              <td>{{ $expenseCategory->expense_cat_name }}</td>
+              <td>{{ $expenseCategory->expense_cat_description }}</td>
+              <td><?php $date = \Carbon\Carbon::parse($expenseCategory->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
               <td>
                 <div class="dropdown text-center">
                   <a class="btn btn-primary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Select Action
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                      <a class="dropdown-item" href="{{ route('courses.edit', ['courses' => $course->id]) }}" title="Edit {{ $course->course_name }}">
+                      <a class="dropdown-item" href="{{ route('expense-categories.edit', ['expense-categories' => $expenseCategory->id]) }}" title="Edit {{ $expenseCategory->expense_cat_name }}">
                         <span class="icon-edit text-warning"></span> 
                         Edit
                       </a>
-                      <form method="POST" action="{{ route('courses.destroy', ['courses' => $course->id]) }}">
+                      <form method="POST" action="{{ route('expense-categories.destroy', ['expense-categories' => $expenseCategory->id]) }}">
                         @csrf @method('DELETE')
-                        <button type="submit" class="dropdown-item" href=""   title="Delete {{ $course->course_name }}">
+                        <button type="submit" class="dropdown-item" href=""   title="Delete {{ $expenseCategory->expense_cat_name }}">
                         <span class="icon-bin text-danger"></span> 
                         Delete
                         </button>
