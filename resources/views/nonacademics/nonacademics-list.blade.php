@@ -40,18 +40,18 @@
               <th>Name</th>
               <th>Email</th>
               <th>Category</th>
-              <th>Date Created</th>
+              <th>Date Joined</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            @foreach($academics as $academic)
+            @foreach($nonAcademicStaffs as $nonacademic)
             <tr>
               <td>{{ ++$i }}</td>
               <td>{{ $nonacademic->firstname.' '.$nonacademic->lastname }}</td>
               <td>{{ $nonacademic->email }}</td>
-              <td>{{ $nonacademic->category_name }}</td>
-              <td><?php $date = \Carbon\Carbon::parse($nonacademic->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
+              <td>{{ $nonacademic->categories->category_name }}</td>
+              <td><?php $date = \Carbon\Carbon::parse($nonacademic->date_joined , 'UTC'); echo $date->isoFormat('MMMM Do YYYY'); ?></td>
               <td>
                 <div class="dropdown text-center">
                   <a class="btn btn-primary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

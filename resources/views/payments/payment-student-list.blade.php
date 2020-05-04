@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'My Payment History')
+@section('title', 'Students Payments Lost')
 @section('content')
 @include('partials._messages')
 
@@ -12,8 +12,8 @@
             <i class="icon-library"></i>
           </div>
           <div class="page-title">
-            <h5>Payment History </h5>
-            <h6 class="sub-heading">Payment History as of <strong><?php echo date('M, d Y'); ?></h6>
+            <h5>Student Payments List </h5>
+            <h6 class="sub-heading">All Studeents Payments as of <strong><?php echo date('M, d Y'); ?></h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
@@ -36,6 +36,7 @@
               <thead class="thead-inverse">
                 <tr>
                   <th>S/N</th>
+                  <th>Student Name</th>
                   <th>Fee Type</th>
                   <th>Fee Category</th>
                   <th>Payment Gateway</th>
@@ -47,6 +48,7 @@
                 @foreach($paymentHistories as $paymentHistory)
                 <tr>
                   <td>{{ ++$i }}</td>
+                  <td>{{ $paymentHistory->firstname.' '.$paymentHistory->lastname }}</td>
                   <td>{{ $paymentHistory->fee_type_name }}</td>
                   <td>{{ $paymentHistory->fee_name }}</td>
                   <td>{{ $paymentHistory->payment_gateway_name }}</td>

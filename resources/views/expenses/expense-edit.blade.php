@@ -18,7 +18,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
             <a href="{{ route('expenses.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Expense list">
-                <i class="icon-tree"></i>
+                <i class="icon-calculator"></i>
               </a>
             </div>
           </div>
@@ -44,7 +44,7 @@
         </div>
 
         <div class="form-group row gutters">                        
-          <label for="expense_categories_id" class="col-sm-3 col-form-label">Course Category</label>
+          <label for="expense_categories_id" class="col-sm-3 col-form-label">Expense Category</label>
           <div class="col-sm-9">
           <select id="expense_categories_id" name="expense_categories_id" class="form-control" required>
               <option>Choose</option>
@@ -65,7 +65,7 @@
       <div class="form-group row gutters">
           <label for="expense_description" class="col-sm-3 col-form-label">Description</label>
           <div class="col-sm-9">
-            <textarea id="expense_description" rows="3" class="form-control @error('expense_description') is-invalid @enderror" name="expense_description" required autocomplete="expense_description" autofocus>{{ old('expense_description') ?? $expense->expense_description }}</textarea>
+            <textarea id="expense_description" rows="3" class="form-control @error('expense_description') is-invalid @enderror" name="expense_description" required autocomplete="expense_description">{{ old('expense_description') ?? $expense->expense_description }}</textarea>
             @error('expense_description')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -87,4 +87,26 @@
 </div>
 <!-- Row end -->
   </div>
+
+  <script>
+    $(document).ready(function(){
+
+      $(document).on('focusout', '#amount', function(){
+
+        let balance = $('#balance').val();
+        let amount = $('#amount').val();
+
+        if(parseFloat(amount) > parseFloat(balance)){
+          $('#amount').val('').addClass('is-invalid')
+          $('#error-output').removeClass('d-none');
+        }
+        if(parseFloat(amount) < parseFloat(balance)){
+          $('#amount').val(amount).removeClass('is-invalid')
+          $('#error-output').addClass('d-none');
+        }
+
+      });
+
+    });
+    </script>
 @endsection

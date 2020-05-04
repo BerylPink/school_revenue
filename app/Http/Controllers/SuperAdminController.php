@@ -12,6 +12,8 @@ use App\SuperAdmin;
 use App\Student;
 use App\Academic;
 use App\NonAcademic;
+use App\StaffPayment;
+use App\StudentPaymentHistory;
 
 class SuperAdminController extends Controller
 {
@@ -19,9 +21,9 @@ class SuperAdminController extends Controller
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
      */
-    // public function __construct() {
-    //     $this->middleware('auth:web');
-    //  }
+    public function __construct() {
+        $this->middleware('auth:web');
+     }
      
     /**
      * Display a listing of the resource.
@@ -36,7 +38,22 @@ class SuperAdminController extends Controller
 
         $totalNonAcademicStaffs = NonAcademic::count();
 
-        $data = compact('totalStudents', 'totalAcademicStaffs', 'totalNonAcademicStaffs');
+        $finances = DB::table('finances')->select('school_fund', 'expenses_budget')->first();
+
+        $expenses = DB::table('expenses')->sum('amount');
+
+        $balance = $finances->expenses_budget - $expenses;
+
+        $totalAcademicStaffPayment = StaffPayment::where('academic_staff_id', '>', 0)->count();
+
+        $totalNonAcademicStaffPayment = StaffPayment::where('non_academic_staff_id', '>', 0)->count();
+
+        $totalStudentPayment = StudentPaymentHistory::count();
+
+        $studentPayments = StudentPaymentHistory::sum('amount_paid');
+
+        
+        $data = compact('totalStudents', 'totalAcademicStaffs', 'totalNonAcademicStaffs', 'finances', 'expenses', 'balance', 'totalAcademicStaffPayment', 'totalNonAcademicStaffPayment', 'totalStudentPayment', 'studentPayments');
 
         return view('superadmin.dashboard', $data);
     }
@@ -59,68 +76,10 @@ class SuperAdminController extends Controller
      */
     public function store(Request $request)
     {
-        //Validate request
-        $this->validateRequest();
-
-        //Validate if an image filewas selected 
-        if($request->hasFile('profile_avatar')){
-            $image = $request->file('profile_avatar');
-            $avatarName = rand() .'.'.$image->getClientOriginalExtension();
-            $image->move(public_path('uploads'), $avatarName);
-        } else{
-            //If image wasn't selected, set a default image for profile avatar
-            $avatarName = 'default_avatar.png';
-        }
         
-        //Begin database transaction
-        DB::beginTransaction();
-
-        //INSERT INTO `users` table
-        $users = User::create([
-            'email'            =>   $request->input('email'),
-            'password'         =>   Hash::make($request->input('password')),
-            'user_role'        =>   '1',
-            'created_by'       =>   '1'
-        ]);
-
-        //INSERT INTO `super_admin_infos` tabble
-        $superAdminInfos = SuperAdmin::create([
-            'users_id'                  =>   $users->id,
-            'firstname'                 =>   $request->input('firstname'),
-            'lastname'                  =>   $request->input('lastname'),
-            'phone_no'                  =>   $request->input('phone_no'),
-            'address'                   =>   $request->input('address'),
-            'profile_avatar'            =>   $avatarName,            
-        ]);
-
-        //Role back transaction if something went wrong
-        DB::commit();
-
-        //If successfully created go to login page
-        if($users AND $superAdminInfos){
-            return redirect('/login')->with('success', $request->input('firstname').' '.$request->input('lastname').'\'s profile has been created!');
-        }
-
-        //If errors occur, return back to super admin registration page
-        return back()->withInput();
     }
 
-    /**
-     * Validate user input fields
-     */
-    private function validateRequest(){
-        return request()->validate([
-            'firstname'                 =>   'required',
-            'lastname'                  =>   'required', 
-            'phone_no'                  =>   'required|Numeric|unique:super_admin_infos,phone_no',
-            'email'                     =>   'required|email|unique:users,email', 
-            'password'                  =>   'required',
-            'password_confirmation'     =>   'required|same:password', 
-            'avatar'                    =>   'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'address'                   =>   'required',
-        ]);
-    }
-
+    
     /**
      * Display the specified resource.
      *

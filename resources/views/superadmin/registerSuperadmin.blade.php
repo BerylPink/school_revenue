@@ -9,7 +9,7 @@
                 <div class="card-body">
                     @include('partials._messages')
 
-                    <form method="POST" action="{{ route('superadmins.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('viewsonly.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group row">

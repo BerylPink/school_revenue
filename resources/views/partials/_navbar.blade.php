@@ -34,38 +34,36 @@
 								</a>
 								<div class="dropdown-menu lg dropdown-menu-right" aria-labelledby="userSettings">
 									<ul class="user-settings-list">
+										@if($user->user_role == 4)
 										<li>
-											@if($user->user_role == 4)
 												<a href="{{ route('students.profile') }}">
-											@else
-												<a href="#">
-											@endif
 												<div class="icon">
 													<i class="icon-account_circle"></i>
 												</div>
 												<p>Profile</p>
 											</a>
 										</li>
+										@endif
+										@if($user->user_role < 4)
+
 										<li>
-											@if($user->user_role < 4)
-												<a href="{{ route('settings.change_password') }}">
-											@else
-												<a href="#">
-											@endif
+											<a href="{{ route('settings.change_password') }}">
 												<div class="icon red">
 													<i class="icon-cog3"></i>
 												</div>
 												<p>Settings</p>
 											</a>
 										</li>
-										<li>
+										@endif
+
+										{{-- <li>
 											<a href="">
 												<div class="icon yellow">
 													<i class="icon-schedule"></i>
 												</div>
 												<p>Activity</p>
 											</a>
-										</li>
+										</li> --}}
 									</ul>
 									<div class="logout-btn">
 									<a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
@@ -137,7 +135,7 @@
 								</ul>
 							</li>
 
-							<li class="{{ Route::currentRouteNamed('fee-categories.index', 'fee-categories.create', 'fee-categories.edit', 'categories.index', 'categories.create', 'categories.edit') ? 'active selected' : '' }}">
+							<li class="{{ Route::currentRouteNamed('fee-categories.index', 'fee-categories.create', 'fee-categories.edit', 'categories.index', 'categories.create', 'categories.edit', 'expense-categories.index', 'expense-categories.create', 'expense-categories.edit', 'payment-categories.index', 'payment-categories.create', 'payment-categories.edit') ? 'active selected' : '' }}">
 								<a href="#" class="has-arrow" aria-expanded="false">
 									<span class="has-icon">
 										<i class="icon-tree"></i>
@@ -146,33 +144,17 @@
 								</a>
 								<ul aria-expanded="false" class="collapse" style="height: 0px;">
 									<li>
-										<a class="{{ Route::currentRouteNamed('fee-categories.index') ? 'current-page' : '' }}" href="{{ route('fee-categories.index') }}">Fee Category</a>
+										<a class="{{ Route::currentRouteNamed('expense-categories.index', 'expense-categories.create', 'expense-categories.edit') ? 'current-page' : '' }}" href="{{ route('expense-categories.index') }}">Expense Category</a>
 									</li>
 									<li>
 										<a class="{{ Route::currentRouteNamed('categories.index') ? 'current-page' : '' }}" href="{{ route('categories.index') }}">Non-Academic Staff</a>
 									</li>
-									
-								</ul>
-							</li>
-
-							<li class="{{ Route::currentRouteNamed('expense-categories.index', 'expense-categories.create', 'expense-categories.edit', 'expenses.index', 'expenses.create', 'expenses.edit') ? 'active selected' : '' }}">
-								<a href="#" class="has-arrow" aria-expanded="false">
-									<span class="has-icon">
-										<i class="icon-tree"></i>
-									</span>
-									<span class="nav-title">Expense</span>
-								</a>
-								<ul aria-expanded="false" class="collapse" style="height: 0px;">
 									<li>
-										<a class="{{ Route::currentRouteNamed('expense-categories.index') ? 'current-page' : '' }}" href="{{ route('expense-categories.index') }}">Expense Category</a>
+										<a class="{{ Route::currentRouteNamed('payment-categories.index', 'payment-categories.create', 'payment-categories.edit') ? 'current-page' : '' }}" href="{{ route('payment-categories.index') }}">Payment Category</a>
 									</li>
 									<li>
-										<a class="{{ Route::currentRouteNamed('expenses.create') ? 'current-page' : '' }}" href="{{ route('expenses.create') }}">Add</a>
+										<a class="{{ Route::currentRouteNamed('fee-categories.index') ? 'current-page' : '' }}" href="{{ route('fee-categories.index') }}">Student Fee Category</a>
 									</li>
-									<li>
-										<a class="{{ Route::currentRouteNamed('expenses.index') ? 'current-page' : '' }}" href="{{ route('expenses.index') }}">List</a>
-									</li>
-									
 								</ul>
 							</li>
 
@@ -226,8 +208,26 @@
 									</li>
 								</ul>
 							</li>
-
-							<li class="{{ Route::currentRouteNamed('payment-gateways.index') ? 'active selected' : '' }}"">
+							<li class="{{ Route::currentRouteNamed('expenses.index', 'expenses.create', 'expenses.edit', 'expenses.show') ? 'active selected' : '' }}">
+								<a href="#" class="has-arrow" aria-expanded="false">
+									<span class="has-icon">
+										<i class="icon-calculator"></i>
+									</span>
+									<span class="nav-title">Expense</span>
+								</a>
+								<ul aria-expanded="false" class="collapse" style="height: 0px;">
+									
+									<li>
+										<a class="{{ Route::currentRouteNamed('expenses.index', 'expenses.show', 'expenses.edit') ? 'current-page' : '' }}" href="{{ route('expenses.index') }}">All Expenses List</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('expenses.create') ? 'current-page' : '' }}" href="{{ route('expenses.create') }}">Create Expense</a>
+									</li>
+									
+									
+								</ul>
+							</li>
+							<li class="{{ Route::currentRouteNamed('payment-gateways.index', 'payment-gateways.create', 'payment-gateways.edit', 'payments.index', 'payments.create', 'payments.academic_list', 'payments.academic_show', 'payments.non_academic_list', 'payments.non_academic_show', 'payments.student_list') ? 'active selected' : '' }}"">
 								<a href="#" class="has-arrow" aria-expanded="false">
 									<span class="has-icon">
 										<i class="icon-credit-card"></i>
@@ -236,16 +236,25 @@
 								</a>
 								<ul aria-expanded="false" class="collapse" style="height: 0px;">
 									<li>
-										<a class="{{ Route::currentRouteNamed('payment-gateways.index') ? 'current-page' : '' }}" href="{{ route('payment-gateways.index') }}">Payment Gateway</a>
+										<a class="{{ Route::currentRouteNamed('payment-gateways.index', 'payment-gateways.create', 'payment-gateways.edit') ? 'current-page' : '' }}" href="{{ route('payment-gateways.index') }}">Payment Gateway</a>
 									</li>
 									<li>
-										<a class="" href="">Payments List</a>
+										<a class="{{ Route::currentRouteNamed('payments.academic_list', 'payments.academic_show') ? 'current-page' : '' }}" href="{{ route('payments.academic_list') }}">Payments List: Aca. Staff</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('payments.non_academic_list', 'payments.non_academic_show') ? 'current-page' : '' }}" href="{{ route('payments.non_academic_list') }}">Payments List: Non-Aca. Staff</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('payments.student_list') ? 'current-page' : '' }}" href="{{ route('payments.student_list') }}">Payments List: Students</a>
+									</li>
+									<li>
+										<a class="{{ Route::currentRouteNamed('payments.create') ? 'current-page' : '' }}" href="{{ route('payments.create') }}">Pay Staffs</a>
 									</li>
 								</ul>
 							</li>
 
 
-							<li class="{{ Route::currentRouteNamed('admins.index', 'admins.create', 'admins.show', 'admins.edit', 'human-resource.index', 'human-resource.create', 'human-resource.show', 'human-resource.edit','superadmins.list', 'superadmins.show', 'students.index', 'students.create', 'students.edit', 'students.show') ? 'active selected' : '' }}">
+							<li class="{{ Route::currentRouteNamed('admins.index', 'admins.create', 'admins.show', 'admins.edit', 'human-resource.index', 'human-resource.create', 'human-resource.show', 'human-resource.edit','superadmins.list', 'superadmins.show', 'students.index', 'students.create', 'students.edit', 'students.show', 'academics.index', 'academics.create', 'academics.show', 'academics.edit', 'nonacademics.index', 'nonacademics.create', 'nonacademics.show', 'nonacademics.edit') ? 'active selected' : '' }}">
 								<a href="#" class="has-arrow" aria-expanded="false">
 									<span class="has-icon">
 										<i class="icon-users"></i>

@@ -37,6 +37,10 @@ Route::get('/superadmin/list',            'SuperAdminController@superAdminList')
 Route::get('/settings/password/change',   'SuperAdminController@changePassword')->name('settings.change_password');
 Route::put('/settings/password/update',   'SuperAdminController@updatePassword')->name('settings.update_password');
 
+/**
+ * Routes for Admin Features
+*/
+Route::resource('/viewsonly',                'ViewsOnlyController');
 
 /**
  * Routes for Admin Features
@@ -55,7 +59,7 @@ Route::get('/humanresource/register', function () {
 /**
  * Routes for College Features
 */
-Route::resource('/colleges',              'CollegeController');
+Route::resource('/colleges',             'CollegeController');
 
 
 /**
@@ -73,14 +77,14 @@ Route::resource('/userroles',            'UserRoleController');
  * Routes for Student Features
 */
 Route::resource('/students',             'StudentController');
-Route::get('/students/college/departments',  'StudentController@getDepartmentsFromCollege')->name('colleges.departments');
-Route::get('/student',                   'StudentController@studentDashboard')->name('students.dashboard');
-Route::get('/student/profile',           'StudentController@studentProfile')->name('students.profile');
-Route::get('/student/profile/update',    'StudentController@studentUpdateProfileView')->name('students.update_profile_view');
-Route::get('/student/payment/',          'StudentController@studentPayment')->name('students.payment');
-Route::get('/students/payment/fee-category', 'StudentController@getFeeCategory')->name('students.fee_category');
+Route::get('/students/college/departments',         'StudentController@getDepartmentsFromCollege')->name('colleges.departments');
+Route::get('/student',                              'StudentController@studentDashboard')->name('students.dashboard');
+Route::get('/student/profile',                      'StudentController@studentProfile')->name('students.profile');
+Route::get('/student/profile/update',               'StudentController@studentUpdateProfileView')->name('students.update_profile_view');
+Route::get('/student/payment/',                     'StudentController@studentPayment')->name('students.payment');
+Route::get('/students/payment/fee-category',        'StudentController@getFeeCategory')->name('students.fee_category');
 Route::get('/students/payment/fee-category-amount', 'StudentController@getFeeCategoryAmount')->name('students.fee_category_amount');
-Route::get('/students/payment/histrory', 'StudentController@studentPaymentHistory')->name('students.payment_history');
+Route::get('/students/payment/histrory',            'StudentController@studentPaymentHistory')->name('students.payment_history');
 
 /**
  * Routes for Academic Staff Features
@@ -105,12 +109,12 @@ Route::resource('/fee-categories',       'FeeCategoryController');
 /**
  * Routes for expense-Category Features
 */
-Route::resource('/expense-categories',       'ExpenseCategoryController');
+Route::resource('/expense-categories',   'ExpenseCategoryController');
 
 /**
  * Routes for Expense Features
 */
-Route::resource('/expenses',       'ExpenseController');
+Route::resource('/expenses',             'ExpenseController');
 
 /**
  * Routes for Category Features
@@ -131,4 +135,14 @@ Route::resource('/payment-gateways',     'PaymentGatewayController');
  * Routes for Payments Features
 */
 Route::resource('/payments',             'PaymentController');
-Route::post('/payments/student/make-payment',     'PaymentController@studentMakePayment')->name('payments.student_payment');
+Route::post('/payments/student/make-payment',           'PaymentController@studentMakePayment')->name('payments.student_payment');
+Route::get('/payments/academic/payment-list',           'PaymentController@academicStaffPaymentsList')->name('payments.academic_list');
+Route::get('/payments/academic/payment-show/{id}',      'PaymentController@academicStaffPaymentShow')->name('payments.academic_show');
+Route::get('/payments/non-academic/payment-list',       'PaymentController@nonAcademicStaffPaymentsList')->name('payments.non_academic_list');
+Route::get('/payments/non-academic/payment-show/{id}',  'PaymentController@nonAcademicStaffPaymentShow')->name('payments.non_academic_show');
+Route::get('/payments/student/payment-list',            'PaymentController@StudentPaymentsList')->name('payments.student_list');
+
+/**
+ * Routes for Payments Category Features
+*/
+Route::resource('/payment-categories',   'PaymentCategoryController');

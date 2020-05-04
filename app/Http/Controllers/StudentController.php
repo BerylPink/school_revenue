@@ -192,10 +192,19 @@ class StudentController extends Controller
             ->select('users.id', 'email', 'registration_number', 'firstname', 'lastname', 'college_name', 'department_name', 'StateName', 'gender', 'phone_no', 'dob', 'CountryName', 'address', 'profile_avatar', 'users.created_at')
             ->where('users.id', $id)->first();
 
-            $data = compact('student');
+
+            $paymentHistories = DB::table('student_payment_histories')
+            ->join('fee_types', 'fee_types.id', '=', 'student_payment_histories.fee_type')
+            ->join('fee_categories', 'fee_categories.id', '=', 'student_payment_histories.fee_category')
+            ->join('payment_gateways', 'payment_gateways.id', '=', 'student_payment_histories.payment_gateway')
+            ->select('fee_type_name', 'fee_name', 'payment_gateway_name', 'amount_paid', 'student_payment_histories.created_at')
+            ->where('student_payment_histories.user_id', $id)
+            ->orderBy('student_payment_histories.created_at', 'ASC')->get();
+
+            $data = compact('student', 'paymentHistories');
             // return response()->json($data);
 
-            return view('students.student-show', $data);
+            return view('students.student-show', $data)->with('i');
 
         }else{
             return back()->with('error', 'This User is not a Student');
@@ -351,7 +360,7 @@ class StudentController extends Controller
             $college = $request->get('college_id');
 
             $departments = Department::select('id', 'department_name', 'department_description')
-            ->where('id', $college)->get();
+            ->where('colleges_id', $college)->get();
 
             // return response()->json($departments);
 

@@ -40,7 +40,7 @@
   </header>
 
 <div class="main-content">
-<form method="POST" action="{{ route('payments.student_payment') }}">
+    <form method="POST" action="{{ route('payments.student_payment') }}">
     @csrf
         <div class="row gutters">
             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8">
@@ -90,6 +90,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Payment Details</h3>
+                                <small class="text-danger">*Card details will not be saved</small>
                             </div><hr>
                             <div class="panel-body">
                                 <form role="form">

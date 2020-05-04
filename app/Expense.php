@@ -10,7 +10,7 @@ class Expense extends Model
     public $table = "expenses";
 
     protected $fillable = [
-        'expense_categories_id', 'expense_name', 'amount', 'expense_description',
+        'expense_categories_id', 'expense_name', 'amount', 'expense_description', 'created_by', 'updated_by'
     ];
 
 }

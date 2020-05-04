@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
+use App\Http\Controllers\Auth\LoginController;
 use App\Expense;
 use App\ExpenseCategory;
 
@@ -37,7 +39,13 @@ class ExpenseController extends Controller
         $expenseCategories = ExpenseCategory::select('id', 'expense_cat_name', 'expense_cat_description')
         ->orderBy('expense_cat_name', 'ASC')->get();
 
-        $data = compact('expenseCategories');
+        $finances = DB::table('finances')->select('school_fund', 'expenses_budget')->first();
+
+        $expenses = DB::table('expenses')->sum('amount');
+
+        $balance = $finances->expenses_budget - $expenses;
+
+        $data = compact('expenseCategories', 'finances', 'expenses', 'balance');
 
         return view('expenses.expense-create', $data);
     }
@@ -58,6 +66,7 @@ class ExpenseController extends Controller
             'expense_name'            =>   $request->input('expense_name'),
             'amount'                  =>   $request->input('amount'),
             'expense_description'     =>   $request->input('expense_description'),
+            'created_by'              =>   $this->loggedUserID(),
         ]);
 
         //If successfully created go to login page
@@ -87,7 +96,20 @@ class ExpenseController extends Controller
      */
     public function show($id)
     {
-        //
+        $expenseExists = Expense::findOrFail($id);
+
+        $expense = Expense::where('id', $id)->first();
+
+        $expenseCategories = ExpenseCategory::select('id', 'expense_cat_name', 'expense_cat_description')
+        ->orderBy('expense_cat_name', 'ASC')->get();
+
+        $createdBy = $this->fullName($expense->created_by);
+
+        $updatedBy = $this->fullName($expense->updated_by);
+
+        $data = compact('expense', 'expenseCategories', 'createdBy', 'updatedBy');
+
+        return view('expenses.expense-show', $data);
     }
 
     /**
@@ -124,6 +146,8 @@ class ExpenseController extends Controller
             'expense_name'            =>   $request->input('expense_name'),
             'amount'                  =>   $request->input('amount'),
             'expense_description'     =>   $request->input('expense_description'),
+            'updated_by'              =>   $this->loggedUserID(),
+
         ]);
 
 
@@ -150,5 +174,17 @@ class ExpenseController extends Controller
         if($deleteExpense){
             return back()->with('success', 'Expense has been deleted.');
         }
+    }
+
+    public function loggedUserID(){
+        $this->userID = new LoginController();
+
+        return $this->userID->userID();
+    }
+
+    public function fullName($id){
+        $this->userFullName = new LoginController();
+
+        return $this->userFullName->getFullName($id);
     }
 }

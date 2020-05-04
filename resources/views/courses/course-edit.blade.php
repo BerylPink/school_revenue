@@ -18,7 +18,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
             <a href="{{ route('courses.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Course list">
-                <i class="icon-office"></i>
+                <i class="icon-library_books"></i>
               </a>
             </div>
           </div>
@@ -37,7 +37,7 @@
         <form method="POST" action="{{ route('courses.update', $course->id) }}">
           @csrf @method('PUT')
         <div class="form-group row gutters">
-          <label for="course_name" class="col-sm-3 col-form-label">Name</label>
+          <label for="course_name" class="col-sm-3 col-form-label">Course Name</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" id="course_name" placeholder="Name" class="form-control @error('course_name') is-invalid @enderror" name="course_name" value="{{ old('course_name') ?? $course->course_name }}" required autocomplete="course_name" autofocus>
             @error('course_name')
@@ -49,7 +49,7 @@
         </div>
 
         <div class="form-group row gutters">
-          <label for="course_code" class="col-sm-3 col-form-label">Code</label>
+          <label for="course_code" class="col-sm-3 col-form-label">Course Code</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" id="course_code" placeholder="Code" class="form-control @error('course_code') is-invalid @enderror" name="course_code" value="{{ old('course_code') ?? $course->course_code }}" required autocomplete="course_code" autofocus>
             @error('course_code')
@@ -61,9 +61,9 @@
         </div>
 
         <div class="form-group row gutters">
-          <label for="course_unit" class="col-sm-3 col-form-label">Unit</label>
+          <label for="course_unit" class="col-sm-3 col-form-label">Course Unit</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" id="course_unit" placeholder="Unit" class="form-control @error('course_unit') is-invalid @enderror" name="course_unit" value="{{ old('course_unit') ?? $course->course_unit }}" required autocomplete="course_unit" autofocus>
+            <input type="tel" class="form-control" maxlength="1" id="course_unit" placeholder="Unit" class="form-control @error('course_unit') is-invalid @enderror" name="course_unit" value="{{ old('course_unit') ?? $course->course_unit }}" required autocomplete="course_unit" autofocus>
             @error('course_unit')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>

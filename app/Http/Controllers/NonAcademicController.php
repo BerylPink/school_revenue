@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Auth\LoginController;
-use App\Academic;
-use App\College;
-use App\Department;
-use App\Course;
+use App\NonAcademic;
 use App\Country;
 use App\State;
+use App\Category;
 
-class AcademicController extends Controller
+class NonAcademicController extends Controller
 {
     /**
      * This method will redirect users back to the login page if not properly authenticated
@@ -21,21 +19,20 @@ class AcademicController extends Controller
     public function __construct() {
         $this->middleware('auth:web');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */ 
+     */
     public function index()
     {
-        $academicStaffs = Academic::select('id', 'firstname', 'lastname', 'email', 'employee_number', 'date_joined')
+        $nonAcademicStaffs = NonAcademic::select('id', 'firstname', 'lastname', 'email', 'employee_number', 'date_joined')
         ->orderBy('date_joined', 'DESC')->get();
 
-        $data = compact('academicStaffs');
+        $data = compact('nonAcademicStaffs');
 
-        return view('academics.academics-list', $data)->with('i');
-        
+        return view('nonacademics.nonacademics-list', $data)->with('i');
     }
 
     /**
@@ -45,22 +42,15 @@ class AcademicController extends Controller
      */
     public function create()
     {
-
         $states = State::select('StateID', 'StateName')->get();
-
-        $courses = Course::select('id', 'colleges_id', 'departments_id', 'course_name', 'course_description')
-        ->orderBy('course_name', 'ASC')->get();
 
         $countries = Country::select('CountryID', 'CountryName')->get();
 
-        $colleges = College::select('id', 'college_name', 'college_description')
-        ->orderBy('college_name', 'ASC')->get();
+        $categories = Category::select('id', 'category_name', 'category_description')->get();
 
-        $departments = Department::select('id', 'department_name', 'department_description')->get();
+        $data = compact('states', 'countries', 'categories');
 
-        $data = compact('states', 'courses', 'countries', 'colleges', 'departments');
-
-        return view('academics.academics-registration', $data);
+        return view('nonacademics.nonacademics-register', $data);
     }
 
     /**
@@ -73,25 +63,14 @@ class AcademicController extends Controller
     {
         //Validate user inputs
         $this->validateRequest();
-        
-        //Begin database transaction
-        DB::beginTransaction();
 
-        // if($request->has($request->input('courses_id')))
-        // {
-            $courses_id = implode(',', $request->input('courses_id'));
-
-        // }else{
-        //     $courses_id = '';
-        // }
-
-        //INSERT INTO `academic_staffs` table
-        $academic = Academic::create([
+        //INSERT INTO `non_academic_staffs` table
+        $nonAcademicStaff = NonAcademic::create([
 
             'country_id'                =>   $request->input('country_id'),
             'states_id'                 =>   $request->input('states_id'),
+            'category_id'               =>   $request->input('category_id'),
             'employee_number'           =>   $request->input('employee_number'),
-            'courses_id'                =>   $courses_id,
             'firstname'                 =>   $request->input('firstname'),
             'lastname'                  =>   $request->input('lastname'),
             'email'                     =>   $request->input('email'),
@@ -105,35 +84,29 @@ class AcademicController extends Controller
 
         ]);
 
-        //Role back transaction if something went wrong
-        DB::commit();
-
         //If successfully created go to Non Academic Staff list page
-        if($academic){
-            return redirect()->route('academics.index')->with('success', $request->input('firstname').' '.$request->input('lastname').'\'s profile has been created!');
+        if($nonAcademicStaff){
+            return redirect()->route('nonacademics.index')->with('success', $request->input('firstname').' '.$request->input('lastname').'\'s profile has been created!');
         }
 
         //If errors occur, return back to  Non Academic Staff registration page
         return back()->withInput();
     }
 
-      /**
-     * Validate user input fields
-     */
     private function validateRequest(){
         return request()->validate([
             'firstname'                 =>   'required',
             'lastname'                  =>   'required',
+            'category_id'               =>   'required',
             'country_id'                =>   'required',
             'states_id'                 =>   'required',
-            'employee_number'           =>   'required|Numeric|unique:academic_staffs,employee_number',
-            'courses_id'                =>   'required',
-            'email'                     =>   'required|email|unique:academic_staffs,email', 
+            'employee_number'           =>   'required|Numeric|unique:non_academic_staffs,employee_number',
+            'email'                     =>   'email|unique:non_academic_staffs,email', 
             'gender'                    =>   'required',
             'marital_status'            =>   'required',
             'dob'                       =>   'required',
             'date_joined'               =>   'required', 
-            'phone_no'                  =>   'required|unique:academic_staffs,phone_no',
+            'phone_no'                  =>   'required|unique:non_academic_staffs,phone_no',
             'address'                   =>   'required',
         ]);
     }
@@ -144,35 +117,21 @@ class AcademicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function show($id)
     {
-        $academicStaffExists = Academic::findOrFail($id);
+        $nonAcademicStaffExists = NonAcademic::findOrFail($id);
 
-        $academicStaff = Academic::where('id', $id)->first();
+        $nonAcademicStaff = NonAcademic::where('id', $id)->first();
 
-        //Explode tag user Agency list
-        $coursesArray = array_map('intval', explode(',', trim($academicStaff->courses_id)));
-
-        //Get tag names from `tags` table
-        $courses = Course::select('course_name', 'course_code')
-        ->where(function($courses) use($coursesArray) {
-            foreach($coursesArray as $item) {
-                $courses->orWhere('id', 'like', "%$item%");
-            };
-        })->get();
-
-        $academicPaymentLists = DB::table('staff_payments')
-        ->join('academic_staffs', 'academic_staffs.id', '=', 'staff_payments.academic_staff_id')
+        $paymentLists = DB::table('staff_payments')
+        ->join('non_academic_staffs', 'non_academic_staffs.id', '=', 'staff_payments.non_academic_staff_id')
         ->join('payment_categories', 'payment_categories.id', '=', 'staff_payments.payment_category')
-        ->select('staff_payments.id','firstname', 'lastname', 'payment_category_name', 'amount', 'staff_payments.created_at')->where('staff_payments.id', $id)
+        ->select('staff_payments.id','firstname', 'lastname', 'payment_category_name', 'amount', 'staff_payments.created_at')->where('non_academic_staffs.id', $id)
         ->orderBy('staff_payments.created_at', 'DESC')->get();
 
+        $data = compact('nonAcademicStaff', 'paymentLists');
 
-        $data = compact('academicStaff', 'courses', 'academicPaymentLists');
-
-        return view('academics.academics-show', $data)->with('i');
-        
+        return view('nonacademics.nonacademics-show', $data)->with('i');
     }
 
     /**
@@ -183,23 +142,19 @@ class AcademicController extends Controller
      */
     public function edit($id)
     {
-        $academicStaffExists = Academic::findOrFail($id);
+        $nonAcademicStaffExists = NonAcademic::findOrFail($id);
 
-        $academicStaff = Academic::where('id', $id)->first();
-
-        $states = State::select('StateID', 'StateName')->get();
-
-        $courses = Course::select('id', 'colleges_id', 'departments_id', 'course_name', 'course_description')
-        ->orderBy('course_name', 'ASC')->get();
+        $nonacademic = NonAcademic::where('id', $id)->first();
 
         $countries = Country::select('CountryID', 'CountryName')->get();
 
-        //Explode tag user Agency list
-        $coursesArray = array_map('intval', explode(',', trim($academicStaff->courses_id)));
+        $states = State::select('StateID', 'StateName')->get();
 
-        $data = compact('academicStaff', 'coursesArray', 'courses', 'states', 'countries');
+        $categories = Category::select('id', 'category_name', 'category_description')->get();
 
-        return view('academics.academics-edit', $data);
+        $data = compact('nonacademic', 'states', 'countries', 'categories');
+
+        return view('nonacademics.nonacademics-edit', $data);
     }
 
     /**
@@ -216,26 +171,25 @@ class AcademicController extends Controller
             'country_id'                =>   'required',
             'states_id'                 =>   'required',
             'employee_number'           =>   'required',
-            'courses_id'                =>   'required',
+            'category_id'               =>   'required',
             'firstname'                 =>   'required',
             'lastname'                  =>   'required', 
-            'phone_no'                  =>   'required|Numeric|unique:academic_staffs,phone_no,'.$id.',id',
+            'phone_no'                  =>   'required|Numeric|unique:non_academic_staffs,phone_no,'.$id.',id',
             'gender'                    =>   'required',
             'marital_status'            =>   'required',
             'dob'                       =>   'required',
             'date_joined'               =>   'required',
-            'email'                     =>   'required|email|unique:academic_staffs,email,'.$id.',id',
+            'email'                     =>   'email|unique:non_academic_staffs,email,'.$id.',id',
             'address'                   =>   'required',
         ]);
 
-        $courses_id = implode(',', $request->input('courses_id'));
 
-        //UPDATE `academic_staffs` table
-        $academicStaffUpdate = Academic::where('id', $id)->update([
+        //UPDATE `non_academic_staffs` table
+        $nonAcademicStaffUpdate = NonAcademic::where('id', $id)->update([
             'country_id'                =>   $request->input('country_id'),
             'states_id'                 =>   $request->input('states_id'),
             'employee_number'           =>   $request->input('employee_number'),
-            'courses_id'                =>   $courses_id,
+            'category_id'               =>   $request->input('category_id'),
             'firstname'                 =>   $request->input('firstname'),
             'lastname'                  =>   $request->input('lastname'),
             'email'                     =>   $request->input('email'),
@@ -248,9 +202,9 @@ class AcademicController extends Controller
             'updated_by'                =>   $this->loggedUserID(),
         ]);
 
-        if($academicStaffUpdate){
+        if($nonAcademicStaffUpdate){
 
-            return redirect()->route('academics.index')->with('success', 'Updated '.$request->input('firstname').' '.$request->input('lastname').' profile');
+            return redirect()->route('nonacademics.index')->with('success', 'Updated '.$request->input('firstname').' '.$request->input('lastname').' profile');
         }
             
         return back()->withInput();
@@ -264,11 +218,11 @@ class AcademicController extends Controller
      */
     public function destroy($id)
     {
-        $academicStaffExists = Academic::findOrFail($id);
+        $nonAcademicStaffExists = NonAcademic::findOrFail($id);
 
-        $deleteAcademicStaff = Academic::where('id', $id)->delete();
+        $deleteNonAcademicStaff = NonAcademic::where('id', $id)->delete();
 
-        if($deleteAcademicStaff){
+        if($deleteNonAcademicStaff){
             return back()->with('success', 'Profile has been deleted.');
         }
     }

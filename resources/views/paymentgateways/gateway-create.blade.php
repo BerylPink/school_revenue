@@ -18,7 +18,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
             <a href="{{ route('payment-gateways.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Payment Gateway list">
-                <i class="icon-tree"></i>
+                <i class="icon-shield2"></i>
               </a>
             </div>
           </div>

@@ -62,6 +62,8 @@ class AppServiceProvider extends ServiceProvider
                     }
         
                     $view->with('user', $users);
+            }else{
+                return redirect()->route('logout');
             }
             });        
 

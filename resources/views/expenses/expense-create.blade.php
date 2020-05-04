@@ -18,7 +18,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
             <a href="{{ route('expenses.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Expenses list">
-                <i class="icon-tree"></i>
+                <i class="icon-calculator"></i>
               </a>
             </div>
           </div>
@@ -28,6 +28,98 @@
   <!-- END: .main-heading -->
 
   <div class="main-content">
+    <div class="row gutters">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="stats-widget">
+              <div class="stats-widget-header">
+                <i class="icon-note_add"></i>
+              </div>
+              <div class="stats-widget-body">
+                <!-- Row start -->
+                <ul class="row no-gutters">
+                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
+                    <h6 class="title">Current Expenses</h6>
+                  </li>
+                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
+                  <h4 class="total">&#8358;{{ number_format($expenses) }}</h4>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="stats-widget">
+              <div class="stats-widget-header">
+                <i class="icon-note_add"></i>
+              </div>
+              <div class="stats-widget-body">
+                <!-- Row start -->
+                <ul class="row no-gutters">
+                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
+                    <h6 class="title">Expenses Balance</h6>
+                  </li>
+                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
+                  <h4 class="total">&#8358;{{ number_format($balance) }}</h4>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="stats-widget">
+              <div class="stats-widget-header">
+                <i class="icon-clipboard"></i>
+              </div>
+              <div class="stats-widget-body">
+                <!-- Row start -->
+                <ul class="row no-gutters">
+                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
+                    <h6 class="title">Expenses Budget</h6>
+                  </li>
+                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
+                    <h4 class="total">&#8358;{{ number_format($finances->expenses_budget) }}</h4>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="stats-widget">
+              <div class="stats-widget-header">
+                <i class="icon-calculator"></i>
+              </div>
+              <div class="stats-widget-body">
+                <!-- Row start -->
+                <ul class="row no-gutters">
+                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
+                    <h6 class="title">School Fund</h6>
+                  </li>
+                  <li class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col">
+                    <h4 class="total">&#8358;{{ number_format($finances->school_fund) }}</h4>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
   <!-- Row start -->
 <div class="row gutters">
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -69,6 +161,10 @@
         <label for="amount" class="col-sm-3 col-form-label">Amount</label>
         <div class="col-sm-9">
           <input type="amount" maxlength="11" class="form-control" id="amount" placeholder="" class="form-control @error('amount') is-invalid @enderror" name="amount" value="{{ old('amount') }}" required autocomplete="amount" autofocus>
+        <input type="hidden" id="balance" value="{{ $balance }}">
+        <span class="invalid-feedback d-none" id="error-output" role="alert">
+            <strong>Amount entered cannot be greater than the Expenses Balance</strong>
+        </span>
           @error('amount')
               <span class="invalid-feedback" role="alert">
                   <strong>{{ $message }}</strong>
@@ -101,4 +197,26 @@
 </div>
 <!-- Row end -->
   </div>
+
+  <script>
+    $(document).ready(function(){
+
+      $(document).on('focusout', '#amount', function(){
+
+        let balance = $('#balance').val();
+        let amount = $('#amount').val();
+
+        if(parseFloat(amount) > parseFloat(balance)){
+          $('#amount').val('').addClass('is-invalid')
+          $('#error-output').removeClass('d-none');
+        }
+        if(parseFloat(amount) < parseFloat(balance)){
+          $('#amount').val(amount).removeClass('is-invalid')
+          $('#error-output').addClass('d-none');
+        }
+
+      });
+
+    });
+    </script>
 @endsection

@@ -41,16 +41,16 @@
   $(document).ready(function () {
 
     //Prevent characters or string asides number in ohone number input field 
-    $("#phone_no, #amount, #card_number, #expiry_year, #expiry_month, #ccv_code, #account_number").on("keypress keyup blur", function(event) {
+    $("#phone_no, #amount, #card_number, #expiry_year, #expiry_month, #ccv_code, #account_number, #course_unit").on("keypress keyup blur", function(event) {
         $(this).val($(this).val().replace(/[^\d].+/, ""));
         if ((event.which < 48 || event.which > 57)) {
             event.preventDefault();
         }
     });  
 
-    $(document).on('click', '#dob', function(){
+    $(document).on('click', '#dob, #date_joined, #registration_date', function(){
       // Url for more info on datepicker options https://xdsoft.net/jqplugins/datetimepicker/
-        $('#dob').datetimepicker({
+        $('#dob, #date_joined, #registration_date').datetimepicker({
             // format: 'L', //LT for time only
             // inline: true,
             // sideBySide: true,
@@ -62,6 +62,8 @@
             // datepicker: false, //Only time should be displayed
         });
       });
+
+    
 
 });
 </script>

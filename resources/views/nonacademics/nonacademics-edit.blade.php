@@ -58,48 +58,48 @@
                         <input id="email" type="email" class="form-control" name="email" value="{{ old('email') ?? $nonacademic->email }}" placeholder="Email">
                     </div>
                     <div class="form-group col-md-4">                  
-                        <label for="DOB" class="col-form-label">Date of Birth</label>
-                        <input id="date" type="date" name="date" value="{{ old('date') }}" required autocomplete="date" placeholder="Date of Birth">
+                        <label for="dob" class="col-form-label">Date of Birth</label>
+                        <input id="dob" class="form-control" name="dob" value="{{ old('dob') ?? $nonacademic->dob }}" required readonly autocomplete="dob" placeholder="Date of Birth">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="employee_no" class="col-form-label">Employee Number</label>
-                        <input id="employee_no" maxlength="11" type="tel" class="form-control" name="employee_no" placeholder="Employee Number" value="{{ old('employee_no') ?? $nonacademic->employee_no }}">
+                        <label for="employee_number" class="col-form-label">Employee Number</label>
+                        <input id="employee_number" maxlength="11" type="tel" class="form-control" name="employee_number" placeholder="Employee Number" value="{{ old('employee_number') ?? $nonacademic->employee_number }}">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="gender" class="col-form-label">Gender</label>
                         <select id="gender" name="gender" class="form-control" required>
                             <option>Choose</option>
-                            <option value="Female" @if($academic->gender == 'Female') selected @endif>Female</option>
-                            <option value="Male" @if($academic->gender == 'Male') selected @endif>Male</option>
+                            <option value="Female" @if($nonacademic->gender == 'Female') selected @endif>Female</option>
+                            <option value="Male" @if($nonacademic->gender == 'Male') selected @endif>Male</option>
                         </select>
                     </div>
                     <div class="form-group col-md-4">                  
                         <label for="marital_status" class="col-form-label">Marital Status</label>
                         <select id="marital_status" name="marital_status" class="form-control" required>
                             <option>Choose</option>
-                            <option value="single" @if($academic->marital_status == 'Single') selected @endif>Single</option>
-                            <option value="married" @if($academic->marital_status == 'Married') selected @endif>Married</option>
-                            <option value="divorced" @if($academic->marital_status == 'Divorced') selected @endif>Divorced</option>
+                            <option value="single" @if($nonacademic->marital_status == 'Single') selected @endif>Single</option>
+                            <option value="married" @if($nonacademic->marital_status == 'Married') selected @endif>Married</option>
+                            <option value="divorced" @if($nonacademic->marital_status == 'Divorced') selected @endif>Divorced</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">                        
-                        <label for="categories_id" class="col-form-label">Country</label>
-                        <select id="categories_id" name="categories_id" class="form-control" required>
+                        <label for="category_id" class="col-form-label">Category</label>
+                        <select id="category_id" name="category_id" class="form-control" required>
                             <option>Choose</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $cateory->CategoryID }}" @if($category->CategoryID == $nonacademic->category_id) selected @endif>{{ $category->CategoryName }}</option>                                
+                                <option value="{{ $category->id }}" @if($category->id == $nonacademic->category_id) selected @endif>{{ $category->category_name }}</option>                                
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group col-md-6">         
                         <label for="date_joined" class="col-form-label">Date Joined</label>
-                        <input id="date" type="date" name="date" value="{{ old('date') }}" required autocomplete="date" placeholder="Date Joined">
+                        <input id="date_joined" class="form-control" name="date_joined" value="{{ old('date_joined') ?? $nonacademic->date_joined }}" required readonly autocomplete="date_joined" placeholder="Date Joined">
                     </div>
                 </div>
 
@@ -109,16 +109,16 @@
                         <select id="country_id" name="country_id" class="form-control" required>
                             <option>Choose</option>
                             @foreach ($countries as $country)
-                                <option value="{{ $country->CountryID }}" @if($country->CountryID == $academic->country_id) selected @endif>{{ $country->CountryName }}</option>                                
+                                <option value="{{ $country->CountryID }}" @if($country->CountryID == $nonacademic->country_id) selected @endif>{{ $country->CountryName }}</option>                                
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group col-md-6">                        
-                        <label for="state_id" class="col-form-label">State</label>
-                        <select id="state_id" name="state_id" class="form-control" required>
+                        <label for="states_id" class="col-form-label">State</label>
+                        <select id="states_id" name="states_id" class="form-control" required>
                             <option>Choose</option>
                             @foreach ($states as $state)
-                                <option value="{{ $state->StateID }}" @if($state->StateID == $nonacademic->state_id) selected @endif>{{ $state->StateName }}</option>                                
+                                <option value="{{ $state->StateID }}" @if($state->StateID == $nonacademic->states_id) selected @endif>{{ $state->StateName }}</option>                                
                             @endforeach
                         </select>
                     </div>
@@ -136,6 +136,19 @@
       </div>
     <!-- Row end -->
     </div>
+
+    <script>
+     
+         $('#country_id').on('change',function () {
+             let country_id = $('#country_id').find('option:selected').val();
+             if(country_id != 156){
+                 $('#states_id').prop('selectedIndex', 1).val();
+             }else{
+                 $('#states_id').prop('selectedIndex', 0).val();
+             }
+         })
+     
+     </script>
 
 
 @endsection

@@ -15,6 +15,13 @@
             <h6 class="sub-heading">Create a new Academic Staff Profile</h6>
           </div>
         </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+            <div class="right-actions">
+              <a href="{{ route('academics.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Academic Staff list">
+                <i class="icon-users"></i>
+              </a>
+            </div>
+          </div>
       </div>
     </div>
   </header>
@@ -73,18 +80,18 @@
                     </div>
                     
                     <div class="form-group col-md-4">                        
-                        <label for="DOB" class="col-form-label">Date of Birth</label>
-                        <input id="date" type="date" name="date" value="{{ old('date') }}" required autocomplete="date" placeholder="Date of Birth">
-                        <!-- @error('gender')
+                        <label for="dob" class="col-form-label">Date of Birth</label>
+                        <input id="dob" class="form-control @error('dob') is-invalid @enderror" name="dob" value="{{ old('dob') }}" required readonly placeholder="Date of Birth">
+                        @error('dob')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
-                        @enderror -->
+                        @enderror 
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group col-md-4">                        
+                    {{-- <div class="form-group col-md-4">                        
                         <label for="college_id" class="col-form-label">College</label>
                         <select id="college_id" name="college_id" class="form-control" required>
                             <option>Choose</option>
@@ -94,32 +101,35 @@
                         </select>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="department_id" class="col-form-label">Department</label>
-                        <select id="department_id" name="department_id" class="form-control" required>
-                            <option>Choose</option>
-                            @foreach ($departments as $department)
-                                <option value="{{ $department->id }}" title="{{ $department->department_description }}">{{ $department->department_name }}</option>                                
-                            @endforeach
+                        <label for="departments_id" class="col-form-label">Department</label>
+                        <select id="departments_id" name="departments_id" class="form-control @error('departments_id') is-invalid @enderror" required>
+                            <option value="">Choose</option>                                
                         </select>                        
-                        
-                    </div>
-                    <div class="form-group col-md-4">         
-                        <label for="course_id" class="col-form-label">Course</label>
-                        <select id="course_id" name="course_id" class="form-control" required>
+                        @error('departments_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div> --}}
+                    <div class="form-group col-md-12">        
+                         
+                        <label for="courses_id" class="col-form-label">Course</label>
+                        <select id="courses_id" name="courses_id[]" class="form-control" multiple required>
                             <option>Choose</option>
                             @foreach ($courses as $course)
                                 <option value="{{ $course->id }}" title="{{ $course->course_description }}">{{ $course->course_name }}</option>                                
                             @endforeach
-                        </select>    
+                        </select>   
+                        <small class="text-danger">*Hold down the Ctrl (windows) or Command (Mac) button to select multiple options.</small> 
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="employee_no" class="col-form-label">Employee Number</label>
-                        <input id="employee_no" maxlength="11" type="tel" class="form-control @error('employee_no') is-invalid @enderror" name="employee_no" value="{{ old('employee_no') }}" required autocomplete="employee_no" autofocus placeholder="Employee Number">
+                        <label for="employee_number" class="col-form-label">Employee Number</label>
+                        <input id="employee_number" maxlength="11" type="tel" class="form-control @error('employee_number') is-invalid @enderror" name="employee_number" value="{{ old('employee_number') }}" required autocomplete="employee_number" autofocus placeholder="Employee Number">
 
-                        @error('employee_no')
+                        @error('employee_number')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -128,10 +138,10 @@
 
                     <div class="form-group col-md-4">         
                         <label for="gender" class="col-form-label">Gender</label>
-                        <select id="gender" name="gender" class="form-control" required>
+                        <select id="gender" name="gender" class="form-control @error('gender') is-invalid @enderror" required>
                             <option>Choose</option>
-                            <option value="female">Female</option>
-                            <option value="male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Male">Male</option>
                         </select>
                         @error('gender')
                             <span class="invalid-feedback" role="alert">
@@ -144,11 +154,11 @@
                         <label for="marital_status" class="col-form-label">Marital Status</label>
                         <select id="marital_status" name="marital_status" class="form-control" required>
                             <option>Choose</option>
-                            <option value="single">Single</option>
-                            <option value="married">Married</option>
-                            <option value="divorced">Divorced</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
                         </select>
-                        @error('divorced')
+                        @error('marital_status')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -167,8 +177,8 @@
                         </select>
                     </div>
                     <div class="form-group col-md-4">                        
-                        <label for="state_id" class="col-form-label">State</label>
-                        <select id="state_id" name="state_id" class="form-control" required>
+                        <label for="states_id" class="col-form-label">State</label>
+                        <select id="states_id" name="states_id" class="form-control" required>
                             <option>Choose</option>
                             @foreach ($states as $state)
                                 <option value="{{ $state->StateID }}">{{ $state->StateName }}</option>                                
@@ -178,12 +188,12 @@
 
                     <div class="form-group col-md-4">                        
                         <label for="date_joined" class="col-form-label">Date Joined</label>
-                        <input id="date" type="date" name="date" value="{{ old('date') }}" required autocomplete="date" placeholder="Date Joined">
-                        <!-- @error('gender')
+                        <input id="date_joined" class="form-control @error('date_joined') is-invalid @enderror" name="date_joined" value="{{ old('date_joined') }}" required readonly placeholder="Date Joined">
+                        @error('date_joined')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
-                        @enderror -->
+                        @enderror 
                     </div>  
                 </div>
 
@@ -205,5 +215,38 @@
     <!-- Row end -->
     </div>
 
+    <script>
+        $('#colleges_id').on('change',function () {
+             let college_id = $('#colleges_id').find('option:selected').val();
+             // console.log(state);
+             $.ajaxSetup({
+                 headers: {
+                     'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
+                 }
+             });
+     
+             $.ajax({
+                 url: "{{ route('colleges.departments') }}",
+                 method: "GET",
+                 dataType: "JSON",
+                 data: {college_id:college_id},
+                 success: function(data){
+                     if(data){
+                         $('#departments_id').html(data.collegeDepartment);
+                     }
+                 },
+             })
+         })
+     
+         $('#country_id').on('change',function () {
+             let country_id = $('#country_id').find('option:selected').val();
+             if(country_id != 156){
+                 $('#states_id').prop('selectedIndex', 1).val();
+             }else{
+                 $('#states_id').prop('selectedIndex', 0).val();
+             }
+         })
+     
+     </script>
 
 @endsection

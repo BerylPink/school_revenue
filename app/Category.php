@@ -12,4 +12,9 @@ class Category extends Model
     protected $fillable = [
         'category_name', 'category_description',
     ];
+
+    // public function nonAcademicStaffs() 
+    // {
+    //     return $this->hasMany(NonAcademic::class);
+    // }
 }

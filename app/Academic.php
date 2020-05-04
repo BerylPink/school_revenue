@@ -14,4 +14,8 @@ class Academic extends Model
         'date_joined', 'phone_no', 'address', 'created_by', 'updated_by' 
     ];
 
+    public function state(){
+        return $this->hasOne(State::class, 'StateID', 'states_id');
+    }
+
 }

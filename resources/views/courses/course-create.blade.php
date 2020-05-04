@@ -18,7 +18,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
             <div class="right-actions">
             <a href="{{ route('courses.index') }}" class="btn btn-success float-right" data-toggle="tooltip" data-placement="left" title="Course list">
-                <i class="icon-books"></i>
+                <i class="icon-library_books"></i>
               </a>
             </div>
           </div>
@@ -63,12 +63,12 @@
         <div class="form-group row gutters">
           <label for="course_unit" class="col-sm-3 col-form-label">Course Unit</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" id="course_unit" placeholder="" class="form-control @error('course_unit') is-invalid @enderror" name="course_unit" value="{{ old('course_unit') }}" required autocomplete="course_unit" autofocus>
+            <input type="text"  type="tel" maxlength="1" class="form-control" id="course_unit" placeholder="" class="form-control @error('course_unit') is-invalid @enderror" name="course_unit" value="{{ old('course_unit') }}" required autocomplete="course_unit" autofocus>
             @error('course_unit')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
-            @enderror
+            @enderror 
           </div>
         </div>
 

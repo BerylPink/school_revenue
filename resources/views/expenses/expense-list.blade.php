@@ -56,6 +56,10 @@
                     Select Action
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                    <a class="dropdown-item" href="{{ route('expenses.show', ['expenses' => $expense->id]) }}" title="More details on {{ $expense->expense_name }}">
+                      <span class="icon-profile text-primary"></span> 
+                      Details
+                    </a>
                       <a class="dropdown-item" href="{{ route('expenses.edit', ['expenses' => $expense->id]) }}" title="Edit {{ $expense->expense_name }}">
                         <span class="icon-edit text-warning"></span> 
                         Edit

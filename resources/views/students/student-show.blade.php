@@ -111,5 +111,40 @@
                 
             </div>
       </div>
-  </div>
+  
+      <div class="row gutters">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="card-header">Payments History</div>
+            <div class="card-body">
+              <table id="basicExample" class="table table-bordered table-responsive">
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>S/N</th>
+                    <th>Fee Type</th>
+                    <th>Fee Category</th>
+                    <th>Payment Gateway</th>
+                    <th>Amount (₦)</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($paymentHistories as $paymentHistory)
+                  <tr>
+                    <td>{{ ++$i }}</td>
+                    <td>{{ $paymentHistory->fee_type_name }}</td>
+                    <td>{{ $paymentHistory->fee_name }}</td>
+                    <td>{{ $paymentHistory->payment_gateway_name }}</td>
+                    <td>{{ number_format($paymentHistory->amount_paid )}}</td>
+                    <td><?php $date = \Carbon\Carbon::parse($paymentHistory->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
+                  </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
 @endsection

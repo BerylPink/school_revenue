@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use DB;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -76,6 +78,44 @@ class LoginController extends Controller
         } else{
             return view('login');
         }
+    }
+
+    public function getFullName($id){
+        $userID = $id;
+
+        $userRole = User::select('user_role')->where('id', $userID)->first();
+
+        //Get basic information of Super Admin User
+        if($userRole['user_role'] == 1){
+            $users = DB::table('users')
+                ->join('super_admin_infos', 'super_admin_infos.users_id', '=', 'users.id')
+                ->select('firstname', 'lastname')->where('users.id', $userID)->first();
+
+            $name = $users->firstname.' '.$users->lastname;
+
+            return $name;
+        }
+        //Get basic information of Admin User
+        if($userRole['user_role'] == 2){
+            $users = DB::table('users')
+                ->join('admin_infos', 'admin_infos.users_id', '=', 'users.id')
+                ->select('firstname', 'lastname')->where('users.id', $userID)->first();
+
+            $name = $users->firstname.' '.$users->lastname;
+
+            return $name;
+        }
+        //Get basic information of HR User
+        if($userRole['user_role'] == 3){
+            $users = DB::table('users')
+            ->join('human_resource_infos', 'human_resource_infos.users_id', '=', 'users.id')
+            ->select('firstname', 'lastname')->where('users.id', $userID)->first();
+
+            $name = $users->firstname.' '.$users->lastname;
+
+            return $name;
+        }
+        
     }
     
     public function logout()
