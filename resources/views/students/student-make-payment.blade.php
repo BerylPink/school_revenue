@@ -62,6 +62,8 @@
                             <select class="form-control" id="fee_category" name="fee_category">
                                 <option>Choose</option>
                             </select>
+
+                            
                         </div>
 
                         <div class="form-group">

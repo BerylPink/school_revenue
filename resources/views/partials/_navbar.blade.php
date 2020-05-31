@@ -286,6 +286,43 @@
 									@endif
 								</ul>
 							</li>
+
+							<li class="{{ Route::currentRouteNamed('payment-gateways.index', 'payment-gateways.create', 'payment-gateways.edit', 'payments.index', 'payments.create', 'payments.academic_list', 'payments.academic_show', 'payments.non_academic_list', 'payments.non_academic_show', 'payments.student_list') ? 'active selected' : '' }}"">
+								<a href="#" class="has-arrow" aria-expanded="false">
+									<span class="has-icon">
+										<i class="icon-credit-card"></i>
+									</span>
+									<span class="nav-title">Advance Report</span>
+								</a>
+								<ul aria-expanded="false" class="collapse" style="height: 0px;">
+									<li>
+										<a href="#" class="has-arrow" aria-expanded="false">
+											<span class="nav-title">Activity Report</span>
+										</a>
+										<ul aria-expanded="false" class="collapse" style="height: 0px;">
+											<li>
+												<a class="#" href= "/expense-report">Expense Report</a>
+											</li>
+											<li>
+												<a class="#" href= "/income-report">Income Report</a>
+											</li>
+											<li>
+												<a class="#" href= "/staff-report">Staff Report</a>
+											</li>
+											<li>
+												<a class="#" href= "/student-report">Student Report</a>
+											</li>
+										</ul>	
+									</li>
+									<li>
+										<a class="#" href= "/financial-report" >Financial Report</a>
+									</li>
+									<li>
+										<a class="#" href= "/summary-report" >Summary Report</a>
+									</li>
+								</ul>
+							</li>
+
 							{{-- Student sidebar view--}}
 							@else
 							<li class="{{ Route::currentRouteNamed('students.update_profile_view', 'students.profile') ? 'active selected' : '' }}"">

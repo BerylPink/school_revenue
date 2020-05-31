@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Students Payments Lost')
+@section('title', 'Students Payments List')
 @section('content')
 @include('partials._messages')
 
@@ -13,7 +13,7 @@
           </div>
           <div class="page-title">
             <h5>Student Payments List </h5>
-            <h6 class="sub-heading">All Studeents Payments as of <strong><?php echo date('M, d Y'); ?></h6>
+            <h6 class="sub-heading">All Students Payments as of <strong><?php echo date('M, d Y'); ?></h6>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">

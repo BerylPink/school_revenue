@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4-custom.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/gallery/gallery.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/css/jquery.datetimepicker.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/vendor/c3/custom/area-spline-graph.js') }}">
+  <link rel="stylesheet" href="{{ asset('assets/vendor/c3/custom/bar-graph.js') }}">
+  <link rel="stylesheet" href="{{ asset('assets/vendor/c3/custom/pie-chart.js') }}">
 
   {{-- <link rel="stylesheet" href="{{ asset('assets/css/jquery.datetimepicker.min.css') }}"> --}}
   
