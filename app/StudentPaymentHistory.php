@@ -10,6 +10,6 @@ class StudentPaymentHistory extends Model
      public $table = "student_payment_histories";
 
      protected $fillable = [
-         'user_id', 'fee_type', 'fee_category', 'payment_gateway', 'amount_paid',
+         'user_id', 'academic_session', 'academic_semester', 'fee_type', 'fee_category', 'payment_gateway', 'amount_paid',
      ];
 }

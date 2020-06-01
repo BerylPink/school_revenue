@@ -36,6 +36,8 @@
               <thead class="thead-inverse">
                 <tr>
                   <th>S/N</th>
+                  <th>Academic Session</th>
+                  <th>Academic Semester</th>
                   <th>Fee Type</th>
                   <th>Fee Category</th>
                   <th>Payment Gateway</th>
@@ -47,6 +49,8 @@
                 @foreach($paymentHistories as $paymentHistory)
                 <tr>
                   <td>{{ ++$i }}</td>
+                  <td>{{ $paymentHistory->academic_session }}</td>
+                  <td>{{ $paymentHistory->academic_semester }}</td>
                   <td>{{ $paymentHistory->fee_type_name }}</td>
                   <td>{{ $paymentHistory->fee_name }}</td>
                   <td>{{ $paymentHistory->payment_gateway_name }}</td>

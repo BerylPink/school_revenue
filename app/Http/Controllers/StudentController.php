@@ -442,7 +442,13 @@ class StudentController extends Controller
         $feeTypes = FeeType::select('id', 'fee_type_name')
         ->orderBy('fee_type_name', 'ASC')->get();
 
-        $data = compact('paymentGateways', 'feeTypes');
+        $academicSessions = DB::table('academic_sessions')->select('session')->get();
+
+        $academicSemesters = DB::table('semesters')->select('semester')->get();
+
+        $is_displayed = 0;
+
+        $data = compact('paymentGateways', 'feeTypes', 'is_displayed', 'academicSessions', 'academicSemesters');
 
         return view('students.student-make-payment', $data);
         
@@ -453,22 +459,14 @@ class StudentController extends Controller
 
             $feeType = $request->get('fee_type');
 
-            $feeCategories = FeeCategory::select('id', 'fee_name')
+            $feeCategories = FeeCategory::select('id', 'fee_name', 'amount')
             ->where('fee_type', $feeType)->get();
 
-            $feeCategoryRenderer = '';
-            $feeCategoryRenderer .= "
-                    <option>Choose</option>
-                    ";
-            foreach ($feeCategories as $feeCategory ){
-                $feeCategoryRenderer .= "
-                    <option value='$feeCategory->id'>$feeCategory->fee_name</option>
-                    ";
-            }
+            $is_displayed = 1;
 
-            $data = array(
-                'feeCategoryRenderer' => $feeCategoryRenderer
-            );
+            $data = compact('feeCategories', 'is_displayed');
+
+            return view('students.student-make-payment-table', $data)->with('i');
 
         }
 
@@ -499,7 +497,7 @@ class StudentController extends Controller
         ->join('fee_types', 'fee_types.id', '=', 'student_payment_histories.fee_type')
         ->join('fee_categories', 'fee_categories.id', '=', 'student_payment_histories.fee_category')
         ->join('payment_gateways', 'payment_gateways.id', '=', 'student_payment_histories.payment_gateway')
-        ->select('fee_type_name', 'fee_name', 'payment_gateway_name', 'amount_paid', 'student_payment_histories.created_at')
+        ->select('academic_session', 'academic_semester', 'fee_type_name', 'fee_name', 'payment_gateway_name', 'amount_paid', 'student_payment_histories.created_at')
         ->where('student_payment_histories.user_id', $this->loggedUserID())
         ->orderBy('student_payment_histories.created_at', 'ASC')->get();
 

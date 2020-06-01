@@ -141,23 +141,37 @@ class PaymentController extends Controller
     }
 
     public function studentMakePayment(Request $request){
-
         //Validate request
         $this->validateStudentPaymentRequest();
 
-        //INSERT INTO `users` table
-        $makePayment = StudentPaymentHistory::create([
-            'user_id'             =>   $this->loggedUserID(),
-            'fee_type'            =>   $request->input('fee_type'),
-            'fee_category'        =>   $request->input('fee_category'),
-            'payment_gateway'     =>   $request->input('payment_gateway'),
-            'amount_paid'         =>   $request->get('amount_paid'),
-        ]);
+        $loopIteration = count($request->get('fee_category'));
 
-        //If successfully created go to payment history page
-        if($makePayment){
-            return redirect()->route('students.payment_history')->with('success', 'Payment was successful!');
+        for($i = 0; $i < $loopIteration; $i++) {
+
+            //INSERT INTO `users` table
+            StudentPaymentHistory::create([
+                'user_id'             =>   $this->loggedUserID(),
+                'academic_session'    =>   $request->input('academic_session'),
+                'academic_semester'   =>   $request->input('academic_semester'),
+                'fee_type'            =>   $request->input('fee_type'),
+                'fee_category'        =>   $request->input('fee_category'),
+                'payment_gateway'     =>   $request->input('payment_gateway'),
+                'amount_paid'         =>   $request->get('amount_paid')[$i],
+                'fee_category'        =>   $request->get('fee_category')[$i],
+            ]);
+
+            // //If successfully created go to payment history page
+            if($i == ($loopIteration - 1)){
+                return redirect()->route('students.payment_history')->with('success', 'Payment was successful!');
+
+            }
         }
+        
+
+        // //If successfully created go to payment history page
+        // if($makePayment){
+        //     return redirect()->route('students.payment_history')->with('success', 'Payment was successful!');
+        // }
     }
 
      /**
@@ -165,10 +179,13 @@ class PaymentController extends Controller
      */
     private function validateStudentPaymentRequest(){
         return request()->validate([
-            'fee_type'          =>   'required',
-            'fee_category'      =>   'required',
-            'payment_gateway'   =>   'required',
-            'amount_paid'       =>   'required',
+            'academic_session'      =>   'required',
+            'academic_semester'     =>   'required',
+            'fee_type'              =>   'required',
+            'fee_category'          =>   'required',
+            'payment_gateway'       =>   'required',
+            'amount_paid'           =>   'required',
+            'fee_category'          =>   'required',
         ]);
     }
 
