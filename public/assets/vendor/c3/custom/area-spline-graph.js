@@ -14,12 +14,12 @@ var chart3 = c3.generate({
 			data2: 'area-spline'
 		},
 		names: {
-			data1: 'Male',
-			data2: 'Female'
+			data1: 'Income',
+			data2: 'Expense'
 		},
 		colors: {
 			data1: '#007ae1',
-			data2: '#e5e8f2'
+			data2: '#FA8072'
 		},
 	},
 });

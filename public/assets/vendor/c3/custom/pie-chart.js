@@ -3,8 +3,8 @@ var chart9 = c3.generate({
 	data: {
 		// iris data from R
 		columns: [
-			['Likes', 36],
-			['Shares', 5],
+			['Income', 36],
+			['Expense', 5],
 		],
 		type : 'pie',
 		colors: {

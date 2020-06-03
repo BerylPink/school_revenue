@@ -12,8 +12,8 @@ var chart6 = c3.generate({
 		],
 		type: 'bar',
 		names: {
-			data1: 'Likes',
-			data2: 'Shares'
+			data1: 'Income',
+			data2: 'Expense'
 		},
 		colors: {
 			data1: '#007ae1',

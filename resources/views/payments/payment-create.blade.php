@@ -69,43 +69,75 @@
                         <div class="d-none" id="payment_options">
                             <div class="form-group">
                                 <label for="payment_category">Payment Category</label>
-                                <select class="form-control" id="payment_category" name="payment_category">
-                                    <option>Choose</option>
-                                    @foreach ($paymentCategories as $paymentCategory)
-                                <option value="{{ $paymentCategory->id }}" title="{{ $paymentCategory->payment_category_description }}">{{ $paymentCategory->payment_category_name }}</option>                                
-                                    @endforeach
-                                </select>
+                                
+                                <table id="basicExample" class="table table-bordered table-responsive">
+                                    <thead class="thead-inverse">
+                                        <tr>
+                                            <th>S/N</th>
+                                            <th class="text-center">Check Option</th>
+                                            <th>Payment Category</th>
+                                            <th>Amount (₦)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form>
+                                        @foreach($paymentCategories as $paymentCategory)
+                                            <tr>
+                                                <td>{{ ++$i }}</td>
+                                                <td><div class="form-check ml-4 text-center"><input class="form-check-input check-box" id="check-box" type="checkbox" value="" ></div></td>
+                                                <td>{{ $paymentCategory->payment_category_name }}</td>
+                                                <td><input type="text" class="form-control amount" style="width: 85% !important;" id="amount" placeholder="Amount" name="amount[]" autocomplete="off"" maxlength="6"><small class="text-danger error-msg"></small></td>
+                                                <td style="border: none" class="d-none">
+                                                <input type="hidden" class="payment-category" name="payment_category[]" id="feeCategory" value="{{ $paymentCategory->id }}" disabled>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </form>
+                                    <td colspan="4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Total</strong>
+                                        </div>
+                                        <div class="col-md-6 mr-auto table-total" style="margin-right: .1em; float: right;">
+                                        </div>
+                                        </div>
+                                    </td>
+                                    </tbody>
+                                    </table>
                             </div>
 
-                            <div class="form-group">
-                                <label for="payment_gateway">Payment Gateway</label>
-                                <select class="form-control" id="payment_gateway" name="payment_gateway">
-                                    <option>Choose</option>
-                                    @foreach ($paymentGateways as $paymentGateway)
-                                        <option value="{{ $paymentGateway->id }}">{{ $paymentGateway->payment_gateway_name }}</option>                                
-                                    @endforeach
-                                </select>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 d-none" id="payment_details">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 d-none" id="payment-mode">
                 <div class="card">
                     <div class="card-body">
+                        <div class="form-group">
+                            <label for="payment_gateway">Payment Gateway</label>
+                            <select class="form-control" id="payment_gateway" name="payment_gateway">
+                                <option>Choose</option>
+                                @foreach ($paymentGateways as $paymentGateway)
+                                    <option value="{{ $paymentGateway->id }}">{{ $paymentGateway->payment_gateway_name }}</option>                                
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="d-none" id="payment_details">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Payment Details</h3>
                                 <small class="text-danger">*Card details will not be saved</small>
                             </div><hr>
                             <div class="panel-body">
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="amount">Amount</label>
                                     <div class="input-group">
                                         <input type="tel" class="form-control" id="amount" name="amount" placeholder="Amount" maxlength="8" autocomplete="off" required autofocus />
                                         <span class="input-group-addon"><span class="icon-dial-pad"></span></span>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="form-group">
                                     <label for="cardNumber">Card Number</label>
@@ -139,11 +171,13 @@
                         <ul class="list-group">
                             <li class=" list-group-item active">
                             Final Payment
-                            <span class="badge badge-primary badge-pill float-right">₦<span id="final_amount"></span></span>
-                            </li>                       
+                            <span class="badge badge-primary badge-pill float-right"><span id="final_amount"></span></span>
+                            </li>             
+                            <input type="hidden" class="form-control" id="total-amount" name="total_amount">          
                         </ul>
                         <br/>
                         <button class="btn btn-success btn-lg btn-block" type="submit">Make Payment</button>
+                        </div>
                     </div>
                     </div>
                 </div>
@@ -212,6 +246,55 @@
         num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return num_parts.join(".");
     }
+
+    $(".check-box").change(function(){
+        
+        let total = 0;
+
+        $(".check-box:checked").each(function(){
+            let amountField = $(this).parent().parent().nextAll("td").find(".amount").val();
+
+            if(amountField < 1){
+                $(this).parent().parent().nextAll("td").find(".error-msg").text('Amount field cannot be empty');
+                $(this).prop('checked', false);
+                $(".table-total, #final_amount, #fee_amount").text("");
+                $('#payment-mode').addClass('d-none');
+            }else{
+
+                total += parseFloat($(this).parent().parent().nextAll("td").find(".amount").val());
+                $(this).parent().parent().nextAll("td").find(".error-msg").text('');
+                $('#total-amount').val(total);
+
+                $('#payment-mode').removeClass('d-none');
+                
+                $(this).parent().parent().nextAll("td").find(".payment-category, .amount").removeAttr('disabled');
+
+                $(this).on('change', function(){
+                    if ($(this).prop('checked') == true) {
+                        $(this).parent().parent().nextAll("td").find(".payment-category, .amount").removeAttr('disabled');
+
+                    }else{
+                        // $(this).parent().parent().nextAll("td").find(".payment-category, .amount").attr('disabled', true);
+                        $(this).parent().parent().nextAll("td").find(".payment-category, .amount").val("");
+                    }
+                });
+            }
+
+        });
+
+
+        $(".table-total, #final_amount, #fee_amount").text("₦"+total);
+
+        $('#ccv_code').keyup(function(){
+            $(".amount").each(function(){
+                let isFieldEmpty = $(this).val();
+                if(isFieldEmpty == ''){
+                    $(this).attr('disabled', true);
+                }
+            });
+        });
+    });
+
 </script>
 
 @endsection

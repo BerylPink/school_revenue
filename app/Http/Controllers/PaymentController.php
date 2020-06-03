@@ -11,6 +11,7 @@ use App\PaymentCategory;
 use App\Academic;
 use App\NonAcademic;
 use App\StaffPayment;
+use App\StaffPaymentDetails;
 
 class PaymentController extends Controller
 {
@@ -52,7 +53,7 @@ class PaymentController extends Controller
 
         $data = compact('paymentGateways', 'paymentCategories', 'academicStaffs', 'nonAcademicStaffs');
 
-        return view('payments.payment-create', $data);
+        return view('payments.payment-create', $data)->with('i');
     }
 
     /**
@@ -63,24 +64,37 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
+
         //Validate request
         $this->validateRequest();
 
+        $loopIteration = count($request->get('payment_category'));
+            
         $makePayment = StaffPayment::create([
             'staff_category'                   =>   $request->input('staff_category'),
             'academic_staff_id'                =>   $request->input('academic_staff_id'),
             'non_academic_staff_id'            =>   $request->input('non_academic_staff_id'),
-            'payment_category'                 =>   $request->input('payment_category'),
             'payment_gateway'                  =>   $request->input('payment_gateway'),
-            'amount'                           =>   $request->input('amount'),
+            'total_amount'                     =>   $request->input('total_amount'),
             'created_by'                       =>   $this->loggedUserID(),
         ]);
-        
-        if($makePayment){
-            return back()->with('success', 'Payment has been made.');
+
+        for($i = 0; $i < $loopIteration; $i++) {
+            StaffPaymentDetails::create([
+                'staff_payments_id'                =>   $makePayment->id,
+                'payment_category'                 =>   $request->input('payment_category')[$i],
+                'amount'                           =>   $request->input('amount')[$i],
+            ]);
+
+            if($i == ($loopIteration - 1)){
+                return back()->with('success', 'Payment has been made.');
+            }
         }
         
-        return back()->withInput();
+        
+        
+        // return back()->withInput();
 
     }
 
@@ -204,8 +218,8 @@ class PaymentController extends Controller
     public function academicStaffPaymentsList(){
         $academicPaymentLists = DB::table('staff_payments')
         ->join('academic_staffs', 'academic_staffs.id', '=', 'staff_payments.academic_staff_id')
-        ->join('payment_categories', 'payment_categories.id', '=', 'staff_payments.payment_category')
-        ->select('staff_payments.id','firstname', 'lastname', 'payment_category_name', 'amount', 'staff_payments.created_at')
+        ->join('payment_gateways', 'payment_gateways.id', '=', 'staff_payments.payment_gateway')
+        ->select('staff_payments.id','firstname', 'lastname', 'payment_gateway_name', 'total_amount', 'staff_payments.created_at')
         ->orderBy('staff_payments.created_at', 'DESC')->get();
 
         $data = compact('academicPaymentLists');
@@ -217,17 +231,22 @@ class PaymentController extends Controller
 
         $academicPayment = DB::table('staff_payments')
         ->join('academic_staffs', 'academic_staffs.id', '=', 'staff_payments.academic_staff_id')
-        ->join('payment_categories', 'payment_categories.id', '=', 'staff_payments.payment_category')
         ->join('payment_gateways', 'payment_gateways.id', '=', 'staff_payments.payment_gateway')
-        ->select('staff_payments.id','firstname', 'lastname', 'payment_category_name', 'amount', 'payment_gateway_name', 'staff_payments.created_by', 'staff_payments.created_at', 'staff_payments.updated_by', 'staff_payments.updated_at')
+        ->select('staff_payments.id','firstname', 'lastname', 'payment_gateway_name', 'staff_payments.created_by', 'staff_payments.created_at', 'staff_payments.updated_by', 'staff_payments.updated_at')
         ->where('staff_payments.id', $id)
         ->orderBy('staff_payments.created_at', 'DESC')->first();
+
+        $paymentDetails = DB::table('staff_payment_details')
+        ->join('payment_categories', 'payment_categories.id', '=', 'staff_payment_details.payment_category')
+        ->select('payment_category_name', 'amount')
+        ->where('staff_payments_id', $academicPayment->id)
+        ->get();
 
         $createdBy = $this->fullName($academicPayment->created_by);
 
         $updatedBy = $this->fullName($academicPayment->updated_by);
 
-        $data = compact('academicPayment', 'createdBy', 'updatedBy');
+        $data = compact('academicPayment', 'createdBy', 'updatedBy', 'paymentDetails');
 
         return view('payments.payment-academic-show', $data)->with('i');
     }
@@ -236,8 +255,8 @@ class PaymentController extends Controller
     public function nonAcademicStaffPaymentsList(){
         $paymentLists = DB::table('staff_payments')
         ->join('non_academic_staffs', 'non_academic_staffs.id', '=', 'staff_payments.non_academic_staff_id')
-        ->join('payment_categories', 'payment_categories.id', '=', 'staff_payments.payment_category')
-        ->select('staff_payments.id','firstname', 'lastname', 'payment_category_name', 'amount', 'staff_payments.created_at')
+        ->join('payment_gateways', 'payment_gateways.id', '=', 'staff_payments.payment_gateway')
+        ->select('staff_payments.id','firstname', 'lastname', 'payment_gateway_name', 'total_amount', 'staff_payments.created_at')
         ->orderBy('staff_payments.created_at', 'DESC')->get();
 
         $data = compact('paymentLists');
@@ -249,17 +268,24 @@ class PaymentController extends Controller
 
         $academicPayment = DB::table('staff_payments')
         ->join('non_academic_staffs', 'non_academic_staffs.id', '=', 'staff_payments.non_academic_staff_id')
-        ->join('payment_categories', 'payment_categories.id', '=', 'staff_payments.payment_category')
         ->join('payment_gateways', 'payment_gateways.id', '=', 'staff_payments.payment_gateway')
-        ->select('staff_payments.id','firstname', 'lastname', 'payment_category_name', 'amount', 'payment_gateway_name', 'staff_payments.created_by', 'staff_payments.created_at', 'staff_payments.updated_by', 'staff_payments.updated_at')
+        ->select('staff_payments.id','firstname', 'lastname', 'payment_gateway_name', 'staff_payments.created_by', 'staff_payments.created_at', 'staff_payments.updated_by', 'staff_payments.updated_at')
         ->where('staff_payments.id', $id)
         ->orderBy('staff_payments.created_at', 'DESC')->first();
+
+        $paymentDetails = DB::table('staff_payment_details')
+        ->join('payment_categories', 'payment_categories.id', '=', 'staff_payment_details.payment_category')
+        ->select('payment_category_name', 'amount')
+        ->where('staff_payments_id', $academicPayment->id)
+        ->get();
+
+        // return $paymentDetails;
 
         $createdBy = $this->fullName($academicPayment->created_by);
 
         $updatedBy = $this->fullName($academicPayment->updated_by);
 
-        $data = compact('academicPayment', 'createdBy', 'updatedBy');
+        $data = compact('academicPayment', 'createdBy', 'updatedBy', 'paymentDetails');
 
         return view('payments.payment-non-academic-show', $data)->with('i');
     }
@@ -277,5 +303,24 @@ class PaymentController extends Controller
         $data = compact('paymentHistories');
 
         return view('payments.payment-student-list', $data)->with('i');
+    }
+
+    public function getPaymentCategory(Request $request){
+        if($request->ajax()){
+
+            $feeType = $request->get('fee_type');
+
+            $feeCategories = FeeCategory::select('id', 'fee_name', 'amount')
+            ->where('fee_type', $feeType)->get();
+
+            $is_displayed = 1;
+
+            $data = compact('feeCategories', 'is_displayed');
+
+            return view('students.student-make-payment-table', $data)->with('i');
+
+        }
+
+        return response()->json($data);
     }
 }

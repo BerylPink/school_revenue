@@ -146,3 +146,44 @@ Route::get('/payments/student/payment-list',            'PaymentController@Stude
  * Routes for Payments Category Features
 */
 Route::resource('/payment-categories',   'PaymentCategoryController');
+
+
+
+// Route::get('/expense-report', function () {
+//     return view('activityreports/expense-report');
+// });
+
+// routes for reports
+
+Route::get('expense/academicSession/{session_id?}','ExpenseReportController@session');
+Route::resource('expense-report','ExpenseReportController');
+
+Route::get('income/academicSession/{session_id?}','IncomeReportController@session');
+Route::resource('income-report','IncomeReportController');
+
+Route::get('staff/academicSession/{session_id?}','StaffReportController@session');
+Route::resource('staff-report','StaffReportController');
+
+Route::get('student/academicSession/{session_id?}','StudentReportController@session');
+Route::resource('student-report','StudentReportController');
+
+// Route::get('/income-report', function () {
+//     return view('activityreports/income-report');
+// });
+
+// Route::get('/staff-report', function () {
+//     return view('activityreports/staff-report');
+// });
+
+// Route::get('/student-report', function () {
+//     return view('activityreports/student-report');
+// });
+
+
+Route::get('/financial-report', function () {
+    return view('advancereports/financial-report');
+});
+
+Route::get('/summary-report', function () {
+    return view('advancereports/summary-report');
+});

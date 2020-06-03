@@ -32,7 +32,7 @@
               <tr>
                 <th>S/N</th>
                 <th>Name</th>
-                <th>Payment Category</th>
+                <th>Payment Gateway</th>
                 <th>Amount (₦)</th>
                 <th>Date Created</th>
                 <th>Action</th>
@@ -43,8 +43,8 @@
               <tr>
                 <td>{{ ++$i }}</td>
                 <td>{{ $paymentList->firstname.' '.$paymentList->lastname }}</td>
-                <td>{{ $paymentList->payment_category_name }}</td>
-                <td>{{ number_format($paymentList->amount) }}</td>
+                <td>{{ $paymentList->payment_gateway_name }}</td>
+                <td>{{ number_format($paymentList->total_amount) }}</td>
                 <td><?php $date = \Carbon\Carbon::parse($paymentList->created_at , 'UTC'); echo $date->isoFormat('MMMM Do YYYY h:mm:ssa'); ?></td>
                 <td>
                   <div class="dropdown text-center">
