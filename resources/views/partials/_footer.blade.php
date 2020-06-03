@@ -30,6 +30,13 @@
 <script src="{{ asset('assets/vendor/gallery/plugins.js') }}"></script>
 <script src="{{ asset('assets/vendor/gallery/custom-gallery.js') }}"></script>
 
+<script src="{{ asset('assets/vendor/d3/d3.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/c3/c3.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/c3/custom/area-spline-graph.js') }}"></script>
+<script src="{{ asset('assets/vendor/c3/custom/bar-graph.js') }}"></script>
+<script src="{{ asset('assets/vendor/c3/custom/pie-chart.js') }}"></script>
+
+
 {{-- Basic DataTable --}}
 <script>
   $(function(){
